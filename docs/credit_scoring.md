@@ -78,3 +78,20 @@ Developing a machine learning model for default prediction involves three phases
 2. **Training Phase**: Trains the model using the selected algorithms and pre-processed data.
 3. **Evaluation Phase**: Assesses the model's results, considers the outputs, and ensures model interpretability.
 
+### Model Selection
+Model selection is an exploratory process involving the continuous evaluation of multiple machine learning models. Some commonly used algorithms include Logistic Regression, Random Forest, Extra-Trees, CatBoost, LightGBM, XGBoost, K-Nearest Neighbours, Convolutional Neural Networks, and Stacking. (Refer to Appendix B for detailed descriptions of these algorithms.)
+
+### Data Exploration
+Credit scoring modelling requires rigorous exploratory data analysis (EDA) to distinguish variables and optimize the model.
+
+### Model Training
+Machine learning algorithms establish statistical/mathematical models that can make inferences. The training data (predictors/independent variables) and the outputs (responses/dependent variables) can be quantitative (numerical) or qualitative (categorical). Numerical outputs correspond to regression problems, while categorical outputs correspond to classification problems.
+
+### Model Assessment
+In the banking industry, model quality resides in the output and its interpretation. The model must be accurate to avoid losses and align with the bank's working capacity and liquidity. The Area Under the Receiver Operating Characteristic (ROC) Curve is a commonly used metric to assess model quality.
+
+### Feature Importance
+Investigating feature importance helps to further improve the model. Once the data has been explored and the model trained and tested, analyzing feature importance involves inspecting variables and assessing whether changes in a variable would affect the model output.
+
+### Model Interpretability
+Interpretability is the degree to which a human can understand the cause of a decision. Greater interpretability makes it easier for humans to understand why a decision or prediction was made. Model interpretation technologies include SHAP, ELI, LIME, Microsoft InterpretML, XAI, Alibi, TreeInterpreter, Skater, FairML, and fairness.
