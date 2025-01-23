@@ -16,7 +16,7 @@ class CreditScoringEDA:
         """Print the structure of the dataset."""
         print("Number of rows and columns:", self.data.shape)
         print("Column names and data types:\n", self.data.dtypes)
-        print("First few rows of the dataset:\n", self.data.head())
+       
 
     def summary_statistics(self):
         """Display summary statistics of the dataset."""
