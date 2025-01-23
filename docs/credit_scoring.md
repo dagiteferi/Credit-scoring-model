@@ -1,6 +1,63 @@
 # Understanding Credit Scores and Microloans
 Credit scores are numerical representations that gauge how likely an individual is to repay a loan and make timely payments. Essentially, they predict one's credit behavior—such as the likelihood of paying back loans on time—using information from credit reports. Microloans are typically given to borrowers who lack collateral, providing a crucial lifeline for those with limited access to traditional lending resources.
 
+### Applications of Credit Scoring
+
+1. **Personal Loans**
+   - Credit scoring helps lenders assess the creditworthiness of individuals applying for personal loans. A higher credit score can lead to better loan terms, such as lower interest rates.
+
+2. **Mortgages**
+   - Credit scores are crucial in the mortgage approval process. Lenders use credit scores to determine the risk of lending to a borrower and to set the interest rate for the mortgage.
+
+3. **Credit Cards**
+   - Issuers of credit cards use credit scores to decide whether to approve an application and to set the credit limit and interest rates for the cardholder.
+
+4. **Auto Loans**
+   - Credit scores are used by auto lenders to evaluate the risk of lending money for vehicle purchases. Higher credit scores can result in better financing options.
+
+5. **Business Loans**
+   - Credit scores are important for business loan applications, helping lenders assess the creditworthiness of small and medium-sized enterprises (SMEs).
+
+6. **Insurance Premiums**
+   - Some insurance companies use credit scores to determine the premiums for auto, home, and other types of insurance policies. 
+
+7. **Rental Applications**
+   - Landlords and property management companies may use credit scores to evaluate the reliability of potential tenants.
+
+8. **Utility Services**
+   - Utility companies may use credit scores to decide whether to require a deposit from new customers or to set terms for utility services.
+
+9. **Employment Screening**
+   - Some employers use credit scores as part of their hiring process, especially for positions that involve financial responsibilities.
+
+10. **Telecommunications Services**
+    - Telecom companies may use credit scores to determine eligibility for postpaid mobile phone plans and to set terms for service contracts.
+### Benefits of Credit Scoring Models
+
+1. **Improved Risk Assessment**
+   - Credit scoring models provide lenders with a more accurate assessment of a borrower's creditworthiness, reducing the risk of default and financial loss.
+
+2. **Faster Decision-Making**
+   - Automated credit scoring models enable quicker loan approval processes, benefiting both lenders and borrowers by reducing the time required for credit evaluation.
+
+3. **Objective Evaluation**
+   - Credit scoring models use quantitative data to make decisions, minimizing human biases and ensuring fair and consistent evaluations.
+
+4. **Cost Efficiency**
+   - Automated credit scoring reduces the need for manual review, lowering operational costs for lenders.
+
+5. **Increased Access to Credit**
+   - By utilizing alternative data sources, credit scoring models can extend credit to individuals with limited or no credit history, promoting financial inclusion.
+
+6. **Customization of Loan Products**
+   - Credit scoring models allow lenders to tailor loan products and interest rates to individual borrowers based on their credit risk, offering more personalized financial solutions.
+
+7. **Enhanced Monitoring and Management**
+   - Ongoing monitoring of credit scores enables lenders to identify potential risks early and manage their loan portfolios more effectively.
+
+8. **Regulatory Compliance**
+   - Credit scoring models help financial institutions comply with regulatory requirements by providing documented and transparent credit evaluation processes.
+
 ## Role of Data in Credit Scoring
 Data play an important role in the development, monitoring, and maintenance of credit scoring models. By utilizing data, these models gain higher predictive power and deeper insights, allowing financial institutions to offer new products to previously excluded sectors of society, granting them access to affordable credit.
 
@@ -94,3 +151,18 @@ Investigating feature importance helps to further improve the model. Once the da
 
 ### Model Interpretability
 Interpretability is the degree to which a human can understand the cause of a decision. Greater interpretability makes it easier for humans to understand why a decision or prediction was made. Model interpretation technologies include SHAP, ELI, LIME, Microsoft InterpretML, XAI, Alibi, TreeInterpreter, Skater, FairML, and fairness.
+
+
+### Apps That Use Credit Scoring in Ethiopia
+
+1. **Michu**
+   - Michu is Ethiopia's first uncollateralized digital lending product, powered by Kifiya's Qena platform. It is designed for micro, small, and medium enterprises (MSMEs) and offers loans based on credit scoring.
+
+2. **Telebirr Mela**
+   - Telebirr Mela is a microloan service by Telebirr in partnership with Dashen Bank. It allows users to take out small loans without collateral based on their credit score.
+
+3. **Alegnta**
+   - Offered by Lion International Bank, Alegnta provides microloans and has a variety of loan products, including salary loans, loans for ride and taxi drivers, and loans for small and medium enterprises.
+
+4. **Dube Ale**
+   - Dube Ale is a collaboration between Dashen Bank and EagleLion System Technology. This app offers a Buy-Now Pay-Later scheme, enabling users to purchase goods and services on credit.
