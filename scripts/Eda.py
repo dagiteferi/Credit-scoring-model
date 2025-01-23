@@ -22,15 +22,17 @@ class CreditScoringEDA:
         """Display summary statistics of the dataset."""
         print("Summary statistics:\n", self.data.describe())
 
-    def plot_numerical_distribution(self, numerical_columns):
+    def plot_numerical_distribution(self):
         """Visualize the distribution of numerical features."""
-        for column in numerical_columns:
-            plt.figure(figsize=(10, 5))
-            sns.histplot(self.data[column], kde=True)
-            plt.title(f'Distribution of {column}')
-            plt.xlabel(column)
-            plt.ylabel('Frequency')
-            plt.show()
+        if self.data is not None:
+            numerical_columns = self.data.select_dtypes(include=['int64', 'float64']).columns
+            for column in numerical_columns:
+                plt.figure(figsize=(10, 5))
+                sns.histplot(self.data[column], kde=True)
+                plt.title(f'Distribution of {column}')
+                plt.xlabel(column)
+                plt.ylabel('Frequency')
+                plt.show()
 
     def plot_categorical_distribution(self, categorical_columns):
         """Analyze the distribution of categorical features."""
