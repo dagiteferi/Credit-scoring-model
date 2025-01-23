@@ -43,3 +43,22 @@ Mobile applications may collect data such as transport movements, geolocation, a
 
 #### Social Media Data
 Research suggests that the number and frequency of social media posts can provide insights into consumers' lifestyles, expenditures, and willingness to repay debt.
+
+
+# Credit Scoring Methodologies
+
+### Traditional Credit Scoring Methods
+The most prominent techniques used to develop credit scorecards include statistical discrimination and classification methods such as linear regression models, discriminant analysis, logit and probit models, and expert judgment-based models.
+
+#### Linear Regression
+Linear regression is useful in credit scoring due to its ease in explaining and predicting risk parameters, like the probability of default.
+
+#### Discriminant Analysis
+Discriminant analysis, a variation of regression analysis, is used for classification based on categorical data, such as "default" versus "nondefault".
+
+#### Probit Analysis and Logistic Regression
+The logit model is popular for estimating the probability of default. It is easy to develop, validate, calibrate, and interpret. Estimation in logistic regression maximizes the likelihood of observing the sample values.
+
+#### Judgment-Based Models
+Judgment-based models, like the Analytic Hierarchy Process (AHP), rely on human judgments to perform evaluations. These models are crucial for evaluating exceptions and underrepresented instances in the data.
+
