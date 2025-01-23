@@ -61,4 +61,13 @@ The logit model is popular for estimating the probability of default. It is easy
 
 #### Judgment-Based Models
 Judgment-based models, like the Analytic Hierarchy Process (AHP), rely on human judgments to perform evaluations. These models are crucial for evaluating exceptions and underrepresented instances in the data.
+# Machine Learning in Credit Scoring
+
+## Techniques Related to Credit Scoring Methods
+
+### Feature Engineering
+Feature engineering involves transforming the input data set into meaningful features that help to reveal the underlying patterns in the data. This process enhances the accuracy of machine learning models by providing them with more relevant and informative data.
+
+### Reinforcement Learning
+Reinforcement learning enables machines to learn behaviors based on feedback from the environment. This type of learning allows the model to adapt its actions to achieve optimal outcomes, either through a one-time learning process or continuous adaptation over time.
 
