@@ -70,4 +70,11 @@ Feature engineering involves transforming the input data set into meaningful fea
 
 ### Reinforcement Learning
 Reinforcement learning enables machines to learn behaviors based on feedback from the environment. This type of learning allows the model to adapt its actions to achieve optimal outcomes, either through a one-time learning process or continuous adaptation over time.
+### Development of Machine Learning Models for Default Prediction
+
+Developing a machine learning model for default prediction involves three phases:
+
+1. **Preparation Phase**: Selects suitable machine learning algorithms and explores alternative data for credit scoring.
+2. **Training Phase**: Trains the model using the selected algorithms and pre-processed data.
+3. **Evaluation Phase**: Assesses the model's results, considers the outputs, and ensures model interpretability.
 
