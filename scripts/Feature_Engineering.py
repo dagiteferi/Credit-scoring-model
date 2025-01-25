@@ -1,11 +1,41 @@
-# Assuming the following imports and class definition are already done
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+import logging
+import numpy as np
+
+class WOE:
+    def __init__(self):
+        self.iv_values_ = {}
+
+    def fit(self, X, y):
+        self.woe_dict = {}
+        self.iv_values_ = {}
+        for column in X.columns:
+            self.woe_dict[column] = {}
+            total_good = (y == 0).sum()
+            total_bad = (y == 1).sum()
+            for value in X[column].unique():
+                good = ((X[column] == value) & (y == 0)).sum()
+                bad = ((X[column] == value) & (y == 1)).sum()
+                woe = np.log((good / total_good) / (bad / total_bad))
+                iv = ((good / total_good) - (bad / total_bad)) * woe
+                self.woe_dict[column][value] = woe
+                self.iv_values_.setdefault(column, 0)
+                self.iv_values_[column] += iv
+
+    def transform(self, X):
+        X_woe = X.copy()
+        for column in X.columns:
+            X_woe[column] = X_woe[column].map(self.woe_dict[column])
+        return X_woe
+
+# Initialize logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class Feature_Engineering:
-    # Existing class methods...
     def __init__(self, file_path):
         self.data = self.load_data(file_path)
     
@@ -30,7 +60,6 @@ class Feature_Engineering:
         average_transaction_amount.columns = ['CustomerId', 'average_transaction_amount']
         return average_transaction_amount
     
-# Define the standalone function outside the class
 def creating_aggregate_features(data):
     try:
         aggregates = data.groupby('CustomerId').agg(
@@ -60,28 +89,48 @@ def extract_transaction_features(data):
     except Exception as e:
         print(f"Error occurred: {e}")
 
-
-
-def encode_categorical_variables(ef, categorical_columns):
+def encoding(data, target_variable='FraudResult', sample_size=10000):
+    logger.info("encoding the categorical variables")
     try:
-        # Apply One-Hot Encoding to most categorical columns
-        onehot_encoder = OneHotEncoder(sparse=False, drop='first')  # 'drop=first' to avoid multicollinearity
-        encoded_vars = onehot_encoder.fit_transform(ef[categorical_columns])
-        encoded_vars_df = pd.DataFrame(encoded_vars, columns=onehot_encoder.get_feature_names_out(categorical_columns))
-        ef = pd.concat([ef, encoded_vars_df], axis=1)
-        
-        # Apply Label Encoding to 'CurrencyCode' (if it's in the categorical columns)
-        if 'CurrencyCode' in categorical_columns:
-            label_encoder = LabelEncoder()
-            ef['CurrencyCodeEncoded'] = label_encoder.fit_transform(ef['CurrencyCode'])
-        
-        return ef
+        # Apply Label Encoding for ordinal categorical variables first
+        logger.info("label encoding for ordinal categorical variables")
+        # (Your existing label encoding code)
+
+        # Check data types of columns for WOE encoding
+        logger.info("Checking data types of columns for WOE encoding")
+        logger.info(data.dtypes)
+
+        # Inspect unique values before conversion
+        for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
+            logger.info(f"Unique values in {col}: {data[col].unique()}")
+
+        # Convert categorical to numeric using category codes
+        for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
+            if data[col].dtype == 'object':
+                data[col] = data[col].astype('category').cat.codes
+
+        logger.info("Data types after conversion:")
+        logger.info(data.dtypes)
+
+        # Now apply WOE encoding to a sample of the data
+        logger.info("applying WOE encoding to a sample of the data...")
+        woe = WOE()
+        try:
+            sample_data = data.sample(n=sample_size, random_state=1)
+            woe.fit(sample_data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']], sample_data[target_variable])
+            data_woe = woe.transform(data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']])
+            data = pd.concat([data, data_woe], axis=1)
+            iv_values = woe.iv_values_
+            logger.info(f"Information Value (IV) for features: {iv_values}")
+        except Exception as e:
+            logger.error(f"Error during WOE transformation: {e}")
+
+        # Now apply one-hot encoding for nominal variables
+        logger.info("one-hot encoding for nominal variables")
+        # (Your existing one-hot encoding code)
+
+        return data
+
     except Exception as e:
-        print(f"Error occurred: {e}")
-
-# Call the function with identified categorical columns
-
-
-
-
-
+        logger.error(f"error occurred {e}")
+        return data  # Return original data on error
