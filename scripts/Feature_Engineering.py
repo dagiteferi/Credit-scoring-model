@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.preprocessing import LabelEncoder , MinMaxScaler, StandardScaler
+import datetime as dt
+
 import logging
 import numpy as np
 
@@ -139,13 +141,7 @@ def Standardize_numeical_features(data):
         # Initialize MinMaxScalar for normalization
         min_max_scalar =MinMaxScaler()
 
-        # # Apply normalization to the numerical columns
-        # data[numerical_features] = min_max_scalar.fit_transform(data[numerical_features])
-
-        # logger.info(f"the result of the nirmalized numeical featuresis  \n {data[numerical_features].head()}")
-
-        # Standardize the Numerical Featutres (Mean 0 , Standard Deviation 1)
-            #   initialize StandardScalar for standardixation
+       
         standard_scalar = StandardScaler()
         # Apply standardization to the numerical columns
         data[numerical_features] = standard_scalar.fit_transform(data[numerical_features])
@@ -209,39 +205,50 @@ def visualuze_RFMS_space(data):
         logger.error(f"Error in visualizing RFMS space: {e}")
 
 def assign_good_and_bad_lables(data):
-    # Define threshold
     threshold = data['RFMS_score'].median()
-    
-    # Assign Good and Bad labels based on the threshold
     data['Label'] = np.where(data['RFMS_score'] > threshold, 'Good', 'Bad')
+    # Debugging prints
+    print("RFMS Score and Labels after assignment:\n", data[['RFMS_score', 'Label']].head())
+    print("Label Distribution after assignment:\n", data['Label'].value_counts())
+
 def calculate_woe(df, target, feature):
     """
     Calculate the Weight of Evidence (WoE) for a given feature.
     """
     try:
+        # Convert target to numeric if necessary
+        df[target] = pd.to_numeric(df[target], errors='coerce')
+
         # Group by the feature and calculate the counts and events
-        woe_df = df.groupby(feature)[target].agg(
-            count=('Label', 'size'), 
-            event=('Label', 'sum')
+        woe_df = df.groupby(feature).agg(
+            count=(target, 'size'),
+            event=(target, 'sum')
         ).reset_index()
 
         woe_df['non_event'] = woe_df['count'] - woe_df['event']
         
-        # Check for zero division
+        # Debugging print statement
+        print("WoE DataFrame:\n", woe_df)
+
         total_events = woe_df['event'].sum()
         total_non_events = woe_df['non_event'].sum()
 
-        # Avoid division by zero
+        # Avoid division by zero and skip categories with zero events or non-events
         if total_events == 0 or total_non_events == 0:
             raise ValueError("Total events or non-events cannot be zero.")
 
         woe_df['event_rate'] = woe_df['event'] / total_events
         woe_df['non_event_rate'] = woe_df['non_event'] / total_non_events
         
-        # Calculate WoE
-        woe_df['woe'] = np.log(woe_df['event_rate'] / woe_df['non_event_rate']).replace([-np.inf, np.inf], 0)
-        
+        # Calculate WoE and handle zero events or non-events by skipping them
+        woe_df['woe'] = np.where(
+            (woe_df['event_rate'] == 0) | (woe_df['non_event_rate'] == 0),
+            0,  # Assign a default value for WoE
+            np.log(woe_df['event_rate'] / woe_df['non_event_rate']).replace([-np.inf, np.inf], 0)
+        )
+
         return woe_df[[feature, 'count', 'event', 'non_event', 'woe']]
     
     except Exception as e:
         logger.error(f"Error in calculating WoE: {e}")
+        return None
