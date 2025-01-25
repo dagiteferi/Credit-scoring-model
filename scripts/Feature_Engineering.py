@@ -133,4 +133,15 @@ def encoding(data, target_variable='FraudResult', sample_size=10000):
 
     except Exception as e:
         logger.error(f"error occurred {e}")
-        return data  # Return original data on error
+        return data  
+
+def check_missing_values(df):
+        """Check for missing values in each column of the DataFrame."""
+        missing_values = df.isnull().sum()
+        print("Missing values in each column:\n", missing_values)
+        return missing_values
+def fill_missing_values_with_mode(df, column_name):
+        """Fill missing values in the specified column with the mode."""
+        df[column_name].fillna(df[column_name].mode()[0], inplace=True)
+        print(f"Missing values in '{column_name}' after imputation:\n", df[column_name].isnull().sum())
+
