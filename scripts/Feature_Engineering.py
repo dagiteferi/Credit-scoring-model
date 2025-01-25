@@ -60,88 +60,61 @@ class Feature_Engineering:
         average_transaction_amount.columns = ['CustomerId', 'average_transaction_amount']
         return average_transaction_amount
     
-def creating_aggregate_features(data):
-    try:
-        aggregates = data.groupby('CustomerId').agg(
-            Total_Transaction_Amount=('Amount', 'sum'),  # Sum of all transaction amounts per customer
-            Average_Transaction_Amount=('Amount', 'mean'),  # Average transaction amount per customer
-            Transaction_Count=('TransactionId', 'count'),  # Count of transactions per customer
-            Std_Transaction_Amount=('Amount', 'std')  # Standard deviation of transaction amounts per customer
-        ).reset_index()
-
-        # Merge the aggregated features back into the original dataframe 'data'
-        data = data.merge(aggregates, on='CustomerId', how='left')
-        return data
-    except Exception as e:
-        print(f"Error occurred: {e}")
-
-def extract_transaction_features(data):
-    try:
-        if not pd.api.types.is_datetime64_any_dtype(data['TransactionStartTime']):
-            data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
-        
-        data['TransactionHour'] = data['TransactionStartTime'].dt.hour
-        data['TransactionDay'] = data['TransactionStartTime'].dt.day
-        data['TransactionMonth'] = data['TransactionStartTime'].dt.month
-        data['TransactionYear'] = data['TransactionStartTime'].dt.year
-        
-        return data
-    except Exception as e:
-        print(f"Error occurred: {e}")
-
-def encoding(data, target_variable='FraudResult', sample_size=10000):
-    logger.info("encoding the categorical variables")
-    try:
-        # Apply Label Encoding for ordinal categorical variables first
-        logger.info("label encoding for ordinal categorical variables")
-        # (Your existing label encoding code)
-
-        # Check data types of columns for WOE encoding
-        logger.info("Checking data types of columns for WOE encoding")
-        logger.info(data.dtypes)
-
-        # Inspect unique values before conversion
-        for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
-            logger.info(f"Unique values in {col}: {data[col].unique()}")
-
-        # Convert categorical to numeric using category codes
-        for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
-            if data[col].dtype == 'object':
-                data[col] = data[col].astype('category').cat.codes
-
-        logger.info("Data types after conversion:")
-        logger.info(data.dtypes)
-
-        # Now apply WOE encoding to a sample of the data
-        logger.info("applying WOE encoding to a sample of the data...")
-        woe = WOE()
+    def encoding(self, data, target_variable='FraudResult'):
+        logger.info("encoding the categorical variables")
         try:
-            sample_data = data.sample(n=sample_size, random_state=1)
-            woe.fit(sample_data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']], sample_data[target_variable])
-            data_woe = woe.transform(data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']])
-            data = pd.concat([data, data_woe], axis=1)
-            iv_values = woe.iv_values_
-            logger.info(f"Information Value (IV) for features: {iv_values}")
+            # Apply Label Encoding for ordinal categorical variables first
+            logger.info("label encoding for ordinal categorical variables")
+            # (Your existing label encoding code)
+
+            # Check data types of columns for WOE encoding
+            logger.info("Checking data types of columns for WOE encoding")
+            logger.info(data.dtypes)
+
+            # Inspect unique values before conversion
+            for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
+                logger.info(f"Unique values in {col}: {data[col].unique()}")
+
+            # Convert categorical to numeric using category codes
+            for col in ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']:
+                if data[col].dtype == 'object':
+                    data[col] = data[col].astype('category').cat.codes
+
+            logger.info("Data types after conversion:")
+            logger.info(data.dtypes)
+
+            # Now apply WOE encoding
+            logger.info("applying WOE encoding to certain categorical variables...")
+            woe = WOE()
+            try:
+                woe.fit(data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']], data[target_variable])
+                data_woe = woe.transform(data[['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']])
+                data_woe.columns = [f"{col}_WOE" for col in data_woe.columns]  # Rename columns to avoid duplicates
+                data = pd.concat([data, data_woe], axis=1)
+                iv_values = woe.iv_values_
+                logger.info(f"Information Value (IV) for features: {iv_values}")
+            except Exception as e:
+                logger.error(f"Error during WOE transformation: {e}")
+
+            # Now apply one-hot encoding for nominal variables
+            logger.info("one-hot encoding for nominal variables")
+            # (Your existing one-hot encoding code)
+
+            return data
+
         except Exception as e:
-            logger.error(f"Error during WOE transformation: {e}")
-
-        # Now apply one-hot encoding for nominal variables
-        logger.info("one-hot encoding for nominal variables")
-        # (Your existing one-hot encoding code)
-
-        return data
-
-    except Exception as e:
-        logger.error(f"error occurred {e}")
-        return data  
+            logger.error(f"error occurred {e}")
+            return data  # Return original data on error
 
 def check_missing_values(df):
-        """Check for missing values in each column of the DataFrame."""
-        missing_values = df.isnull().sum()
-        print("Missing values in each column:\n", missing_values)
-        return missing_values
+    """Check for missing values in each column of the DataFrame."""
+    missing_values = df.isnull().sum()
+    print("Missing values in each column:\n", missing_values)
+    return missing_values
+
 def fill_missing_values_with_mode(df, column_name):
-        """Fill missing values in the specified column with the mode."""
-        df[column_name].fillna(df[column_name].mode()[0], inplace=True)
-        print(f"Missing values in '{column_name}' after imputation:\n", df[column_name].isnull().sum())
+    """Fill missing values in the specified column with the mode."""
+    df[column_name].fillna(df[column_name].mode()[0], inplace=True)
+    print(f"Missing values in '{column_name}' after imputation:\n", df[column_name].isnull().sum())
+
 
