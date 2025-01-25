@@ -28,7 +28,7 @@ class Feature_Engineering:
         average_transaction_amount = filtered_data.groupby('CustomerId')['Amount'].mean().reset_index()
         average_transaction_amount.columns = ['CustomerId', 'average_transaction_amount']
         return average_transaction_amount
-
+    
 # Define the standalone function outside the class
 def creating_aggregate_features(data):
     try:
@@ -44,5 +44,22 @@ def creating_aggregate_features(data):
         return data
     except Exception as e:
         print(f"Error occurred: {e}")
+
+def extract_transaction_features(data):
+    try:
+        if not pd.api.types.is_datetime64_any_dtype(data['TransactionStartTime']):
+            data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
+        
+        data['TransactionHour'] = data['TransactionStartTime'].dt.hour
+        data['TransactionDay'] = data['TransactionStartTime'].dt.day
+        data['TransactionMonth'] = data['TransactionStartTime'].dt.month
+        data['TransactionYear'] = data['TransactionStartTime'].dt.year
+        
+        return data
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+
+
 
 
