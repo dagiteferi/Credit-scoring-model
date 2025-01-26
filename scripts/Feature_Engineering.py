@@ -121,7 +121,7 @@ def creating_aggregate_features(data):
 def extract_features(data):
     logger.info("extracing some features")
     try:
-        # Assuming the 'TransactionStartTime' is in string format, let's convert it to datetime
+       
         data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
 
         # Extracting features from 'TransactionStartTime'
