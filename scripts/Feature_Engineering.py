@@ -223,13 +223,14 @@ def assign_good_and_bad_lables(data):
     threshold = data['RFMS_score'].median()
 
     # Assign labels based on the threshold
-    data['Label'] = np.where(data['RFMS_score'] > threshold, 'Good', 'Bad')
+    data['Label'] = np.where(data['RFMS_score'] > threshold, 1, 0)
 
     # Debugging prints
     print("RFMS Score and Labels after assignment:\n", data[['RFMS_score', 'Label']].head())
     print("Label Distribution after assignment:\n", data['Label'].value_counts())
 
     return data
+
 
 
 def calculate_woe(df, target, feature):
