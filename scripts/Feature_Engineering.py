@@ -215,11 +215,22 @@ def visualuze_RFMS_space(data):
         logger.error(f"Error in visualizing RFMS space: {e}")
 
 def assign_good_and_bad_lables(data):
+    # Handling NaN and inf values
+    data['RFMS_score'].replace([np.inf, -np.inf], np.nan, inplace=True)
+    data['RFMS_score'].fillna(0, inplace=True)  # or use a more appropriate value
+
+    # Calculate the threshold
     threshold = data['RFMS_score'].median()
+
+    # Assign labels based on the threshold
     data['Label'] = np.where(data['RFMS_score'] > threshold, 'Good', 'Bad')
+
     # Debugging prints
     print("RFMS Score and Labels after assignment:\n", data[['RFMS_score', 'Label']].head())
     print("Label Distribution after assignment:\n", data['Label'].value_counts())
+
+    return data
+
 
 def calculate_woe(df, target, feature):
     """
