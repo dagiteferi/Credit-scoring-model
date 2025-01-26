@@ -108,6 +108,16 @@ class Feature_Engineering:
         except Exception as e:
             logger.error(f"error occurred {e}")
             return data  # Return original data on error
+def creating_aggregate_features(data):
+    aggregates = data.groupby('CustomerId').agg(
+        Total_Transaction_Amount=('Amount', 'sum'),
+        Average_Transaction_Amount=('Amount', 'mean'),
+        Transaction_Count=('TransactionId', 'count'),
+        Std_Transaction_Amount=('Amount', 'std')
+    ).reset_index()
+    data = data.merge(aggregates, on='CustomerId', how='left')
+    return data
+
 def extract_features(data):
     logger.info("extracing some features")
     try:
@@ -227,20 +237,14 @@ def calculate_woe(df, target, feature):
 
         woe_df['non_event'] = woe_df['count'] - woe_df['event']
         
-        # Debugging print statement
-        print("WoE DataFrame:\n", woe_df)
-
         total_events = woe_df['event'].sum()
         total_non_events = woe_df['non_event'].sum()
 
-        # Avoid division by zero and skip categories with zero events or non-events
-        if total_events == 0 or total_non_events == 0:
-            raise ValueError("Total events or non-events cannot be zero.")
+        # Avoid division by zero and assign default values
+        woe_df['event_rate'] = np.where(total_events == 0, 0, woe_df['event'] / total_events)
+        woe_df['non_event_rate'] = np.where(total_non_events == 0, 0, woe_df['non_event'] / total_non_events)
 
-        woe_df['event_rate'] = woe_df['event'] / total_events
-        woe_df['non_event_rate'] = woe_df['non_event'] / total_non_events
-        
-        # Calculate WoE and handle zero events or non-events by skipping them
+        # Calculate WoE and handle zero events or non-events by assigning a default value
         woe_df['woe'] = np.where(
             (woe_df['event_rate'] == 0) | (woe_df['non_event_rate'] == 0),
             0,  # Assign a default value for WoE
