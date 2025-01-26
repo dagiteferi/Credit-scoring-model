@@ -216,7 +216,11 @@ def visualuze_RFMS_space(data):
 
 def assign_good_and_bad_lables(data):
     threshold = data['RFMS_score'].median()
+    print("RFMS_score Median Threshold:", threshold)  # Debugging print
+    print("RFMS_score Values:\n", data['RFMS_score'].head())  # Debugging print
+
     data['Label'] = np.where(data['RFMS_score'] > threshold, 'Good', 'Bad')
+    
     # Debugging prints
     print("RFMS Score and Labels after assignment:\n", data[['RFMS_score', 'Label']].head())
     print("Label Distribution after assignment:\n", data['Label'].value_counts())
