@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score , precision_score , recall_score , f1_score , roc_auc_score
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 logging.basicConfig(
     level=logging.DEBUG,  # Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'  # Format of the log messages
@@ -107,6 +107,23 @@ def tain_the_models(X_train,y_train,X_test):
         return logistic_model , random_forest_model
     except Exception as e:
         logger.error(f"error occured {e}")
+
+
+def grid_search_tuning(model, param_grid, X_train, y_train):
+    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='accuracy')
+    grid_search.fit(X_train, y_train)
+    best_params = grid_search.best_params_
+    best_estimator = grid_search.best_estimator_
+    return best_params, best_estimator
+
+def random_search_tuning(model, param_distributions, X_train, y_train, n_iter=100):
+    random_search = RandomizedSearchCV(estimator=model, param_distributions=param_distributions, n_iter=n_iter, cv=5, scoring='accuracy', random_state=42)
+    random_search.fit(X_train, y_train)
+    best_params = random_search.best_params_
+    best_estimator = random_search.best_estimator_
+    return best_params, best_estimator
+
+
 # model evaluation 
 def evaluate_models(model,X_test,y_test):
     logger.info("Evaluate the models")
