@@ -138,10 +138,11 @@ def check_missing_values(df):
     print("Missing values in each column:\n", missing_values)
     return missing_values
 
-def fill_missing_values_with_mode(df, column_name):
-    """Fill missing values in the specified column with the mode."""
-    df[column_name].fillna(df[column_name].mode()[0], inplace=True)
+def fill_missing_values_with_median(df, column_name):
+    """Fill missing values in the specified column with the median."""
+    df[column_name].fillna(df[column_name].median(), inplace=True)
     print(f"Missing values in '{column_name}' after imputation:\n", df[column_name].isnull().sum())
+
 
 def Standardize_numeical_features(data):
     logger.info("normalize the numerical features")
