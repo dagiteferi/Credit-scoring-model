@@ -93,7 +93,7 @@ class Modeling:
             logger.error(f"Error occurred while splitting the data: {e}")
             return None, None, None, None
 
-    def tain_the_models(X_train,y_train,X_test):
+    def train_the_models(self, X_train, y_train):
         """
         Train Logistic Regression and Random Forest models.
         
