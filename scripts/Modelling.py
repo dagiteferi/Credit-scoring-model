@@ -99,21 +99,21 @@ def tain_the_models(X_train, y_train, X_test):
 def define_hyperparameter_grids():
     param_grids = {
         'Logistic Regression': {
-            'C': [0.01, 0.1, 1, 10, 100],
-            'penalty': ['l1', 'l2'],
-            'solver': ['liblinear']
-        },
+        'C': [0.1, 1, 10],
+        'penalty': ['l1', 'l2'],
+        'solver': ['liblinear']
+    },
         'Decision Tree': {
             'max_depth': [None, 10, 20, 30, 40, 50],
             'min_samples_split': [2, 5, 10],
             'min_samples_leaf': [1, 2, 4]
         },
         'Random Forest': {
-            'n_estimators': [50, 100, 200],
-            'max_depth': [None, 10, 20, 30],
-            'min_samples_split': [2, 5, 10],
-            'min_samples_leaf': [1, 2, 4]
-        },
+        'n_estimators': [50, 100],
+        'max_depth': [10, 20],
+        'min_samples_split': [2, 5],
+        'min_samples_leaf': [1, 2]
+    },
         'Gradient Boosting': {
             'n_estimators': [50, 100, 200],
             'learning_rate': [0.01, 0.1, 0.2],
@@ -135,7 +135,20 @@ def perform_grid_search(models, param_grids, X_train, y_train):
         logging.info(f"{name} Best Parameters: {grid_search.best_params_}")
     return best_models
 
-
+def evaluate_best_models(best_models, X_test, y_test):
+    logging.info("Evaluating the best models on the testing data.")
+    results = {}
+    for name, model in best_models.items():
+        y_pred = model.predict(X_test)
+        y_pred_prob = model.predict_proba(X_test)[:, 1]
+        results[name] = {
+            'Accuracy': accuracy_score(y_test, y_pred),
+            'Precision': precision_score(y_test, y_pred),
+            'Recall': recall_score(y_test, y_pred),
+            'F1 Score': f1_score(y_test, y_pred),
+            'ROC-AUC': roc_auc_score(y_test, y_pred_prob)
+        }
+    return 
 def evaluate_models(model, X_test, y_test):
     logger.info("Evaluate the models")
     try:
@@ -155,3 +168,21 @@ def evaluate_models(model, X_test, y_test):
         return y_pred
     except Exception as e:
         logger.error(f"error occurs {e}")
+def save_best_models(self, save_dir='models'):
+        logging.info("Saving best models for further analysis and deployment.")
+        
+        # Ensure the save directory exists
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        
+        for name, model in self.best_models.items():
+            file_path = os.path.join(save_dir, f"{name}_best_model.pkl")
+            try:
+                joblib.dump(model, file_path)
+                logging.info(f"Model {name} saved to {file_path}.")
+            except Exception as e:
+                logging.error(f"Failed to save model {name}: {e}")
+models = {
+    "Logistic Regression": logistic_model,
+    "Random Forest": random_forest_model
+}
