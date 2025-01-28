@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 
+# Corrected features and input values
 features = [
     'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 
     'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count', 'Std_Transaction_Amount',
