@@ -2,3 +2,5 @@ week-6
 data
 __pycache__
 logs
+db.sqlite3
+*.pyc
