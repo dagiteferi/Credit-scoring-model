@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 features = [
-    'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 'FraudResult',
+    'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 
     'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count', 'Std_Transaction_Amount',
     'Transaction_Hour', 'Transaction_Day', 'Transaction_Month', 'Transaction_Year', 'CurrencyCode_WOE',
     'ProviderId_WOE', 'ProductId_WOE', 'ProductCategory_WOE', 'Recency', 'RFMS_score', 'ProductId_1',
@@ -18,19 +18,18 @@ features = [
 
 
 input_values = [
-    5, 0, -0.046371, -0.072291, 2, 0, 0.170118, -0.067623, -0.311831, 0.165122,
-    2, 15, 11, 2018, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False,
-    False, False, False, False, False, False, False, False, False, False, False,
-    False, False, False, False, False, False, False, False, False, True, False,
-    False, False, 2, 15, 11, 3, 0, 1, 1
+    4, 2, -0.050426, -0.076352, 2,  0.165893, -0.074327, -0.389225, 0.145069, 
+    19, 15, 12, 2025, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False, 
+    False, False, False, False, False, False, False, False, False, False, 
+    False, False, False, False, False, False, False, False, False, True, False, 
+    False, 2, 15, 11, 5, 1, 0, 1, 1, 1
 ]
 
 
 
 
 
-
-# Ensure the input_values list length matches the number of features
+# Ensure input_values list length matches the number of features
 print("Number of features:", len(features))
 print("Number of input values:", len(input_values))
 
