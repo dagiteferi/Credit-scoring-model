@@ -2,7 +2,6 @@ import requests
 import json
 import pandas as pd
 
-# Corrected features and input values
 features = [
     'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 'FraudResult',
     'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count', 'Std_Transaction_Amount',
@@ -15,13 +14,21 @@ features = [
     'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday', 'CurrencyCode', 'CountryCode', 'ProductId'
 ]
 
+
+
 input_values = [
-    4, 2, -0.050426, -0.076352, 2, 0, 0.165893, -0.074327, -0.389225, 0.145069,
-    19, 15, 12, 2025, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False,
+    4, 2, -0.050426, -0.076352, 2, 0, 0.165893, -0.074327, -1, 0.145069,
+    19, 15, 12, 2025, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False,  # Valid integer for Transaction_Count
+    False,  # ProductId_1 as boolean
     False, False, False, False, False, False, False, False, False, False,
-    False, False, False, False, False, False, False, False, False, True, False,
-    False, 2, 15, 11, 5, 1, 0, 1, 1, 0  # Adding a placeholder value to match the features list length
+    False, False, False, False, False, False, False, False, False, True, 
+    False,  # ChannelId_ChannelId_3
+    True,  # Corrected ChannelId_ChannelId_5 to boolean
+    True, 15, 11, 5, 1, 0, 1, 1
 ]
+
+
+
 
 
 # Ensure input_values list length matches the number of features
