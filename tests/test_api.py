@@ -11,7 +11,7 @@ features = [
     'ProductId_9', 'ProductId_10', 'ProductId_11', 'ProductId_12', 'ProductId_13', 'ProductId_14',
     'ProductId_15', 'ProductId_16', 'ProductId_17', 'ProductId_18', 'ProductId_19', 'ProductId_20',
     'ProductId_21', 'ProductId_22', 'ChannelId_ChannelId_2', 'ChannelId_ChannelId_3', 'ChannelId_ChannelId_5',
-    'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday', 'CurrencyCode', 'CountryCode', 'ProductId'
+    'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday', 'ProductId'
 ]
 
 
@@ -24,7 +24,7 @@ input_values = [
     False, False, False, False, False, False, False, False, False, True, 
     False,  # ChannelId_ChannelId_3
     True,  # Corrected ChannelId_ChannelId_5 to boolean
-    True, 15, 11, 5, 1, 0, 1, 1
+    True, 15, 11, 5, 1, 1
 ]
 
 

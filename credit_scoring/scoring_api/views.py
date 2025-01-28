@@ -27,7 +27,7 @@ class ScoringView(APIView):
                 data['ProductId_17'], data['ProductId_18'], data['ProductId_19'], data['ProductId_20'], data['ProductId_21'], 
                 data['ProductId_22'], data['ChannelId_ChannelId_2'], data['ChannelId_ChannelId_3'], data['ChannelId_ChannelId_5'], 
                 data['TransactionHour'], data['TransactionDay'], data['TransactionMonth'], data['TransactionWeekday'], 
-                data['CurrencyCode'], data['CountryCode'], data['ProductId']
+                 data['ProductId']
             ]
 
             try:

@@ -50,6 +50,6 @@ class ScoringSerializer(serializers.Serializer):
     TransactionDay = serializers.IntegerField()
     TransactionMonth = serializers.IntegerField()
     TransactionWeekday = serializers.IntegerField()
-    CurrencyCode = serializers.IntegerField()
-    CountryCode = serializers.IntegerField()
+    # CurrencyCode = serializers.IntegerField()
+    # CountryCode = serializers.IntegerField()
     ProductId = serializers.IntegerField()
