@@ -4,7 +4,7 @@ import pandas as pd
 
 # Corrected features and input values
 features = [
-    'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 
+    'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 'FraudResult',
     'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count', 'Std_Transaction_Amount',
     'Transaction_Hour', 'Transaction_Day', 'Transaction_Month', 'Transaction_Year', 'CurrencyCode_WOE',
     'ProviderId_WOE', 'ProductId_WOE', 'ProductCategory_WOE', 'Recency', 'RFMS_score', 'ProductId_1',
@@ -15,19 +15,13 @@ features = [
     'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday', 'CurrencyCode', 'CountryCode', 'ProductId'
 ]
 
-
-
-
 input_values = [
-    4, 2, -0.050426, -0.076352, 2,  0.165893, -0.074327, -0.389225, 0.145069, 
-    19, 15, 12, 2025, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False, 
-    False, False, False, False, False, False, False, False, False, False, 
-    False, False, False, False, False, False, False, False, False, True, False, 
-    False, 2, 15, 11, 5, 1, 0, 1, 1, 1
+    4, 2, -0.050426, -0.076352, 2, 0, 0.165893, -0.074327, -0.389225, 0.145069,
+    19, 15, 12, 2025, 0.0, 3.137005, 1.645067, 1.620379, 2265, -0.042337, False,
+    False, False, False, False, False, False, False, False, False, False,
+    False, False, False, False, False, False, False, False, False, True, False,
+    False, 2, 15, 11, 5, 1, 0, 1, 1, 0  # Adding a placeholder value to match the features list length
 ]
-
-
-
 
 
 # Ensure input_values list length matches the number of features
