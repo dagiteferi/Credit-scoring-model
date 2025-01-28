@@ -111,7 +111,118 @@ Install the required dependencies
 ```bash
 pip install -r requirements.txt
 ```
+## Usage
+Running the Django Application
+Navigate to the credit_scoring directory
+```bash
+cd credit_scoring
+```
+Apply the database migrations
+```bash
+python manage.py migrate
+```
+Run the Django development server
+```bash
+python manage.py runserver
+```
+
+Making Predictions
+The API endpoint /api/predict/ can be used to make predictions. Use the following sample payload:
+```json
+{
+    "ProviderId": 4,
+    "ProductCategory": 2,
+    "Amount": 0.050426,
+    "Value": 0.076352,
+    "PricingStrategy": 2,
+    "FraudResult": 0,
+    "Total_Transaction_Amount": 0.165893,
+    "Average_Transaction_Amount": -0.074327,
+    "Transaction_Count": -1,
+    "Std_Transaction_Amount": 0.145069,
+    "Transaction_Hour": 19,
+    "Transaction_Day": 15,
+    "Transaction_Month": 12,
+    "Transaction_Year": 2025,
+    "CurrencyCode_WOE": 0.0,
+    "ProviderId_WOE": 3.137005,
+    "ProductId_WOE": 1.645067,
+    "ProductCategory_WOE": 1.620379,
+    "Recency": 2265,
+    "RFMS_score": -0.042337,
+    "ProductId_1": false,
+    "ProductId_2": false,
+    "ProductId_3": false,
+    "ProductId_4": false,
+    "ProductId_5": false,
+    "ProductId_6": false,
+    "ProductId_7": false,
+    "ProductId_8": false,
+    "ProductId_9": false,
+    "ProductId_10": false,
+    "ProductId_11": false,
+    "ProductId_12": false,
+    "ProductId_13": false,
+    "ProductId_14": false,
+    "ProductId_15": false,
+    "ProductId_16": false,
+    "ProductId_17": false,
+    "ProductId_18": false,
+    "ProductId_19": false,
+    "ProductId_20": false,
+    "ProductId_21": false,
+    "ProductId_22": false,
+    "ChannelId_ChannelId_2": true,
+    "ChannelId_ChannelId_3": false,
+    "ChannelId_ChannelId_5": true,
+    "TransactionHour": 15,
+    "TransactionDay": 11,
+    "TransactionMonth": 5,
+    "TransactionWeekday": 1,
+    "ProductId": 1
+}
+
+```
+## Features
+Exploratory Data Analysis (EDA): Understand data distributions, identify outliers, and visualize correlations.
+
+Feature Engineering: Create aggregate features, extract new features, encode categorical variables, handle missing values, normalize numerical features, and calculate Weight of Evidence (WoE).
+
+Model Training and Evaluation: Train multiple machine learning models, perform hyperparameter tuning, evaluate models, and save the best models.
+
+API Development: Develop a REST API for real-time credit scoring predictions.
 
 
+## Exploratory Data Analysis (EDA)
+The EDA process involves the following steps:
 
+Data Loading and Overview: Load and inspect the dataset.
+
+Missing Values Identification: Check for missing values.
+
+Numerical Features Distribution: Analyze the distribution of numerical features.
+
+Skewness Analysis: Check for skewness in numerical features.
+
+Correlation Analysis: Understand the relationships between features.
+
+Outlier Detection: Identify and handle outliers.
+
+
+## Feature Engineering
+Feature engineering involves several tasks:
+
+Create Aggregate Features: Summarize transaction data for each customer.
+
+Extract Features: Derive new features from existing data.
+
+Encode Categorical Variables: Convert categorical variables into numerical format.
+
+Handle Missing Values: Ensure the dataset is clean.
+
+Normalize/Standardize Numerical Features: Enhance model performance.
+
+Construct RFMS Scores and Labels: Calculate RFMS scores and assign labels.
+
+Calculating Weight of Evidence (WoE): Transform categorical variables
 
