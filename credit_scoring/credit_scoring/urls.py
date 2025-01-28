@@ -20,6 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('scoring_api.urls')),
+    path('', home_view, name='home'),  # Optional, if you added a home view
 ]
+
 
 
