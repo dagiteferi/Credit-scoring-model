@@ -1,13 +1,117 @@
 # Credit Scoring Model for Bati Bank
 
-This repository contains the code and analysis for developing a credit scoring model for Bati Bank. The goal of this project is to build a robust machine learning-based system that can predict customer creditworthiness for the bank’s Buy-Now-Pay-Later (BNPL) service. 
+## Table of Contents
+- [Introduction](#introduction)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
+- [Feature Engineering](#feature-engineering)
+- [Model Training and Evaluation](#model-training-and-evaluation)
+- [API Development](#api-development)
+- [Results](#results)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
-The repository includes data processing, feature engineering, model training, and evaluation steps, providing a comprehensive approach to building and deploying a credit scoring system.
-
----
+## Introduction
+In a world where financial inclusion is critical, providing underserved communities with access to credit becomes paramount. This project aims to develop a comprehensive and effective credit scoring system for Bati Bank, leveraging data from an eCommerce platform to enable a buy-now-pay-later service for customers. The journey encompasses understanding credit scoring methodologies, exploratory data analysis (EDA), feature engineering, model training, and evaluation.
 
 ## Project Structure
+```plaintext
+dagiteferi-credit-scoring-model/
+├── README.md
+├── requirements.txt
+├── credit_scoring/
+│   ├── db.sqlite3
+│   ├── manage.py
+│   ├── urls.py
+│   ├── credit_scoring/
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   │   ├── wsgi.py
+│   │   └── templates/
+│   │       └── predict.html
+│   ├── scoring_api/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   │   └── migrations/
+│   │       └── __init__.py
+│   └── webapp/
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── tests.py
+│       ├── urls.py
+│       ├── views.py
+│       ├── migrations/
+│       │   └── __init__.py
+│       └── templates/
+│           └── home.html
+├── models/
+│   ├── Logistic Regression_best_model.pkl
+│   └── Random Forest_best_model.pkl
+├── notebooks/
+│   ├── README.md
+│   ├── Exploratory_Data_Analysis.ipynb
+│   ├── Feature_Engineering.ipynb
+│   ├── Modelling.ipynb
+│   └── __init__.py
+├── scripts/
+│   ├── README.md
+│   ├── Eda.py
+│   ├── Feature_Engineering.py
+│   ├── Modelling.py
+│   ├── __init__.py
+│   └── file_structure.py
+├── src/
+│   └── __init__.py
+├── tests/
+│   ├── __init__.py
+│   └── test_api.py
+└── .github/
+    └── workflows/
+        └── unittests.yml
+```
+## Installation
+Clone the repository
+```bash
+git clone https://github.com/your-repo/dagiteferi-credit-scoring-model.git
+```
+Navigate to the project directory
+```bash
+cd dagiteferi-credit-scoring-model
+```
+Create a virtual environment
+```bash
+python3 -m venv venv
+```
+Activate the virtual environment
+```bash
+# On Windows
+venv\Scripts\activate
+```
+```bash
+# On macOS/Linux
+source venv/bin/activate
+```
 
-Here’s an overview of the key directories and files in the repository:
+Install the required dependencies
+```bash
+pip install -r requirements.txt
+```
 
-. ├── data/ # Contains raw and processed datasets ├── notebooks/ # Jupyter notebooks for exploratory data analysis (EDA) and experimentation ├── scripts/ # Python scripts for data preprocessing, feature engineering, model training, and evaluation ├── src/ # Source code for model pipeline, including functions for training and evaluating models ├── tests/ # Unit tests for validation and testing ├── .vscode/ # VS Code settings for the development environment ├── .github/ # GitHub workflows and CI/CD configurations ├── requirements.txt # Python package dependencies ├── README.md # Project documentation └── LICENSE # Project license
+
+
+
