@@ -10,10 +10,7 @@
 - [Feature Engineering](#feature-engineering)
 - [Model Training and Evaluation](#model-training-and-evaluation)
 - [API Development](#api-development)
-- [Results](#results)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+
 
 ## Introduction
 In a world where financial inclusion is critical, providing underserved communities with access to credit becomes paramount. This project aims to develop a comprehensive and effective credit scoring system for Bati Bank, leveraging data from an eCommerce platform to enable a buy-now-pay-later service for customers. The journey encompasses understanding credit scoring methodologies, exploratory data analysis (EDA), feature engineering, model training, and evaluation.
@@ -226,3 +223,28 @@ Construct RFMS Scores and Labels: Calculate RFMS scores and assign labels.
 
 Calculating Weight of Evidence (WoE): Transform categorical variables
 
+
+
+
+
+## Model Training and Evaluation
+Data Preprocessing: Clean and prepare the data.
+
+Split the Data: Divide data into training and testing sets.
+
+Train the Models: Train multiple models and compare performance.
+
+Define Hyperparameter Grids: Set up grids for hyperparameter tuning.
+
+Perform Grid Search: Find the best hyperparameters.
+
+Evaluate the Models: Assess model performance.
+
+Save the Best Models: Retain the best-performing models.
+
+## API Development
+Developing the REST API involves the following steps:
+
+Set Up Django Project: Create and configure the Django project.
+
+Develop API Endpoints: Create
