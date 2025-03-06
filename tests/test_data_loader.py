@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from unittest.mock import patch, mock_open
 import logging
-from data_loader import load_data, create_directory_if_not_exists
+from src.data_loader import load_data, create_directory_if_not_exists
 
 # Sample data for mocking file reads
 SAMPLE_CSV = "customer_id,income,credit_score\n1,50000,700\n2,60000,650\n"

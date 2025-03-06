@@ -3,10 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
-from eda import (load_data, data_overview, summary_statistics, 
+from scripts.eda import (load_data, data_overview, summary_statistics, 
                  visualize_distribution, box_plot_for_outliers, 
                  check_for_skewness, distribution_of_numerical_features,
                  correlation_analysis, identify_missing_values)
+
 
 # Sample DataFrame for testing
 @pytest.fixture
