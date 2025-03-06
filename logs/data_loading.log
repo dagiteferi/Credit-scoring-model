@@ -27,3 +27,10 @@
 2025-03-06 12:07:46,347 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
 2025-03-06 12:13:24,501 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
 2025-03-06 12:13:24,501 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 12:13:34,055 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 12:13:34,491 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 12:13:56,291 - INFO - Starting distribution analysis of numerical features
+2025-03-06 12:13:56,306 - INFO - Identified 5 numerical columns: ['CountryCode', 'Amount', 'Value', 'PricingStrategy', 'FraudResult']
+2025-03-06 12:13:56,306 - INFO - Generating histograms
+2025-03-06 12:13:57,200 - INFO - Generating box plots for outlier detection
+2025-03-06 12:13:58,535 - INFO - Generating pair plots for multivariate analysis
