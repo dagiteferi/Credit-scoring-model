@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 def calculate_woe(df, target, feature):
     """
-    Calculate the Weight of Evidence (WOE) for a given feature.
+    Calculate the Weight of Evidence (WoE) for a given feature.
 
     Args:
         df (pd.DataFrame): Input DataFrame.
@@ -56,14 +56,20 @@ def calculate_woe(df, target, feature):
         total_good = (df[target] == 0).sum()
         total_bad = (df[target] == 1).sum()
 
-        for value in grouped[feature].unique():
-            mask = df[feature] == value
-            good = (mask & (df[target] == 0)).sum()
-            bad = (mask & (df[target] == 1)).sum()
-            woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
-            iv = ((good / total_good) - (bad / total_bad)) * woe if (bad > 0 and good > 0) else 0
-            woe_dict[value] = woe
-            iv_values[feature] = iv_values.get(feature, 0) + iv
+        # Handle case where total_good or total_bad is zero
+        if total_good == 0 or total_bad == 0:
+            logger.warning(f"Total good or bad counts are zero for {target}. Setting WOE to 0.")
+            woe_dict = {value: 0 for value in grouped[feature].unique()}
+            iv_values[feature] = 0
+        else:
+            for value in grouped[feature].unique():
+                mask = df[feature] == value
+                good = (mask & (df[target] == 0)).sum()
+                bad = (mask & (df[target] == 1)).sum()
+                woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
+                iv = ((good / total_good) - (bad / total_bad)) * woe if (bad > 0 and good > 0) else 0
+                woe_dict[value] = woe
+                iv_values[feature] = iv_values.get(feature, 0) + iv
 
         # Transform the feature with WOE values
         df[feature + '_WOE'] = df[feature].map(woe_dict).fillna(0)
@@ -104,6 +110,9 @@ def create_aggregate_features(data):
     logger.info("Creating aggregate features for customers")
     try:
         # Filter out negative amounts to avoid skewing aggregates
+        if 'Amount' not in data.columns or 'CustomerId' not in data.columns:
+            raise ValueError("Required columns 'Amount' or 'CustomerId' not found in DataFrame")
+
         filtered_data = data[data['Amount'] > 0]
         logger.info("Filtered data for positive transactions")
         aggregates = filtered_data.groupby('CustomerId').agg(
@@ -115,6 +124,9 @@ def create_aggregate_features(data):
         data = data.merge(aggregates, on='CustomerId', how='left')
         logger.info("Aggregate features created successfully")
         return data
+    except ValueError as ve:
+        logger.error(f"ValueError in creating aggregate features: {ve}")
+        raise
     except Exception as e:
         logger.error(f"Error creating aggregate features: {e}")
         return data
@@ -131,6 +143,9 @@ def extract_time_features(data):
     """
     logger.info("Extracting time-based features")
     try:
+        if 'TransactionStartTime' not in data.columns:
+            raise ValueError("Required column 'TransactionStartTime' not found in DataFrame")
+
         data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
         data['Transaction_Hour'] = data['TransactionStartTime'].dt.hour
         data['Transaction_Day'] = data['TransactionStartTime'].dt.day
@@ -138,6 +153,9 @@ def extract_time_features(data):
         data['Transaction_Year'] = data['TransactionStartTime'].dt.year
         logger.info("Time features extracted successfully")
         return data
+    except ValueError as ve:
+        logger.error(f"ValueError in extracting time features: {ve}")
+        raise
     except Exception as e:
         logger.error(f"Error extracting time features: {e}")
         return data
@@ -155,7 +173,10 @@ def encode_categorical_variables(data, target_variable='FraudResult'):
     """
     logger.info("Encoding categorical variables")
     try:
-        # Convert categorical columns to category type for WOE
+        if target_variable not in data.columns:
+            raise ValueError(f"Target variable '{target_variable}' not found in DataFrame")
+
+        # Define categorical columns for WOE encoding
         categorical_cols = ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']
         for col in categorical_cols:
             if col in data.columns and data[col].dtype == 'object':
@@ -177,6 +198,9 @@ def encode_categorical_variables(data, target_variable='FraudResult'):
         logger.info("Categorical encoding completed")
         return data
 
+    except ValueError as ve:
+        logger.error(f"ValueError in encoding categorical variables: {ve}")
+        raise
     except Exception as e:
         logger.error(f"Error encoding categorical variables: {e}")
         return data
@@ -224,6 +248,10 @@ def standardize_numerical_features(data):
                              'Transaction_Count', 'Std_Transaction_Amount']
         # Ensure all features exist in the dataset
         numerical_features = [col for col in numerical_features if col in data.columns]
+        if not numerical_features:
+            logger.warning("No numerical features found for standardization")
+            return data
+
         scaler = StandardScaler()
         data[numerical_features] = scaler.fit_transform(data[numerical_features])
         logger.info(f"Standardized features sample:\n{data[numerical_features].head()}")
@@ -234,16 +262,22 @@ def standardize_numerical_features(data):
 
 def construct_rfms_scores(data):
     """
-    Construct RFMS (Recency, Frequency, Monetary, Score) features and assign labels.
+    Construct RFMS (Recency, Frequency, Monetary, Score) features, assign labels, and perform WoE binning.
 
     Args:
         data (pd.DataFrame): Input dataset.
 
     Returns:
-        pd.DataFrame: Dataset with RFMS scores and labels.
+        pd.DataFrame: Dataset with RFMS scores, labels, and WoE binning.
     """
     logger.info("Constructing RFMS scores")
     try:
+        # Validate required columns
+        required_cols = ['TransactionStartTime', 'Transaction_Count', 'Total_Transaction_Amount']
+        missing_cols = [col for col in required_cols if col not in data.columns]
+        if missing_cols:
+            raise ValueError(f"Required columns missing: {missing_cols}")
+
         # Convert to datetime
         data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
         current_date = dt.datetime.now(dt.timezone.utc)
@@ -278,6 +312,9 @@ def construct_rfms_scores(data):
             logger.info("WOE calculation for RFMS_score completed")
         return data
 
+    except ValueError as ve:
+        logger.error(f"ValueError in constructing RFMS scores: {ve}")
+        raise
     except Exception as e:
         logger.error(f"Error constructing RFMS scores: {e}")
         return data
