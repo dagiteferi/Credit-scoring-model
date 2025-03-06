@@ -49,3 +49,7 @@
 2025-03-06 15:59:34,644 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
 2025-03-06 16:00:16,519 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
 2025-03-06 16:00:16,521 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 16:02:31,220 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:02:31,709 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:02:48,962 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:02:49,470 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
