@@ -1,4 +1,3 @@
-# feature_engineering.py
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -31,11 +30,11 @@ def calculate_woe(df, target, feature):
 
     Args:
         df (pd.DataFrame): Input DataFrame.
-        target (str): Target column name (e.g., 'FraudResult' or 'Label').
+        target (str): Target column name (e.g., 'Label').
         feature (str): Feature column name to calculate WOE for.
 
     Returns:
-        pd.DataFrame: DataFrame with WOE values, counts, events, and non-events.
+        tuple: (pd.DataFrame with WOE values, counts, events, and non-events, Information Value).
 
     Raises:
         ValueError: If target or feature column is not found.
@@ -46,24 +45,20 @@ def calculate_woe(df, target, feature):
         if target not in df.columns or feature not in df.columns:
             raise ValueError(f"Columns '{target}' or '{feature}' not found in DataFrame")
 
-        # Convert target to numeric and handle errors
         df[target] = pd.to_numeric(df[target], errors='coerce')
         woe_dict = {}
-        iv_values = {}
+        iv_total = 0
 
-        # Extract unique values directly from the feature column
         unique_values = df[feature].unique()
         total_good = (df[target] == 0).sum()
         total_bad = (df[target] == 1).sum()
 
-        # Handle case where total_good or total_bad is zero
         if total_good == 0 or total_bad == 0:
             logger.warning(f"Total good or bad counts are zero for {target}. Setting WOE to 0.")
             woe_dict = {value: 0 for value in unique_values}
-            iv_values[feature] = 0
+            iv_total = 0
         else:
             for value in unique_values:
-                # Handle NaN values explicitly
                 if pd.isna(value):
                     mask = df[feature].isna()
                 else:
@@ -73,13 +68,11 @@ def calculate_woe(df, target, feature):
                 woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
                 iv = ((good / total_good) - (bad / total_bad)) * woe if (bad > 0 and good > 0) else 0
                 woe_dict[value] = woe
-                iv_values[feature] = iv_values.get(feature, 0) + iv
+                iv_total += iv
 
-        # Transform the feature with WOE values
         df[feature + '_WOE'] = df[feature].map(woe_dict).fillna(0)
-        logger.info(f"WOE and IV calculated for {feature}. IV: {iv_values}")
+        logger.info(f"WOE and IV calculated for {feature}. IV: {iv_total}")
 
-        # Return WOE summary
         woe_df = df.groupby(feature).agg(
             count=(target, 'size'),
             event=(target, 'sum')
@@ -92,14 +85,14 @@ def calculate_woe(df, target, feature):
         woe_df['woe'] = woe_df[feature].map(woe_dict).fillna(0)
 
         logger.info(f"WOE calculation completed for {feature}")
-        return woe_df[[feature, 'count', 'event', 'non_event', 'woe']]
-
+        return woe_df[[feature, 'count', 'event', 'non_event', 'woe']], iv_total
     except ValueError as ve:
         logger.error(f"ValueError in WOE calculation: {ve}")
         raise
     except Exception as e:
         logger.error(f"Unexpected error in WOE calculation: {e}")
-        return None
+        return None, 0
+
 def create_aggregate_features(data):
     """
     Create aggregate features for each customer (Total, Average, Count, Std of Transaction Amounts).
@@ -132,7 +125,7 @@ def create_aggregate_features(data):
         # Impute Std_Transaction_Amount where it is NaN (e.g., single transaction)
         aggregates['Std_Transaction_Amount'] = aggregates['Std_Transaction_Amount'].fillna(0)
 
-        # Merge aggregates back to the original data
+        # Merge aggregates back to the original data, preserving all rows
         data = data.merge(aggregates, on='CustomerId', how='left')
         logger.info("Aggregate features created successfully")
         return data
@@ -152,6 +145,10 @@ def extract_time_features(data):
 
     Returns:
         pd.DataFrame: Dataset with extracted time features.
+
+    Raises:
+        ValueError: If required column 'TransactionStartTime' is not found.
+        Exception: For other unexpected errors.
     """
     logger.info("Extracting time-based features")
     try:
@@ -172,24 +169,28 @@ def extract_time_features(data):
         logger.error(f"Error extracting time features: {e}")
         return data
 
-def encode_categorical_variables(data, target_variable='FraudResult'):
+def encode_categorical_variables(data, target_variable='Label'):
     """
-    Encode categorical variables using WOE, Label Encoding, and One-Hot Encoding.
+    Encode categorical variables using WOE and One-Hot Encoding.
 
     Args:
         data (pd.DataFrame): Input dataset.
-        target_variable (str): Target column for WOE calculation.
+        target_variable (str): Target column for WOE calculation (default: 'Label').
 
     Returns:
         pd.DataFrame: Dataset with encoded categorical variables.
+
+    Raises:
+        ValueError: If target variable is not found.
+        Exception: For other unexpected errors.
     """
     logger.info("Encoding categorical variables")
     try:
         if target_variable not in data.columns:
             raise ValueError(f"Target variable '{target_variable}' not found in DataFrame")
 
-        # Define categorical columns for WOE encoding
-        categorical_cols = ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']
+        # Define categorical columns for WOE encoding, excluding constant CurrencyCode
+        categorical_cols = ['ProviderId', 'ProductId', 'ProductCategory']
         for col in categorical_cols:
             if col in data.columns and data[col].dtype == 'object':
                 data[col] = data[col].astype('category').cat.codes
@@ -197,19 +198,21 @@ def encode_categorical_variables(data, target_variable='FraudResult'):
 
         # Apply WOE encoding
         logger.info("Applying WOE encoding")
+        iv_dict = {}
         for col in categorical_cols:
-            if col in data.columns:
-                woe_df = calculate_woe(data, target_variable, col)
+            if col in data.columns and f"{col}_WOE" not in data.columns:  # Avoid duplicate columns
+                woe_df, iv = calculate_woe(data, target_variable, col)
                 if woe_df is not None:
                     data = pd.concat([data, pd.DataFrame({f"{col}_WOE": data[col].map(dict(zip(woe_df[col], woe_df['woe']))).fillna(0)})], axis=1)
+                    iv_dict[col] = iv
 
-        # Apply One-Hot Encoding for nominal variables
+        # Apply One-Hot Encoding for ChannelId
         logger.info("Applying One-Hot Encoding")
-        if 'ChannelId' in data.columns:
-            data = pd.get_dummies(data, columns=['ChannelId'], drop_first=True)
+        if 'ChannelId' in data.columns and any(f"ChannelId_ChannelId_{i}" not in data.columns for i in range(2, 6)):
+            data = pd.get_dummies(data, columns=['ChannelId'], drop_first=True, prefix='ChannelId')
+        logger.info(f"Information Values for features: {iv_dict}")
         logger.info("Categorical encoding completed")
         return data
-
     except ValueError as ve:
         logger.error(f"ValueError in encoding categorical variables: {ve}")
         raise
@@ -226,6 +229,9 @@ def check_and_handle_missing_values(data):
 
     Returns:
         pd.DataFrame: Dataset with handled missing values.
+
+    Raises:
+        Exception: For unexpected errors.
     """
     logger.info("Checking for missing values")
     try:
@@ -253,12 +259,14 @@ def standardize_numerical_features(data):
 
     Returns:
         pd.DataFrame: Dataset with standardized numerical features.
+
+    Raises:
+        Exception: For unexpected errors.
     """
     logger.info("Standardizing numerical features")
     try:
         numerical_features = ['Amount', 'Value', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
                              'Transaction_Count', 'Std_Transaction_Amount']
-        # Ensure all features exist in the dataset
         numerical_features = [col for col in numerical_features if col in data.columns]
         if not numerical_features:
             logger.warning("No numerical features found for standardization")
@@ -281,32 +289,31 @@ def construct_rfms_scores(data):
 
     Returns:
         pd.DataFrame: Dataset with RFMS scores, labels, and WoE binning.
+
+    Raises:
+        ValueError: If required columns are missing.
+        Exception: For other unexpected errors.
     """
     logger.info("Constructing RFMS scores")
     try:
-        # Validate required columns
         required_cols = ['TransactionStartTime', 'Transaction_Count', 'Total_Transaction_Amount']
         missing_cols = [col for col in required_cols if col not in data.columns]
         if missing_cols:
             raise ValueError(f"Required columns missing: {missing_cols}")
 
-        # Convert to datetime
         data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
         current_date = dt.datetime.now(dt.timezone.utc)
         data['Recency'] = (current_date - data['TransactionStartTime']).dt.days
 
-        # Calculate RFMS score
         data['RFMS_score'] = (1 / (data['Recency'] + 1) * 0.4) + (data['Transaction_Count'] * 0.3) + \
                            (data['Total_Transaction_Amount'] * 0.3)
         data['RFMS_score'].replace([np.inf, -np.inf], np.nan, inplace=True)
         data['RFMS_score'].fillna(0, inplace=True)
 
-        # Assign labels based on median threshold
         threshold = data['RFMS_score'].median()
         data['Label'] = np.where(data['RFMS_score'] > threshold, 1, 0)
         logger.info(f"RFMS score distribution:\n{data['Label'].value_counts()}")
 
-        # Visualize RFMS space
         logger.info("Visualizing RFMS space")
         plt.figure(figsize=(10, 6))
         plt.scatter(data['Transaction_Count'], data['Total_Transaction_Amount'], c=data['RFMS_score'], cmap='viridis')
@@ -316,14 +323,12 @@ def construct_rfms_scores(data):
         plt.title('RFMS Visualization')
         plt.show()
 
-        # Calculate WOE for RFMS_score
         logger.info("Calculating WOE for RFMS_score")
         woe_results = calculate_woe(data, 'Label', 'RFMS_score')
         if woe_results is not None:
-            print("WOE Results for RFMS_score:\n", woe_results)
+            print("WOE Results for RFMS_score:\n", woe_results[0])
             logger.info("WOE calculation for RFMS_score completed")
         return data
-
     except ValueError as ve:
         logger.error(f"ValueError in constructing RFMS scores: {ve}")
         raise
@@ -331,3 +336,16 @@ def construct_rfms_scores(data):
         logger.error(f"Error constructing RFMS scores: {e}")
         return data
 
+if __name__ == "__main__":
+    logger.info("Starting Feature Engineering workflow")
+    data = pd.DataFrame()  # Placeholder; replace with your loaded data
+
+    data = create_aggregate_features(data)
+    data = extract_time_features(data)
+    data = encode_categorical_variables(data)
+    data = check_and_handle_missing_values(data)
+    data = standardize_numerical_features(data)
+    data = construct_rfms_scores(data)
+
+    logger.info("Feature Engineering workflow completed")
+    print("Final dataset head:\n", data.head())
