@@ -522,3 +522,125 @@ Name: count, dtype: int64
 2025-03-06 16:52:31,482 - INFO - WOE and IV calculated for RFMS_score. IV: {'RFMS_score': 0}
 2025-03-06 16:52:31,501 - INFO - WOE calculation completed for RFMS_score
 2025-03-06 16:52:31,518 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 17:02:10,870 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 17:02:10,871 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 17:02:13,405 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 17:02:13,745 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 17:02:44,985 - INFO - Creating aggregate features for customers
+2025-03-06 17:02:44,987 - INFO - Processing all transactions
+2025-03-06 17:02:45,093 - INFO - Aggregate features created successfully
+2025-03-06 17:03:21,491 - INFO - Extracting time-based features
+2025-03-06 17:03:21,693 - INFO - Time features extracted successfully
+2025-03-06 17:04:19,342 - INFO - Encoding categorical variables
+2025-03-06 17:04:19,343 - ERROR - ValueError in encoding categorical variables: Target variable 'Label' not found in DataFrame
+2025-03-06 17:08:04,706 - INFO - Constructing RFMS scores
+2025-03-06 17:08:04,739 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 17:08:04,749 - INFO - Visualizing RFMS space
+2025-03-06 17:08:06,798 - INFO - Calculating WOE for RFMS_score
+2025-03-06 17:08:06,798 - INFO - Calculating WOE for feature: RFMS_score
+2025-03-06 17:08:19,853 - INFO - WOE and IV calculated for RFMS_score. IV: 0
+2025-03-06 17:08:19,889 - INFO - WOE calculation completed for RFMS_score
+2025-03-06 17:08:19,895 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 17:44:34,616 - INFO - Encoding categorical variables
+2025-03-06 17:44:34,626 - INFO - Converted ProviderId to category codes
+2025-03-06 17:44:34,633 - INFO - Converted ProductId to category codes
+2025-03-06 17:44:34,636 - INFO - Converted ProductCategory to category codes
+2025-03-06 17:44:34,636 - INFO - Applying WOE encoding
+2025-03-06 17:44:34,636 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 17:44:34,654 - INFO - WOE and IV calculated for ProviderId. IV: 0.13202650052403148
+2025-03-06 17:44:34,662 - INFO - WOE calculation completed for ProviderId
+2025-03-06 17:44:34,739 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 17:44:34,763 - INFO - WOE and IV calculated for ProductId. IV: 0.052235071315386856
+2025-03-06 17:44:34,765 - INFO - WOE calculation completed for ProductId
+2025-03-06 17:44:34,816 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 17:44:34,835 - INFO - WOE and IV calculated for ProductCategory. IV: 0.027772767137246857
+2025-03-06 17:44:34,851 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 17:44:34,905 - INFO - Applying One-Hot Encoding
+2025-03-06 17:44:34,971 - INFO - Information Values for features: {'ProviderId': np.float64(0.13202650052403148), 'ProductId': np.float64(0.052235071315386856), 'ProductCategory': np.float64(0.027772767137246857)}
+2025-03-06 17:44:34,972 - INFO - Categorical encoding completed
+2025-03-06 17:44:46,493 - INFO - Encoding categorical variables
+2025-03-06 17:44:46,495 - INFO - Applying WOE encoding
+2025-03-06 17:44:46,497 - INFO - Applying One-Hot Encoding
+2025-03-06 17:44:46,497 - INFO - Information Values for features: {}
+2025-03-06 17:44:46,498 - INFO - Categorical encoding completed
+2025-03-06 17:45:31,628 - INFO - Checking for missing values
+2025-03-06 17:45:31,660 - INFO - Missing values:
+TransactionId                 0
+BatchId                       0
+AccountId                     0
+SubscriptionId                0
+CustomerId                    0
+CurrencyCode                  0
+CountryCode                   0
+ProviderId                    0
+ProductId                     0
+ProductCategory               0
+Amount                        0
+Value                         0
+TransactionStartTime          0
+PricingStrategy               0
+FraudResult                   0
+Total_Transaction_Amount      0
+Average_Transaction_Amount    0
+Transaction_Count             0
+Std_Transaction_Amount        0
+Transaction_Hour              0
+Transaction_Day               0
+Transaction_Month             0
+Transaction_Year              0
+Recency                       0
+RFMS_score                    0
+Label                         0
+RFMS_score_WOE                0
+ProviderId_WOE                0
+ProviderId_WOE                0
+ProductId_WOE                 0
+ProductId_WOE                 0
+ProductCategory_WOE           0
+ProductCategory_WOE           0
+ChannelId_ChannelId_2         0
+ChannelId_ChannelId_3         0
+ChannelId_ChannelId_5         0
+dtype: int64
+2025-03-06 17:45:31,661 - INFO - No missing values found
+2025-03-06 17:45:52,293 - INFO - Standardizing numerical features
+2025-03-06 17:45:52,331 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
+2025-03-06 17:55:33,415 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 17:55:33,416 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 17:55:33,452 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 17:55:33,809 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 17:55:44,327 - INFO - Creating aggregate features for customers
+2025-03-06 17:55:44,328 - INFO - Processing all transactions
+2025-03-06 17:55:44,387 - INFO - Aggregate features created successfully
+2025-03-06 17:56:29,808 - INFO - Extracting time-based features
+2025-03-06 17:56:29,974 - INFO - Time features extracted successfully
+2025-03-06 17:57:05,653 - INFO - Constructing RFMS scores
+2025-03-06 17:57:05,685 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 17:57:05,686 - INFO - Visualizing RFMS space
+2025-03-06 17:57:07,882 - INFO - Binning RFMS_score for WOE calculation
+2025-03-06 17:57:07,882 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-06 17:57:07,882 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-06 17:57:07,908 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0
+2025-03-06 17:57:07,920 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-06 17:57:07,925 - ERROR - Error constructing RFMS scores: 'dict' object has no attribute 'fillna'

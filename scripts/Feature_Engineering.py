@@ -281,19 +281,6 @@ def standardize_numerical_features(data):
         return data
 
 def construct_rfms_scores(data):
-    """
-    Construct RFMS (Recency, Frequency, Monetary, Score) features, assign labels, and perform WoE binning.
-
-    Args:
-        data (pd.DataFrame): Input dataset.
-
-    Returns:
-        pd.DataFrame: Dataset with RFMS scores, labels, and WoE binning.
-
-    Raises:
-        ValueError: If required columns are missing.
-        Exception: For other unexpected errors.
-    """
     logger.info("Constructing RFMS scores")
     try:
         required_cols = ['TransactionStartTime', 'Transaction_Count', 'Total_Transaction_Amount']
@@ -302,13 +289,12 @@ def construct_rfms_scores(data):
             raise ValueError(f"Required columns missing: {missing_cols}")
 
         data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
-        current_date = dt.datetime.now(dt.timezone.utc)
+        current_date = pd.Timestamp.now(tz='UTC')
         data['Recency'] = (current_date - data['TransactionStartTime']).dt.days
 
         data['RFMS_score'] = (1 / (data['Recency'] + 1) * 0.4) + (data['Transaction_Count'] * 0.3) + \
                            (data['Total_Transaction_Amount'] * 0.3)
-        data['RFMS_score'].replace([np.inf, -np.inf], np.nan, inplace=True)
-        data['RFMS_score'].fillna(0, inplace=True)
+        data['RFMS_score'] = data['RFMS_score'].replace([np.inf, -np.inf], np.nan).fillna(0)
 
         threshold = data['RFMS_score'].median()
         data['Label'] = np.where(data['RFMS_score'] > threshold, 1, 0)
@@ -323,10 +309,13 @@ def construct_rfms_scores(data):
         plt.title('RFMS Visualization')
         plt.show()
 
-        logger.info("Calculating WOE for RFMS_score")
-        woe_results = calculate_woe(data, 'Label', 'RFMS_score')
+        logger.info("Binning RFMS_score for WOE calculation")
+        data['RFMS_score_binned'] = pd.qcut(data['RFMS_score'], q=10, duplicates='drop', labels=False)
+        logger.info("Calculating WOE for RFMS_score_binned")
+        woe_results = calculate_woe(data, 'Label', 'RFMS_score_binned')
         if woe_results is not None:
-            print("WOE Results for RFMS_score:\n", woe_results[0])
+            print("WOE Results for RFMS_score_binned:\n", woe_results[0])
+            data = pd.concat([data, pd.DataFrame({'RFMS_score_WOE': data['RFMS_score_binned'].map(dict(zip(woe_results[0]['RFMS_score_binned'], woe_results[0]['woe'])).fillna(0))})], axis=1)
             logger.info("WOE calculation for RFMS_score completed")
         return data
     except ValueError as ve:
@@ -335,7 +324,6 @@ def construct_rfms_scores(data):
     except Exception as e:
         logger.error(f"Error constructing RFMS scores: {e}")
         return data
-
 if __name__ == "__main__":
     logger.info("Starting Feature Engineering workflow")
     data = pd.DataFrame()  # Placeholder; replace with your loaded data
