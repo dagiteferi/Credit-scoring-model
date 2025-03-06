@@ -100,3 +100,114 @@
 2025-03-06 16:27:22,670 - INFO - Calculating WOE for feature: CurrencyCode
 2025-03-06 16:27:22,684 - ERROR - ValueError in WOE calculation: ('Lengths must match to compare', (95662,), (1,))
 2025-03-06 16:27:22,684 - ERROR - ValueError in encoding categorical variables: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:33:31,847 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 16:33:31,849 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 16:33:32,945 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:33:33,379 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:33:35,031 - INFO - Creating aggregate features for customers
+2025-03-06 16:33:35,049 - INFO - Filtered data for positive transactions
+2025-03-06 16:33:35,113 - INFO - Aggregate features created successfully
+2025-03-06 16:33:37,357 - INFO - Extracting time-based features
+2025-03-06 16:33:37,531 - INFO - Time features extracted successfully
+2025-03-06 16:35:33,606 - INFO - Step 3: Encoding categorical variables
+2025-03-06 16:35:33,631 - INFO - Encoding categorical variables
+2025-03-06 16:35:33,639 - INFO - Converted CurrencyCode to category codes
+2025-03-06 16:35:33,647 - INFO - Converted ProviderId to category codes
+2025-03-06 16:35:33,654 - INFO - Converted ProductId to category codes
+2025-03-06 16:35:33,661 - INFO - Converted ProductCategory to category codes
+2025-03-06 16:35:33,662 - INFO - Applying WOE encoding
+2025-03-06 16:35:33,662 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:35:33,670 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:35:33,680 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:35:33,727 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:35:33,739 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:35:33,749 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:35:33,782 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:35:33,815 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:35:33,815 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:35:33,848 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:35:33,875 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:35:33,888 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:35:33,933 - INFO - Applying One-Hot Encoding
+2025-03-06 16:35:33,992 - INFO - Categorical encoding completed
+2025-03-06 16:35:33,994 - INFO - Categorical variables encoded
+2025-03-06 16:36:17,603 - INFO - Encoding categorical variables
+2025-03-06 16:36:17,604 - INFO - Applying WOE encoding
+2025-03-06 16:36:17,606 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:36:17,606 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:36:17,628 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:36:17,658 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:36:17,677 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:36:17,679 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:36:17,731 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:36:17,789 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:36:17,799 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:36:17,847 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:36:17,862 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:36:17,876 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:36:17,965 - INFO - Applying One-Hot Encoding
+2025-03-06 16:36:17,966 - INFO - Categorical encoding completed
+2025-03-06 16:36:33,188 - INFO - Encoding categorical variables
+2025-03-06 16:36:33,190 - INFO - Applying WOE encoding
+2025-03-06 16:36:33,192 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:36:33,207 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:36:33,220 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:36:33,262 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:36:33,273 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:36:33,278 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:36:33,330 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:36:33,374 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:36:33,380 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:36:33,431 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:36:33,444 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:36:33,444 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:36:33,498 - INFO - Applying One-Hot Encoding
+2025-03-06 16:36:33,498 - INFO - Categorical encoding completed
+2025-03-06 16:37:28,736 - INFO - Encoding categorical variables
+2025-03-06 16:37:28,737 - INFO - Applying WOE encoding
+2025-03-06 16:37:28,739 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:37:28,758 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:37:28,771 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:37:28,829 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:37:28,847 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:37:28,861 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:37:28,917 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:37:28,967 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:37:28,978 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:37:29,038 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:37:29,042 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:37:29,062 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:37:29,112 - INFO - Applying One-Hot Encoding
+2025-03-06 16:37:29,112 - INFO - Categorical encoding completed
+2025-03-06 16:37:50,208 - INFO - Encoding categorical variables
+2025-03-06 16:37:50,210 - INFO - Applying WOE encoding
+2025-03-06 16:37:50,211 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:37:50,219 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:37:50,240 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:37:50,300 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:37:50,313 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:37:50,318 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:37:50,367 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:37:50,398 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:37:50,398 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:37:50,469 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:37:50,496 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:37:50,497 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:37:50,568 - INFO - Applying One-Hot Encoding
+2025-03-06 16:37:50,569 - INFO - Categorical encoding completed
+2025-03-06 16:41:23,327 - INFO - Encoding categorical variables
+2025-03-06 16:41:23,329 - INFO - Applying WOE encoding
+2025-03-06 16:41:23,330 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:41:23,346 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:41:23,358 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:41:23,454 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:41:23,494 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:41:23,505 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:41:23,574 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:41:23,609 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:41:23,610 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:41:23,678 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:41:23,711 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:41:23,726 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:41:23,798 - INFO - Applying One-Hot Encoding
+2025-03-06 16:41:23,799 - INFO - Categorical encoding completed
