@@ -53,3 +53,50 @@
 2025-03-06 16:02:31,709 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
 2025-03-06 16:02:48,962 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
 2025-03-06 16:02:49,470 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:06:35,466 - INFO - Creating aggregate features for customers
+2025-03-06 16:06:35,493 - INFO - Filtered data for positive transactions
+2025-03-06 16:06:35,588 - INFO - Aggregate features created successfully
+2025-03-06 16:07:37,915 - INFO - Creating aggregate features for customers
+2025-03-06 16:07:37,941 - INFO - Filtered data for positive transactions
+2025-03-06 16:07:38,055 - INFO - Aggregate features created successfully
+2025-03-06 16:07:50,878 - INFO - Creating aggregate features for customers
+2025-03-06 16:07:50,910 - INFO - Filtered data for positive transactions
+2025-03-06 16:07:51,132 - INFO - Aggregate features created successfully
+2025-03-06 16:09:35,041 - INFO - Extracting time-based features
+2025-03-06 16:09:35,432 - INFO - Time features extracted successfully
+2025-03-06 16:11:28,133 - INFO - Extracting time-based features
+2025-03-06 16:11:28,211 - INFO - Time features extracted successfully
+2025-03-06 16:11:37,579 - INFO - Extracting time-based features
+2025-03-06 16:11:37,697 - INFO - Time features extracted successfully
+2025-03-06 16:26:23,967 - INFO - Encoding categorical variables
+2025-03-06 16:26:23,975 - INFO - Converted CurrencyCode to category codes
+2025-03-06 16:26:23,986 - INFO - Converted ProviderId to category codes
+2025-03-06 16:26:23,992 - INFO - Converted ProductId to category codes
+2025-03-06 16:26:24,002 - INFO - Converted ProductCategory to category codes
+2025-03-06 16:26:24,002 - INFO - Applying WOE encoding
+2025-03-06 16:26:24,002 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:26:24,002 - ERROR - ValueError in WOE calculation: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:26:24,002 - ERROR - ValueError in encoding categorical variables: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:26:42,329 - INFO - Encoding categorical variables
+2025-03-06 16:26:42,330 - INFO - Applying WOE encoding
+2025-03-06 16:26:42,331 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:26:42,342 - ERROR - ValueError in WOE calculation: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:26:42,343 - ERROR - ValueError in encoding categorical variables: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:27:07,165 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 16:27:07,165 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 16:27:10,156 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:27:10,476 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:27:13,911 - INFO - Creating aggregate features for customers
+2025-03-06 16:27:13,916 - INFO - Filtered data for positive transactions
+2025-03-06 16:27:13,982 - INFO - Aggregate features created successfully
+2025-03-06 16:27:19,455 - INFO - Extracting time-based features
+2025-03-06 16:27:19,624 - INFO - Time features extracted successfully
+2025-03-06 16:27:22,637 - INFO - Encoding categorical variables
+2025-03-06 16:27:22,647 - INFO - Converted CurrencyCode to category codes
+2025-03-06 16:27:22,655 - INFO - Converted ProviderId to category codes
+2025-03-06 16:27:22,666 - INFO - Converted ProductId to category codes
+2025-03-06 16:27:22,670 - INFO - Converted ProductCategory to category codes
+2025-03-06 16:27:22,670 - INFO - Applying WOE encoding
+2025-03-06 16:27:22,670 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:27:22,684 - ERROR - ValueError in WOE calculation: ('Lengths must match to compare', (95662,), (1,))
+2025-03-06 16:27:22,684 - ERROR - ValueError in encoding categorical variables: ('Lengths must match to compare', (95662,), (1,))

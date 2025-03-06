@@ -31,7 +31,7 @@ def calculate_woe(df, target, feature):
 
     Args:
         df (pd.DataFrame): Input DataFrame.
-        target (str): Target column name (e.g., 'FraudResult').
+        target (str): Target column name (e.g., 'FraudResult' or 'Label').
         feature (str): Feature column name to calculate WOE for.
 
     Returns:
@@ -51,19 +51,23 @@ def calculate_woe(df, target, feature):
         woe_dict = {}
         iv_values = {}
 
-        # Aggregate data for WOE calculation
-        grouped = df.groupby(feature)
+        # Extract unique values directly from the feature column
+        unique_values = df[feature].unique()
         total_good = (df[target] == 0).sum()
         total_bad = (df[target] == 1).sum()
 
         # Handle case where total_good or total_bad is zero
         if total_good == 0 or total_bad == 0:
             logger.warning(f"Total good or bad counts are zero for {target}. Setting WOE to 0.")
-            woe_dict = {value: 0 for value in grouped[feature].unique()}
+            woe_dict = {value: 0 for value in unique_values}
             iv_values[feature] = 0
         else:
-            for value in grouped[feature].unique():
-                mask = df[feature] == value
+            for value in unique_values:
+                # Handle NaN values explicitly
+                if pd.isna(value):
+                    mask = df[feature].isna()
+                else:
+                    mask = df[feature] == value
                 good = (mask & (df[target] == 0)).sum()
                 bad = (mask & (df[target] == 1)).sum()
                 woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
@@ -96,7 +100,6 @@ def calculate_woe(df, target, feature):
     except Exception as e:
         logger.error(f"Unexpected error in WOE calculation: {e}")
         return None
-
 def create_aggregate_features(data):
     """
     Create aggregate features for each customer (Total, Average, Count, Std of Transaction Amounts).
