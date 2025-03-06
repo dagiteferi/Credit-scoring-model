@@ -1,3 +1,4 @@
+# feature_engineering.py
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -20,17 +21,13 @@ log_file_path = os.path.join(log_dir, "feature_engineering.log")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler(log_file_path),
-        logging.StreamHandler(sys.stdout)
-    ]
+    handlers=[logging.FileHandler(log_file_path), logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger(__name__)
 
-# Custom WOE implementation
 def calculate_woe(df, target, feature):
     """
-    Calculate the Weight of Evidence (WoE) for a given feature.
+    Calculate the Weight of Evidence (WOE) for a given feature.
 
     Args:
         df (pd.DataFrame): Input DataFrame.
@@ -51,25 +48,38 @@ def calculate_woe(df, target, feature):
 
         # Convert target to numeric and handle errors
         df[target] = pd.to_numeric(df[target], errors='coerce')
+        woe_dict = {}
+        iv_values = {}
+
+        # Aggregate data for WOE calculation
+        grouped = df.groupby(feature)
+        total_good = (df[target] == 0).sum()
+        total_bad = (df[target] == 1).sum()
+
+        for value in grouped[feature].unique():
+            mask = df[feature] == value
+            good = (mask & (df[target] == 0)).sum()
+            bad = (mask & (df[target] == 1)).sum()
+            woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
+            iv = ((good / total_good) - (bad / total_bad)) * woe if (bad > 0 and good > 0) else 0
+            woe_dict[value] = woe
+            iv_values[feature] = iv_values.get(feature, 0) + iv
+
+        # Transform the feature with WOE values
+        df[feature + '_WOE'] = df[feature].map(woe_dict).fillna(0)
+        logger.info(f"WOE and IV calculated for {feature}. IV: {iv_values}")
+
+        # Return WOE summary
         woe_df = df.groupby(feature).agg(
             count=(target, 'size'),
             event=(target, 'sum')
         ).reset_index()
-
         woe_df['non_event'] = woe_df['count'] - woe_df['event']
         total_events = woe_df['event'].sum()
         total_non_events = woe_df['non_event'].sum()
-
-        # Avoid division by zero
         woe_df['event_rate'] = np.where(total_events == 0, 0, woe_df['event'] / total_events)
         woe_df['non_event_rate'] = np.where(total_non_events == 0, 0, woe_df['non_event'] / total_non_events)
-
-        # Calculate WOE with handling for zero rates
-        woe_df['woe'] = np.where(
-            (woe_df['event_rate'] == 0) | (woe_df['non_event_rate'] == 0),
-            0,  # Default value for undefined WOE
-            np.log(woe_df['event_rate'] / woe_df['non_event_rate']).replace([-np.inf, np.inf], 0)
-        )
+        woe_df['woe'] = woe_df[feature].map(woe_dict).fillna(0)
 
         logger.info(f"WOE calculation completed for {feature}")
         return woe_df[[feature, 'count', 'event', 'non_event', 'woe']]
@@ -80,79 +90,6 @@ def calculate_woe(df, target, feature):
     except Exception as e:
         logger.error(f"Unexpected error in WOE calculation: {e}")
         return None
-
-class WOE:
-    def __init__(self):
-        self.woe_dict = {}
-        self.iv_values_ = {}
-
-    def fit(self, X, y):
-        """
-        Fit the WOE transformation to the data.
-
-        Args:
-            X (pd.DataFrame): Feature DataFrame.
-            y (pd.Series): Target variable.
-        """
-        logger.info("Fitting WOE transformation")
-        self.woe_dict = {}
-        self.iv_values_ = {}
-        for column in X.columns:
-            self.woe_dict[column] = {}
-            total_good = (y == 0).sum()
-            total_bad = (y == 1).sum()
-            for value in X[column].unique():
-                good = ((X[column] == value) & (y == 0)).sum()
-                bad = ((X[column] == value) & (y == 1)).sum()
-                woe = np.log((good / total_good) / (bad / total_bad)) if (bad > 0 and good > 0) else 0
-                iv = ((good / total_good) - (bad / total_bad)) * woe if (bad > 0 and good > 0) else 0
-                self.woe_dict[column][value] = woe
-                self.iv_values_.setdefault(column, 0)
-                self.iv_values_[column] += iv
-        logger.info(f"WOE fit completed with IV values: {self.iv_values_}")
-
-    def transform(self, X):
-        """
-        Transform the data using fitted WOE values.
-
-        Args:
-            X (pd.DataFrame): Feature DataFrame to transform.
-
-        Returns:
-            pd.DataFrame: Transformed DataFrame with WOE values.
-        """
-        logger.info("Transforming data with WOE")
-        X_woe = X.copy()
-        for column in X.columns:
-            X_woe[column] = X_woe[column].map(self.woe_dict[column]).fillna(0)
-        logger.info("WOE transformation completed")
-        return X_woe
-
-def load_data(file_path):
-    """
-    Load the dataset from a CSV file.
-
-    Args:
-        file_path (str): Path to the CSV file.
-
-    Returns:
-        pd.DataFrame: Loaded dataset.
-
-    Raises:
-        FileNotFoundError: If the file is not found.
-        Exception: For other loading errors.
-    """
-    logger.info(f"Attempting to load data from: {file_path}")
-    try:
-        data = pd.read_csv(file_path)
-        logger.info(f"Successfully loaded data with shape: {data.shape}")
-        return data
-    except FileNotFoundError as fnf:
-        logger.error(f"File not found: {fnf}")
-        raise
-    except Exception as e:
-        logger.error(f"Error loading data: {e}")
-        raise
 
 def create_aggregate_features(data):
     """
@@ -166,7 +103,10 @@ def create_aggregate_features(data):
     """
     logger.info("Creating aggregate features for customers")
     try:
-        aggregates = data.groupby('CustomerId').agg(
+        # Filter out negative amounts to avoid skewing aggregates
+        filtered_data = data[data['Amount'] > 0]
+        logger.info("Filtered data for positive transactions")
+        aggregates = filtered_data.groupby('CustomerId').agg(
             Total_Transaction_Amount=('Amount', 'sum'),
             Average_Transaction_Amount=('Amount', 'mean'),
             Transaction_Count=('TransactionId', 'count'),
@@ -218,22 +158,22 @@ def encode_categorical_variables(data, target_variable='FraudResult'):
         # Convert categorical columns to category type for WOE
         categorical_cols = ['CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory']
         for col in categorical_cols:
-            if data[col].dtype == 'object':
+            if col in data.columns and data[col].dtype == 'object':
                 data[col] = data[col].astype('category').cat.codes
                 logger.info(f"Converted {col} to category codes")
 
         # Apply WOE encoding
         logger.info("Applying WOE encoding")
-        woe_encoder = WOE()
-        woe_encoder.fit(data[categorical_cols], data[target_variable])
-        data_woe = woe_encoder.transform(data[categorical_cols])
-        data_woe.columns = [f"{col}_WOE" for col in data_woe.columns]
-        data = pd.concat([data, data_woe], axis=1)
-        logger.info(f"WOE IV values: {woe_encoder.iv_values_}")
+        for col in categorical_cols:
+            if col in data.columns:
+                woe_df = calculate_woe(data, target_variable, col)
+                if woe_df is not None:
+                    data = pd.concat([data, pd.DataFrame({f"{col}_WOE": data[col].map(dict(zip(woe_df[col], woe_df['woe']))).fillna(0)})], axis=1)
 
         # Apply One-Hot Encoding for nominal variables
         logger.info("Applying One-Hot Encoding")
-        data = pd.get_dummies(data, columns=['ChannelId'], drop_first=True)
+        if 'ChannelId' in data.columns:
+            data = pd.get_dummies(data, columns=['ChannelId'], drop_first=True)
         logger.info("Categorical encoding completed")
         return data
 
@@ -243,7 +183,7 @@ def encode_categorical_variables(data, target_variable='FraudResult'):
 
 def check_and_handle_missing_values(data):
     """
-    Check and handle missing values using imputation or removal.
+    Check and handle missing values using imputation.
 
     Args:
         data (pd.DataFrame): Input dataset.
@@ -268,27 +208,28 @@ def check_and_handle_missing_values(data):
         logger.error(f"Error handling missing values: {e}")
         return data
 
-def normalize_standardize_features(data):
+def standardize_numerical_features(data):
     """
-    Normalize and standardize numerical features.
+    Standardize numerical features to have a mean of 0 and standard deviation of 1.
 
     Args:
         data (pd.DataFrame): Input dataset.
 
     Returns:
-        pd.DataFrame: Dataset with normalized/standardized features.
+        pd.DataFrame: Dataset with standardized numerical features.
     """
-    logger.info("Normalizing and standardizing numerical features")
+    logger.info("Standardizing numerical features")
     try:
-        numerical_features = ['Amount', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
+        numerical_features = ['Amount', 'Value', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
                              'Transaction_Count', 'Std_Transaction_Amount']
-        # Standardize features
+        # Ensure all features exist in the dataset
+        numerical_features = [col for col in numerical_features if col in data.columns]
         scaler = StandardScaler()
         data[numerical_features] = scaler.fit_transform(data[numerical_features])
         logger.info(f"Standardized features sample:\n{data[numerical_features].head()}")
         return data
     except Exception as e:
-        logger.error(f"Error normalizing/standardizing features: {e}")
+        logger.error(f"Error standardizing numerical features: {e}")
         return data
 
 def construct_rfms_scores(data):
@@ -320,6 +261,7 @@ def construct_rfms_scores(data):
         logger.info(f"RFMS score distribution:\n{data['Label'].value_counts()}")
 
         # Visualize RFMS space
+        logger.info("Visualizing RFMS space")
         plt.figure(figsize=(10, 6))
         plt.scatter(data['Transaction_Count'], data['Total_Transaction_Amount'], c=data['RFMS_score'], cmap='viridis')
         plt.colorbar(label='RFMS Score')
@@ -329,6 +271,7 @@ def construct_rfms_scores(data):
         plt.show()
 
         # Calculate WOE for RFMS_score
+        logger.info("Calculating WOE for RFMS_score")
         woe_results = calculate_woe(data, 'Label', 'RFMS_score')
         if woe_results is not None:
             print("WOE Results for RFMS_score:\n", woe_results)
