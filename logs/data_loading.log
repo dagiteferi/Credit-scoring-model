@@ -644,3 +644,50 @@ Name: count, dtype: int64
 2025-03-06 17:57:07,908 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0
 2025-03-06 17:57:07,920 - INFO - WOE calculation completed for RFMS_score_binned
 2025-03-06 17:57:07,925 - ERROR - Error constructing RFMS scores: 'dict' object has no attribute 'fillna'
+2025-03-06 18:00:22,246 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 18:00:22,246 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 18:00:23,329 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:00:23,667 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:00:28,240 - INFO - Creating aggregate features for customers
+2025-03-06 18:00:28,240 - INFO - Processing all transactions
+2025-03-06 18:00:28,305 - INFO - Aggregate features created successfully
+2025-03-06 18:00:30,914 - INFO - Extracting time-based features
+2025-03-06 18:00:31,083 - INFO - Time features extracted successfully
+2025-03-06 18:00:35,340 - INFO - Constructing RFMS scores
+2025-03-06 18:00:35,370 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 18:00:35,371 - INFO - Visualizing RFMS space
+2025-03-06 18:00:37,328 - INFO - Custom binning RFMS_score for WOE calculation
+2025-03-06 18:00:37,329 - INFO - Custom binning RFMS_score into 10 bins with class mixing
+2025-03-06 18:00:37,427 - INFO - Validating bin distribution
+2025-03-06 18:00:37,438 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-06 18:00:37,438 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-06 18:00:37,438 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.0019316649100259518
+2025-03-06 18:00:37,466 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-06 18:00:37,471 - ERROR - Error constructing RFMS scores: 'dict' object has no attribute 'fillna'
+2025-03-06 18:03:24,420 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 18:03:24,421 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 18:03:27,459 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:03:27,803 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:03:30,523 - INFO - Creating aggregate features for customers
+2025-03-06 18:03:30,524 - INFO - Processing all transactions
+2025-03-06 18:03:30,588 - INFO - Aggregate features created successfully
+2025-03-06 18:03:34,588 - INFO - Extracting time-based features
+2025-03-06 18:03:34,738 - INFO - Time features extracted successfully
+2025-03-06 18:03:38,406 - INFO - Constructing RFMS scores
+2025-03-06 18:03:38,432 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 18:03:38,433 - INFO - Visualizing RFMS space
+2025-03-06 18:03:40,454 - INFO - Binning RFMS_score for WOE calculation
+2025-03-06 18:03:40,454 - INFO - Validating bin distribution
+2025-03-06 18:03:40,470 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-06 18:03:40,470 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-06 18:03:40,490 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
+2025-03-06 18:03:40,501 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-06 18:03:40,509 - INFO - WOE calculation for RFMS_score completed

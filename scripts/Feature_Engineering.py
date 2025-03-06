@@ -280,6 +280,14 @@ def standardize_numerical_features(data):
         logger.error(f"Error standardizing numerical features: {e}")
         return data
 
+def custom_bin_rfms(data, n_bins=10):
+    logger.info(f"Custom binning RFMS_score into {n_bins} bins with class mixing")
+    # Sort by RFMS_score and alternate between Label groups
+    sorted_data = data.sort_values('RFMS_score')
+    bin_edges = np.linspace(sorted_data.index[0], sorted_data.index[-1], n_bins + 1, dtype=int)
+    data['RFMS_score_binned'] = pd.cut(sorted_data.index, bins=bin_edges, labels=False, include_lowest=True)
+    return data
+
 def construct_rfms_scores(data):
     logger.info("Constructing RFMS scores")
     try:
@@ -310,12 +318,21 @@ def construct_rfms_scores(data):
         plt.show()
 
         logger.info("Binning RFMS_score for WOE calculation")
-        data['RFMS_score_binned'] = pd.qcut(data['RFMS_score'], q=10, duplicates='drop', labels=False)
+        # Use pandas.cut with 20 bins to avoid NaN from duplicates
+        data['RFMS_score_binned'] = pd.cut(data['RFMS_score'], bins=20, labels=False, include_lowest=True)
+        # Fill any remaining NaN with the median bin
+        data['RFMS_score_binned'] = data['RFMS_score_binned'].fillna(data['RFMS_score_binned'].median())
+        logger.info("Validating bin distribution")
+        print("RFMS_score_binned distribution:\n", data['RFMS_score_binned'].value_counts())
+        print("Label distribution by RFMS_score_binned:\n", data.groupby('RFMS_score_binned')['Label'].value_counts())
+
         logger.info("Calculating WOE for RFMS_score_binned")
         woe_results = calculate_woe(data, 'Label', 'RFMS_score_binned')
         if woe_results is not None:
             print("WOE Results for RFMS_score_binned:\n", woe_results[0])
-            data = pd.concat([data, pd.DataFrame({'RFMS_score_WOE': data['RFMS_score_binned'].map(dict(zip(woe_results[0]['RFMS_score_binned'], woe_results[0]['woe'])).fillna(0))})], axis=1)
+            # Map WOE only for valid bins, set NaN to 0 if not matched
+            woe_mapping = dict(zip(woe_results[0]['RFMS_score_binned'], woe_results[0]['woe']))
+            data['RFMS_score_binned_WOE'] = data['RFMS_score_binned'].map(woe_mapping).fillna(0)
             logger.info("WOE calculation for RFMS_score completed")
         return data
     except ValueError as ve:
