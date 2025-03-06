@@ -341,21 +341,28 @@ def construct_rfms_scores(data):
     except Exception as e:
         logger.error(f"Error constructing RFMS scores: {e}")
         return data
-def save_transformed_data(data, output_path="data/transformed_data_credit_scoring.csv", file_format="csv"):
+def save_transformed_data(data, output_path="data/transformed_data_credit_scoring.csv"):
+    """
+    Save the transformed DataFrame to a CSV file after feature engineering.
+
+    Args:
+        data (pd.DataFrame): The transformed DataFrame to save.
+        output_path (str): Path to save the CSV file (default: "data/transformed_data_credit_scoring.csv").
+
+    Raises:
+        OSError: If the save operation fails due to file system issues.
+        Exception: For other unexpected errors.
+    """
     logger.info(f"Saving transformed data to {output_path}")
     try:
+        # Ensure the output directory exists
         output_dir = os.path.dirname(output_path) or '.'
         if output_dir != '.':
             os.makedirs(output_dir, exist_ok=True)
             logger.info(f"Created output directory: {output_dir}")
 
-        if file_format == "csv":
-            data.to_csv(output_path, index=False)
-        elif file_format == "pickle":
-            data.to_pickle(output_path)
-        else:
-            raise ValueError(f"Unsupported file format: {file_format}")
-
+        # Save the DataFrame to CSV
+        data.to_csv(output_path, index=False)
         logger.info(f"Successfully saved transformed data to {output_path}")
         logger.info(f"Total columns saved: {len(data.columns)}")
         logger.info(f"Column names saved: {data.columns.tolist()}")

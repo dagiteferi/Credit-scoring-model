@@ -691,3 +691,105 @@ Name: count, dtype: int64
 2025-03-06 18:03:40,490 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
 2025-03-06 18:03:40,501 - INFO - WOE calculation completed for RFMS_score_binned
 2025-03-06 18:03:40,509 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 18:12:47,309 - INFO - Encoding categorical variables
+2025-03-06 18:12:47,319 - INFO - Converted ProviderId to category codes
+2025-03-06 18:12:47,322 - INFO - Converted ProductId to category codes
+2025-03-06 18:12:47,337 - INFO - Converted ProductCategory to category codes
+2025-03-06 18:12:47,338 - INFO - Applying WOE encoding
+2025-03-06 18:12:47,339 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 18:12:47,351 - INFO - WOE and IV calculated for ProviderId. IV: 0.13202650052403148
+2025-03-06 18:12:47,352 - INFO - WOE calculation completed for ProviderId
+2025-03-06 18:12:47,403 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 18:12:47,435 - INFO - WOE and IV calculated for ProductId. IV: 0.052235071315386856
+2025-03-06 18:12:47,455 - INFO - WOE calculation completed for ProductId
+2025-03-06 18:12:47,542 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 18:12:47,554 - INFO - WOE and IV calculated for ProductCategory. IV: 0.027772767137246857
+2025-03-06 18:12:47,572 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 18:12:47,604 - INFO - Applying One-Hot Encoding
+2025-03-06 18:12:47,671 - INFO - Information Values for features: {'ProviderId': np.float64(0.13202650052403148), 'ProductId': np.float64(0.052235071315386856), 'ProductCategory': np.float64(0.027772767137246857)}
+2025-03-06 18:12:47,672 - INFO - Categorical encoding completed
+2025-03-06 18:19:13,677 - INFO - Standardizing numerical features
+2025-03-06 18:19:13,708 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
+2025-03-06 18:19:21,112 - INFO - Standardizing numerical features
+2025-03-06 18:19:21,160 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
+2025-03-06 18:44:05,086 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 18:44:05,088 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 18:44:05,116 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:44:05,453 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:44:05,470 - INFO - Creating aggregate features for customers
+2025-03-06 18:44:05,479 - INFO - Processing all transactions
+2025-03-06 18:44:05,536 - INFO - Aggregate features created successfully
+2025-03-06 18:44:05,556 - INFO - Extracting time-based features
+2025-03-06 18:44:05,714 - INFO - Time features extracted successfully
+2025-03-06 18:44:05,735 - INFO - Constructing RFMS scores
+2025-03-06 18:44:05,751 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 18:44:05,751 - INFO - Visualizing RFMS space
+2025-03-06 18:44:07,763 - INFO - Binning RFMS_score for WOE calculation
+2025-03-06 18:44:07,763 - INFO - Validating bin distribution
+2025-03-06 18:44:07,763 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-06 18:44:07,763 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-06 18:44:07,786 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
+2025-03-06 18:44:07,786 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-06 18:44:07,802 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 18:44:07,820 - INFO - Encoding categorical variables
+2025-03-06 18:44:07,836 - INFO - Converted ProviderId to category codes
+2025-03-06 18:44:07,842 - INFO - Converted ProductId to category codes
+2025-03-06 18:44:07,843 - INFO - Converted ProductCategory to category codes
+2025-03-06 18:44:07,843 - INFO - Applying WOE encoding
+2025-03-06 18:44:07,850 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 18:44:07,860 - INFO - WOE and IV calculated for ProviderId. IV: 0.13202650052403148
+2025-03-06 18:44:07,869 - INFO - WOE calculation completed for ProviderId
+2025-03-06 18:44:07,918 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 18:44:07,934 - INFO - WOE and IV calculated for ProductId. IV: 0.052235071315386856
+2025-03-06 18:44:07,952 - INFO - WOE calculation completed for ProductId
+2025-03-06 18:44:07,988 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 18:44:08,002 - INFO - WOE and IV calculated for ProductCategory. IV: 0.027772767137246857
+2025-03-06 18:44:08,002 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 18:44:08,054 - INFO - Applying One-Hot Encoding
+2025-03-06 18:44:08,115 - INFO - Information Values for features: {'ProviderId': np.float64(0.13202650052403148), 'ProductId': np.float64(0.052235071315386856), 'ProductCategory': np.float64(0.027772767137246857)}
+2025-03-06 18:44:08,115 - INFO - Categorical encoding completed
+2025-03-06 18:44:08,140 - INFO - Standardizing numerical features
+2025-03-06 18:44:08,164 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
