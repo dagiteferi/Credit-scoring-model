@@ -28,7 +28,7 @@ class ScoringView(APIView):
                     'ProductId_17', 'ProductId_18', 'ProductId_19', 'ProductId_20', 'ProductId_21', 
                     'ProductId_22', 'ChannelId_ChannelId_2', 'ChannelId_ChannelId_3', 'ChannelId_ChannelId_5', 
                     'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday', 
-                    'CurrencyCode', 'CountryCode', 'ProductId'
+                     'ProductId'
                 ]
 
                 # Check if any required fields are missing
