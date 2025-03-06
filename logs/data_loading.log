@@ -793,3 +793,63 @@ Name: count, dtype: int64
 2          -0.444993               -0.201209  
 3          -0.404020               -0.008243  
 4          -0.404020               -0.008243  
+2025-03-06 18:47:18,052 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 18:47:18,070 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 18:47:18,103 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:47:18,487 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 18:47:18,505 - INFO - Creating aggregate features for customers
+2025-03-06 18:47:18,505 - INFO - Processing all transactions
+2025-03-06 18:47:18,578 - INFO - Aggregate features created successfully
+2025-03-06 18:47:18,610 - INFO - Extracting time-based features
+2025-03-06 18:47:18,765 - INFO - Time features extracted successfully
+2025-03-06 18:47:18,797 - INFO - Constructing RFMS scores
+2025-03-06 18:47:18,822 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-06 18:47:18,823 - INFO - Visualizing RFMS space
+2025-03-06 18:47:20,887 - INFO - Binning RFMS_score for WOE calculation
+2025-03-06 18:47:20,894 - INFO - Validating bin distribution
+2025-03-06 18:47:20,904 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-06 18:47:20,904 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-06 18:47:20,904 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
+2025-03-06 18:47:20,922 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-06 18:47:20,922 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 18:47:20,953 - INFO - Encoding categorical variables
+2025-03-06 18:47:20,958 - INFO - Converted ProviderId to category codes
+2025-03-06 18:47:20,971 - INFO - Converted ProductId to category codes
+2025-03-06 18:47:20,977 - INFO - Converted ProductCategory to category codes
+2025-03-06 18:47:20,977 - INFO - Applying WOE encoding
+2025-03-06 18:47:20,977 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 18:47:20,992 - INFO - WOE and IV calculated for ProviderId. IV: 0.13202650052403148
+2025-03-06 18:47:20,992 - INFO - WOE calculation completed for ProviderId
+2025-03-06 18:47:21,051 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 18:47:21,073 - INFO - WOE and IV calculated for ProductId. IV: 0.052235071315386856
+2025-03-06 18:47:21,094 - INFO - WOE calculation completed for ProductId
+2025-03-06 18:47:21,144 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 18:47:21,160 - INFO - WOE and IV calculated for ProductCategory. IV: 0.027772767137246857
+2025-03-06 18:47:21,175 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 18:47:21,236 - INFO - Applying One-Hot Encoding
+2025-03-06 18:47:21,306 - INFO - Information Values for features: {'ProviderId': np.float64(0.13202650052403148), 'ProductId': np.float64(0.052235071315386856), 'ProductCategory': np.float64(0.027772767137246857)}
+2025-03-06 18:47:21,306 - INFO - Categorical encoding completed
+2025-03-06 18:47:21,326 - INFO - Standardizing numerical features
+2025-03-06 18:47:21,374 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
+2025-03-06 18:47:21,459 - INFO - Saving transformed data to data/transformed_data_credit_scoring.csv
+2025-03-06 18:47:21,460 - INFO - Created output directory: data
+2025-03-06 18:47:24,755 - INFO - Successfully saved transformed data to data/transformed_data_credit_scoring.csv
+2025-03-06 18:47:24,755 - INFO - Total columns saved: 37
+2025-03-06 18:47:24,755 - INFO - Column names saved: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'CountryCode', 'ProviderId', 'ProductId', 'ProductCategory', 'Amount', 'Value', 'TransactionStartTime', 'PricingStrategy', 'FraudResult', 'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count', 'Std_Transaction_Amount', 'Transaction_Hour', 'Transaction_Day', 'Transaction_Month', 'Transaction_Year', 'Recency', 'RFMS_score', 'Label', 'RFMS_score_binned', 'RFMS_score_binned_WOE', 'ProviderId_WOE', 'ProviderId_WOE', 'ProductId_WOE', 'ProductId_WOE', 'ProductCategory_WOE', 'ProductCategory_WOE', 'ChannelId_ChannelId_2', 'ChannelId_ChannelId_3', 'ChannelId_ChannelId_5']
