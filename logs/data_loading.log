@@ -34,3 +34,7 @@
 2025-03-06 12:13:56,306 - INFO - Generating histograms
 2025-03-06 12:13:57,200 - INFO - Generating box plots for outlier detection
 2025-03-06 12:13:58,535 - INFO - Generating pair plots for multivariate analysis
+2025-03-06 12:16:09,830 - INFO - Checking for skewness
+2025-03-06 12:16:09,964 - INFO - Distribution analysis completed
+2025-03-06 12:16:10,167 - INFO - Starting distribution analysis of categorical features
+2025-03-06 12:16:10,190 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
