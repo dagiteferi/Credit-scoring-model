@@ -45,3 +45,7 @@
 2025-03-06 12:24:41,469 - INFO - Starting distribution analysis of categorical features
 2025-03-06 12:24:41,492 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
 2025-03-06 13:27:24,303 - INFO - Categorical distribution analysis completed
+2025-03-06 15:59:34,642 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 15:59:34,644 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 16:00:16,519 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 16:00:16,521 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
