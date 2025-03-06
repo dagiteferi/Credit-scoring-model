@@ -341,16 +341,28 @@ def construct_rfms_scores(data):
     except Exception as e:
         logger.error(f"Error constructing RFMS scores: {e}")
         return data
-if __name__ == "__main__":
-    logger.info("Starting Feature Engineering workflow")
-    data = pd.DataFrame()  # Placeholder; replace with your loaded data
+def save_transformed_data(data, output_path="data/transformed_data_credit_scoring.csv", file_format="csv"):
+    logger.info(f"Saving transformed data to {output_path}")
+    try:
+        output_dir = os.path.dirname(output_path) or '.'
+        if output_dir != '.':
+            os.makedirs(output_dir, exist_ok=True)
+            logger.info(f"Created output directory: {output_dir}")
 
-    data = create_aggregate_features(data)
-    data = extract_time_features(data)
-    data = encode_categorical_variables(data)
-    data = check_and_handle_missing_values(data)
-    data = standardize_numerical_features(data)
-    data = construct_rfms_scores(data)
+        if file_format == "csv":
+            data.to_csv(output_path, index=False)
+        elif file_format == "pickle":
+            data.to_pickle(output_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file_format}")
 
-    logger.info("Feature Engineering workflow completed")
-    print("Final dataset head:\n", data.head())
+        logger.info(f"Successfully saved transformed data to {output_path}")
+        logger.info(f"Total columns saved: {len(data.columns)}")
+        logger.info(f"Column names saved: {data.columns.tolist()}")
+
+    except OSError as e:
+        logger.error(f"OSError while saving transformed data to {output_path}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error while saving transformed data to {output_path}: {e}")
+        raise
