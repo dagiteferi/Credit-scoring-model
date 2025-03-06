@@ -211,3 +211,314 @@
 2025-03-06 16:41:23,726 - INFO - WOE calculation completed for ProductCategory
 2025-03-06 16:41:23,798 - INFO - Applying One-Hot Encoding
 2025-03-06 16:41:23,799 - INFO - Categorical encoding completed
+2025-03-06 16:42:55,670 - INFO - Checking for missing values
+2025-03-06 16:42:55,701 - INFO - Missing values:
+TransactionId                    0
+BatchId                          0
+AccountId                        0
+SubscriptionId                   0
+CustomerId                       0
+CurrencyCode                     0
+CountryCode                      0
+ProviderId                       0
+ProductId                        0
+ProductCategory                  0
+Amount                           0
+Value                            0
+TransactionStartTime             0
+PricingStrategy                  0
+FraudResult                      0
+Total_Transaction_Amount      4565
+Average_Transaction_Amount    4565
+Transaction_Count             4565
+Std_Transaction_Amount        5645
+Transaction_Hour                 0
+Transaction_Day                  0
+Transaction_Month                0
+Transaction_Year                 0
+CurrencyCode_WOE                 0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+ProductCategory_WOE              0
+ChannelId_ChannelId_2            0
+ChannelId_ChannelId_3            0
+ChannelId_ChannelId_5            0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+dtype: int64
+2025-03-06 16:42:55,702 - INFO - Imputing missing values with median
+2025-03-06 16:42:58,579 - INFO - Missing values imputed successfully
+2025-03-06 16:45:21,154 - INFO - Standardizing numerical features
+2025-03-06 16:45:21,193 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                 -0.188260                   -0.099171   
+1 -0.054643 -0.080251                 -0.188260                   -0.099171   
+2 -0.050426 -0.076352                 -0.226125                   -0.120629   
+3  0.107717  0.096648                 -0.165399                   -0.015983   
+4 -0.059704 -0.075183                 -0.165399                   -0.015983   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.289714               -0.168275  
+1          -0.289714               -0.168275  
+2          -0.579083               -0.201807  
+3          -0.470570                0.008227  
+4          -0.470570                0.008227  
+2025-03-06 16:45:32,055 - INFO - Standardizing numerical features
+2025-03-06 16:45:32,098 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                 -0.188260                   -0.099171   
+1 -0.054643 -0.080251                 -0.188260                   -0.099171   
+2 -0.050426 -0.076352                 -0.226125                   -0.120629   
+3  0.107717  0.096648                 -0.165399                   -0.015983   
+4 -0.059704 -0.075183                 -0.165399                   -0.015983   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.289714               -0.168275  
+1          -0.289714               -0.168275  
+2          -0.579083               -0.201807  
+3          -0.470570                0.008227  
+4          -0.470570                0.008227  
+2025-03-06 16:46:10,773 - INFO - Constructing RFMS scores
+2025-03-06 16:46:10,807 - INFO - RFMS score distribution:
+Label
+0    47833
+1    47829
+Name: count, dtype: int64
+2025-03-06 16:46:10,807 - INFO - Visualizing RFMS space
+2025-03-06 16:46:13,051 - INFO - Calculating WOE for RFMS_score
+2025-03-06 16:46:13,051 - INFO - Calculating WOE for feature: RFMS_score
+2025-03-06 16:46:29,793 - INFO - WOE and IV calculated for RFMS_score. IV: {'RFMS_score': 0}
+2025-03-06 16:46:29,809 - INFO - WOE calculation completed for RFMS_score
+2025-03-06 16:46:29,809 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 16:47:17,204 - INFO - Constructing RFMS scores
+2025-03-06 16:47:17,234 - INFO - RFMS score distribution:
+Label
+0    47833
+1    47829
+Name: count, dtype: int64
+2025-03-06 16:47:17,236 - INFO - Visualizing RFMS space
+2025-03-06 16:47:19,236 - INFO - Calculating WOE for RFMS_score
+2025-03-06 16:47:19,236 - INFO - Calculating WOE for feature: RFMS_score
+2025-03-06 16:47:37,295 - INFO - WOE and IV calculated for RFMS_score. IV: {'RFMS_score': 0}
+2025-03-06 16:47:37,327 - INFO - WOE calculation completed for RFMS_score
+2025-03-06 16:47:37,328 - INFO - WOE calculation for RFMS_score completed
+2025-03-06 16:51:20,266 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:51:20,579 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:51:22,539 - INFO - Creating aggregate features for customers
+2025-03-06 16:51:22,553 - INFO - Filtered data for positive transactions
+2025-03-06 16:51:22,611 - INFO - Aggregate features created successfully
+2025-03-06 16:51:24,890 - INFO - Extracting time-based features
+2025-03-06 16:51:25,055 - INFO - Time features extracted successfully
+2025-03-06 16:51:38,998 - INFO - Encoding categorical variables
+2025-03-06 16:51:39,007 - INFO - Converted CurrencyCode to category codes
+2025-03-06 16:51:39,008 - INFO - Converted ProviderId to category codes
+2025-03-06 16:51:39,025 - INFO - Converted ProductId to category codes
+2025-03-06 16:51:39,039 - INFO - Converted ProductCategory to category codes
+2025-03-06 16:51:39,040 - INFO - Applying WOE encoding
+2025-03-06 16:51:39,041 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:51:39,042 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:51:39,058 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:51:39,090 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:51:39,104 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:51:39,126 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:51:39,159 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:51:39,188 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:51:39,194 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:51:39,225 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:51:39,240 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:51:39,255 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:51:39,291 - INFO - Applying One-Hot Encoding
+2025-03-06 16:51:39,340 - INFO - Categorical encoding completed
+2025-03-06 16:51:47,347 - INFO - Checking for missing values
+2025-03-06 16:51:47,374 - INFO - Missing values:
+TransactionId                    0
+BatchId                          0
+AccountId                        0
+SubscriptionId                   0
+CustomerId                       0
+CurrencyCode                     0
+CountryCode                      0
+ProviderId                       0
+ProductId                        0
+ProductCategory                  0
+Amount                           0
+Value                            0
+TransactionStartTime             0
+PricingStrategy                  0
+FraudResult                      0
+Total_Transaction_Amount      4565
+Average_Transaction_Amount    4565
+Transaction_Count             4565
+Std_Transaction_Amount        5645
+Transaction_Hour                 0
+Transaction_Day                  0
+Transaction_Month                0
+Transaction_Year                 0
+CurrencyCode_WOE                 0
+CurrencyCode_WOE                 0
+ProviderId_WOE                   0
+ProviderId_WOE                   0
+ProductId_WOE                    0
+ProductId_WOE                    0
+ProductCategory_WOE              0
+ProductCategory_WOE              0
+ChannelId_ChannelId_2            0
+ChannelId_ChannelId_3            0
+ChannelId_ChannelId_5            0
+dtype: int64
+2025-03-06 16:51:47,375 - INFO - Imputing missing values with median
+2025-03-06 16:51:47,829 - INFO - Missing values imputed successfully
+2025-03-06 16:51:53,369 - INFO - Checking for missing values
+2025-03-06 16:51:53,398 - INFO - Missing values:
+TransactionId                 0
+BatchId                       0
+AccountId                     0
+SubscriptionId                0
+CustomerId                    0
+CurrencyCode                  0
+CountryCode                   0
+ProviderId                    0
+ProductId                     0
+ProductCategory               0
+Amount                        0
+Value                         0
+TransactionStartTime          0
+PricingStrategy               0
+FraudResult                   0
+Total_Transaction_Amount      0
+Average_Transaction_Amount    0
+Transaction_Count             0
+Std_Transaction_Amount        0
+Transaction_Hour              0
+Transaction_Day               0
+Transaction_Month             0
+Transaction_Year              0
+CurrencyCode_WOE              0
+CurrencyCode_WOE              0
+ProviderId_WOE                0
+ProviderId_WOE                0
+ProductId_WOE                 0
+ProductId_WOE                 0
+ProductCategory_WOE           0
+ProductCategory_WOE           0
+ChannelId_ChannelId_2         0
+ChannelId_ChannelId_3         0
+ChannelId_ChannelId_5         0
+dtype: int64
+2025-03-06 16:51:53,398 - INFO - No missing values found
+2025-03-06 16:52:12,450 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-06 16:52:12,451 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-06 16:52:12,488 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:52:12,811 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-06 16:52:12,826 - INFO - Creating aggregate features for customers
+2025-03-06 16:52:12,835 - INFO - Processing all transactions
+2025-03-06 16:52:12,896 - INFO - Aggregate features created successfully
+2025-03-06 16:52:12,918 - INFO - Extracting time-based features
+2025-03-06 16:52:13,077 - INFO - Time features extracted successfully
+2025-03-06 16:52:13,119 - INFO - Encoding categorical variables
+2025-03-06 16:52:13,133 - INFO - Converted CurrencyCode to category codes
+2025-03-06 16:52:13,141 - INFO - Converted ProviderId to category codes
+2025-03-06 16:52:13,149 - INFO - Converted ProductId to category codes
+2025-03-06 16:52:13,149 - INFO - Converted ProductCategory to category codes
+2025-03-06 16:52:13,149 - INFO - Applying WOE encoding
+2025-03-06 16:52:13,149 - INFO - Calculating WOE for feature: CurrencyCode
+2025-03-06 16:52:13,165 - INFO - WOE and IV calculated for CurrencyCode. IV: {'CurrencyCode': np.float64(0.0)}
+2025-03-06 16:52:13,168 - INFO - WOE calculation completed for CurrencyCode
+2025-03-06 16:52:13,215 - INFO - Calculating WOE for feature: ProviderId
+2025-03-06 16:52:13,226 - INFO - WOE and IV calculated for ProviderId. IV: {'ProviderId': np.float64(3.327238664152119)}
+2025-03-06 16:52:13,227 - INFO - WOE calculation completed for ProviderId
+2025-03-06 16:52:13,258 - INFO - Calculating WOE for feature: ProductId
+2025-03-06 16:52:13,274 - INFO - WOE and IV calculated for ProductId. IV: {'ProductId': np.float64(3.392017392383026)}
+2025-03-06 16:52:13,294 - INFO - WOE calculation completed for ProductId
+2025-03-06 16:52:13,314 - INFO - Calculating WOE for feature: ProductCategory
+2025-03-06 16:52:13,329 - INFO - WOE and IV calculated for ProductCategory. IV: {'ProductCategory': np.float64(0.9024857607924033)}
+2025-03-06 16:52:13,345 - INFO - WOE calculation completed for ProductCategory
+2025-03-06 16:52:13,376 - INFO - Applying One-Hot Encoding
+2025-03-06 16:52:13,414 - INFO - Categorical encoding completed
+2025-03-06 16:52:13,483 - INFO - Checking for missing values
+2025-03-06 16:52:13,502 - INFO - Missing values:
+TransactionId                 0
+BatchId                       0
+AccountId                     0
+SubscriptionId                0
+CustomerId                    0
+CurrencyCode                  0
+CountryCode                   0
+ProviderId                    0
+ProductId                     0
+ProductCategory               0
+Amount                        0
+Value                         0
+TransactionStartTime          0
+PricingStrategy               0
+FraudResult                   0
+Total_Transaction_Amount      0
+Average_Transaction_Amount    0
+Transaction_Count             0
+Std_Transaction_Amount        0
+Transaction_Hour              0
+Transaction_Day               0
+Transaction_Month             0
+Transaction_Year              0
+CurrencyCode_WOE              0
+CurrencyCode_WOE              0
+ProviderId_WOE                0
+ProviderId_WOE                0
+ProductId_WOE                 0
+ProductId_WOE                 0
+ProductCategory_WOE           0
+ProductCategory_WOE           0
+ChannelId_ChannelId_2         0
+ChannelId_ChannelId_3         0
+ChannelId_ChannelId_5         0
+dtype: int64
+2025-03-06 16:52:13,502 - INFO - No missing values found
+2025-03-06 16:52:13,518 - INFO - Standardizing numerical features
+2025-03-06 16:52:13,566 - INFO - Standardized features sample:
+     Amount     Value  Total_Transaction_Amount  Average_Transaction_Amount  \
+0 -0.046371 -0.072291                  0.170118                   -0.067623   
+1 -0.054643 -0.080251                  0.170118                   -0.067623   
+2 -0.050426 -0.076352                  0.165122                   -0.072568   
+3  0.107717  0.096648                  0.175567                   -0.008155   
+4 -0.059704 -0.075183                  0.175567                   -0.008155   
+
+   Transaction_Count  Std_Transaction_Amount  
+0          -0.311831               -0.167016  
+1          -0.311831               -0.167016  
+2          -0.444993               -0.201209  
+3          -0.404020               -0.008243  
+4          -0.404020               -0.008243  
+2025-03-06 16:52:13,609 - INFO - Constructing RFMS scores
+2025-03-06 16:52:13,649 - INFO - RFMS score distribution:
+Label
+0    47834
+1    47828
+Name: count, dtype: int64
+2025-03-06 16:52:13,651 - INFO - Visualizing RFMS space
+2025-03-06 16:52:15,748 - INFO - Calculating WOE for RFMS_score
+2025-03-06 16:52:15,748 - INFO - Calculating WOE for feature: RFMS_score
+2025-03-06 16:52:31,482 - INFO - WOE and IV calculated for RFMS_score. IV: {'RFMS_score': 0}
+2025-03-06 16:52:31,501 - INFO - WOE calculation completed for RFMS_score
+2025-03-06 16:52:31,518 - INFO - WOE calculation for RFMS_score completed
