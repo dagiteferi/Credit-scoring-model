@@ -109,21 +109,30 @@ def create_aggregate_features(data):
 
     Returns:
         pd.DataFrame: Dataset with aggregated features.
+
+    Raises:
+        ValueError: If required columns 'Amount' or 'CustomerId' are not found.
+        Exception: For other unexpected errors.
     """
     logger.info("Creating aggregate features for customers")
     try:
-        # Filter out negative amounts to avoid skewing aggregates
+        # Validate required columns
         if 'Amount' not in data.columns or 'CustomerId' not in data.columns:
             raise ValueError("Required columns 'Amount' or 'CustomerId' not found in DataFrame")
 
-        filtered_data = data[data['Amount'] > 0]
-        logger.info("Filtered data for positive transactions")
-        aggregates = filtered_data.groupby('CustomerId').agg(
+        # Process all transactions (no filtering for positive amounts)
+        logger.info("Processing all transactions")
+        aggregates = data.groupby('CustomerId').agg(
             Total_Transaction_Amount=('Amount', 'sum'),
             Average_Transaction_Amount=('Amount', 'mean'),
             Transaction_Count=('TransactionId', 'count'),
             Std_Transaction_Amount=('Amount', 'std')
         ).reset_index()
+
+        # Impute Std_Transaction_Amount where it is NaN (e.g., single transaction)
+        aggregates['Std_Transaction_Amount'] = aggregates['Std_Transaction_Amount'].fillna(0)
+
+        # Merge aggregates back to the original data
         data = data.merge(aggregates, on='CustomerId', how='left')
         logger.info("Aggregate features created successfully")
         return data
