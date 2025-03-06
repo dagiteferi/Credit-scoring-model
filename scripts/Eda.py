@@ -176,3 +176,45 @@ def identify_missing_values(data):
         print("Missing values in each column:\n", missing_values)
     else:
         print("No missing values found.")
+
+def distribution_of_categorical_features(data):
+    """
+    Analyze and visualize the distribution of categorical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+
+    Raises
+    ------
+    Exception
+        If an error occurs during categorical distribution analysis.
+    """
+    logger.info("Starting distribution analysis of categorical features")
+    try:
+        # Identify categorical columns
+        categorical_cols = data.select_dtypes(include=['object', 'category']).columns.tolist()
+        logger.info(f"Identified {len(categorical_cols)} categorical columns: {categorical_cols}")
+
+        if not categorical_cols:
+            logger.info("No categorical columns found in the dataset")
+            print("No categorical columns found.")
+            return
+
+        # Plot bar charts for each categorical column
+        plt.figure(figsize=(15, len(categorical_cols) * 5))
+        for i, col in enumerate(categorical_cols, 1):
+            plt.subplot(len(categorical_cols), 1, i)
+            data[col].value_counts().plot(kind='bar', edgecolor='black')
+            plt.title(f'Distribution of {col}')
+            plt.xlabel(col)
+            plt.ylabel('Count')
+        plt.tight_layout()
+        plt.show()
+
+        # Log completion
+        logger.info("Categorical distribution analysis completed")
+    except Exception as e:
+        logger.error(f"An error occurred during categorical distribution analysis: {e}")
+        raise e
