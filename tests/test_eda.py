@@ -15,7 +15,7 @@ def sample_data():
     return pd.DataFrame({
         "customer_id": [1, 2, 3],
         "income": [50000, 60000, None],
-        "credit_score": [700, 650, 600],
+        "credit_score": [700, 650, 600SMALL],
         "category": ["A", "B", "A"]
     })
 
