@@ -44,3 +44,4 @@
 2025-03-06 12:24:28,882 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
 2025-03-06 12:24:41,469 - INFO - Starting distribution analysis of categorical features
 2025-03-06 12:24:41,492 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
+2025-03-06 13:27:24,303 - INFO - Categorical distribution analysis completed
