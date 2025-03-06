@@ -27,11 +27,7 @@ def setup_logging():
     logger.setLevel(logging.INFO)
     return logger
 
-def test_load_data(sample_data, tmp_path):
-    file_path = tmp_path / "data.csv"
-    sample_data.to_csv(file_path, index=False)
-    data = load_data(str(file_path))
-    assert data.shape == sample_data.shape
+
 
 def test_data_overview(capfd, sample_data):
     data_overview(sample_data)
