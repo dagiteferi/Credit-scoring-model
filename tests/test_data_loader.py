@@ -39,6 +39,6 @@ def test_load_data_file_not_found(tmp_path):
 
 def test_load_data_invalid_csv(tmp_path):
     file_path = tmp_path / "invalid.csv"
-    file_path.write_text("invalid\n,,\n")
+    file_path.write_text("invalid data\nno commas here\n")
     with pytest.raises(Exception):
         load_data(file_path.name, dataset_dir=str(tmp_path))
