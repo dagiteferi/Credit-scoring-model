@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import pytest
-from feature_engineering import (
+from scripts.Feature_Engineering import (
     calculate_woe, create_aggregate_features, extract_time_features,
     encode_categorical_variables, check_and_handle_missing_values,
     standardize_numerical_features, construct_rfms_scores, save_transformed_data
