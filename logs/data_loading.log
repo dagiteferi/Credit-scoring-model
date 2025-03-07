@@ -85,3 +85,7 @@ Name: count, dtype: int64
 2025-03-07 16:30:04,035 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
 2025-03-07 16:30:04,050 - INFO - WOE calculation completed for RFMS_score_binned
 2025-03-07 16:30:04,060 - INFO - WOE calculation for RFMS_score completed
+2025-03-07 16:32:25,666 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-07 16:32:25,668 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-07 16:32:40,090 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-07 16:32:40,661 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
