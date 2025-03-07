@@ -49,3 +49,16 @@
 2025-03-06 15:59:34,644 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
 2025-03-06 16:00:16,519 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
 2025-03-06 16:00:16,521 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-07 13:14:58,431 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-07 13:14:58,432 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-07 13:15:27,054 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-07 13:15:27,480 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-07 13:15:27,772 - INFO - Starting distribution analysis of numerical features
+2025-03-07 13:15:27,777 - INFO - Identified 5 numerical columns: ['CountryCode', 'Amount', 'Value', 'PricingStrategy', 'FraudResult']
+2025-03-07 13:15:27,779 - INFO - Generating histograms
+2025-03-07 13:15:29,074 - INFO - Generating box plots for outlier detection
+2025-03-07 13:15:30,798 - INFO - Generating pair plots for multivariate analysis
+2025-03-07 13:19:47,881 - INFO - Checking for skewness
+2025-03-07 13:19:48,233 - INFO - Distribution analysis completed
+2025-03-07 13:19:48,627 - INFO - Starting distribution analysis of categorical features
+2025-03-07 13:19:48,650 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
