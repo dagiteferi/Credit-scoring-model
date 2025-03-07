@@ -71,3 +71,17 @@
 2025-03-07 16:28:03,057 - INFO - Aggregate features created successfully
 2025-03-07 16:29:03,203 - INFO - Extracting time-based features
 2025-03-07 16:29:03,542 - INFO - Time features extracted successfully
+2025-03-07 16:30:01,169 - INFO - Constructing RFMS scores
+2025-03-07 16:30:01,217 - INFO - RFMS score distribution:
+Label
+0    47835
+1    47827
+Name: count, dtype: int64
+2025-03-07 16:30:01,218 - INFO - Visualizing RFMS space
+2025-03-07 16:30:03,991 - INFO - Binning RFMS_score for WOE calculation
+2025-03-07 16:30:03,997 - INFO - Validating bin distribution
+2025-03-07 16:30:04,006 - INFO - Calculating WOE for RFMS_score_binned
+2025-03-07 16:30:04,011 - INFO - Calculating WOE for feature: RFMS_score_binned
+2025-03-07 16:30:04,035 - INFO - WOE and IV calculated for RFMS_score_binned. IV: 0.004776259192989356
+2025-03-07 16:30:04,050 - INFO - WOE calculation completed for RFMS_score_binned
+2025-03-07 16:30:04,060 - INFO - WOE calculation for RFMS_score completed
