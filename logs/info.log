@@ -1,0 +1,273 @@
+2025-01-27 19:37:48,652 - INFO - importting the data 
+2025-01-27 19:37:48,654 - INFO - loading the data 
+2025-01-27 19:38:15,731 - INFO - Preprocessing the data
+2025-01-27 19:38:15,787 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 19:38:16,028 - INFO - Data preprocessing completed
+2025-01-27 19:38:44,218 - INFO - spliting the data 
+2025-01-27 19:39:05,337 - INFO - train the model
+2025-01-27 19:39:05,379 - ERROR - error occured Input X contains infinity or a value too large for dtype('float64').
+2025-01-27 19:41:56,106 - INFO - importting the data 
+2025-01-27 19:41:56,107 - INFO - loading the data 
+2025-01-27 19:41:59,712 - INFO - Preprocessing the data
+2025-01-27 19:41:59,771 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 19:42:00,045 - INFO - Data preprocessing completed
+2025-01-27 19:42:43,367 - INFO - spliting the data 
+2025-01-27 19:42:46,974 - INFO - train the model
+2025-01-27 19:42:47,197 - INFO - Initializing the model
+2025-01-27 19:42:47,198 - INFO - training the model with our data
+2025-01-27 19:43:38,263 - INFO - Evaluate the models
+2025-01-27 19:44:14,147 - INFO - Evaluate the models
+2025-01-27 19:51:56,644 - INFO - Evaluate the models
+2025-01-27 22:42:48,554 - INFO - importting the data 
+2025-01-27 22:42:48,556 - INFO - loading the data 
+2025-01-27 22:42:49,487 - INFO - Preprocessing the data
+2025-01-27 22:42:49,559 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 22:42:49,841 - INFO - Data preprocessing completed
+2025-01-27 22:44:16,137 - INFO - importting the data 
+2025-01-27 22:44:16,140 - INFO - loading the data 
+2025-01-27 22:44:20,918 - INFO - Preprocessing the data
+2025-01-27 22:44:21,020 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 22:44:21,265 - INFO - Data preprocessing completed
+2025-01-27 22:44:29,275 - INFO - spliting the data 
+2025-01-27 22:44:33,483 - INFO - train the model
+2025-01-27 22:44:33,712 - INFO - Initializing the model
+2025-01-27 22:44:33,712 - INFO - training the model with our data
+2025-01-27 22:44:44,509 - INFO - Evaluate the models
+2025-01-27 22:44:51,157 - INFO - Evaluate the models
+2025-01-27 22:51:18,410 - INFO - importting the data 
+2025-01-27 22:51:18,411 - INFO - loading the data 
+2025-01-27 22:51:22,213 - INFO - Preprocessing the data
+2025-01-27 22:51:22,273 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 22:51:22,506 - INFO - Data preprocessing completed
+2025-01-27 22:51:28,570 - INFO - spliting the data 
+2025-01-27 22:51:31,836 - INFO - train the model
+2025-01-27 22:51:32,069 - INFO - Initializing the model
+2025-01-27 22:51:32,069 - INFO - training the model with our data
+2025-01-27 22:51:40,261 - INFO - Evaluate the models
+2025-01-27 22:51:43,238 - INFO - Evaluate the models
+2025-01-27 22:57:55,303 - INFO - importting the data 
+2025-01-27 22:57:55,305 - INFO - loading the data 
+2025-01-27 22:57:58,738 - INFO - Preprocessing the data
+2025-01-27 22:57:58,803 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 22:57:59,090 - INFO - Data preprocessing completed
+2025-01-27 22:58:05,169 - INFO - spliting the data 
+2025-01-27 22:58:08,658 - INFO - train the model
+2025-01-27 22:58:08,890 - INFO - Initializing the model
+2025-01-27 22:58:08,891 - INFO - training the model with our data
+2025-01-27 22:58:17,294 - INFO - Evaluate the models
+2025-01-27 22:58:20,316 - INFO - Evaluate the models
+2025-01-27 23:04:11,681 - INFO - importting the data 
+2025-01-27 23:04:11,681 - INFO - importting the data 
+2025-01-27 23:04:11,681 - INFO - importting the data 
+2025-01-27 23:04:11,682 - INFO - loading the data 
+2025-01-27 23:04:11,682 - INFO - loading the data 
+2025-01-27 23:04:11,682 - INFO - loading the data 
+2025-01-27 23:07:36,200 - INFO - importting the data 
+2025-01-27 23:07:36,202 - INFO - loading the data 
+2025-01-27 23:07:41,060 - INFO - Preprocessing the data
+2025-01-27 23:07:41,122 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:07:41,407 - INFO - Data preprocessing completed
+2025-01-27 23:07:47,767 - INFO - spliting the data 
+2025-01-27 23:07:50,930 - INFO - train the model
+2025-01-27 23:07:51,176 - INFO - Initializing the model
+2025-01-27 23:07:51,178 - INFO - training the model with our data
+2025-01-27 23:07:59,442 - INFO - Evaluate the models
+2025-01-27 23:08:01,272 - INFO - Evaluate the models
+2025-01-27 23:18:04,769 - INFO - importing the data
+2025-01-27 23:18:04,770 - INFO - loading the data
+2025-01-27 23:18:05,711 - INFO - Preprocessing the data
+2025-01-27 23:18:05,791 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:18:06,154 - INFO - Data preprocessing completed
+2025-01-27 23:18:06,715 - INFO - splitting the data
+2025-01-27 23:18:06,903 - INFO - train the model
+2025-01-27 23:18:07,174 - INFO - Initializing the model
+2025-01-27 23:18:07,175 - INFO - training the model with our data
+2025-01-27 23:18:14,843 - INFO - Evaluate the models
+2025-01-27 23:18:15,612 - INFO - Evaluate the models
+2025-01-27 23:27:11,160 - INFO - importing the data
+2025-01-27 23:27:11,162 - INFO - loading the data
+2025-01-27 23:27:12,044 - INFO - Preprocessing the data
+2025-01-27 23:27:12,104 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:27:12,400 - INFO - Data preprocessing completed
+2025-01-27 23:27:12,932 - INFO - splitting the data
+2025-01-27 23:27:13,144 - INFO - train the model
+2025-01-27 23:27:13,393 - INFO - Initializing the model
+2025-01-27 23:27:13,394 - INFO - training the model with our data
+2025-01-27 23:27:21,603 - INFO - Evaluate the models
+2025-01-27 23:27:22,283 - INFO - Evaluate the models
+2025-01-27 23:31:20,939 - INFO - importing the data
+2025-01-27 23:31:20,939 - INFO - importing the data
+2025-01-27 23:31:20,940 - INFO - loading the data
+2025-01-27 23:31:20,940 - INFO - loading the data
+2025-01-27 23:31:21,908 - INFO - Preprocessing the data
+2025-01-27 23:31:21,908 - INFO - Preprocessing the data
+2025-01-27 23:31:21,967 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:31:21,967 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:31:22,239 - INFO - Data preprocessing completed
+2025-01-27 23:31:22,239 - INFO - Data preprocessing completed
+2025-01-27 23:31:22,790 - INFO - splitting the data
+2025-01-27 23:31:22,790 - INFO - splitting the data
+2025-01-27 23:31:22,978 - INFO - train the model
+2025-01-27 23:31:22,978 - INFO - train the model
+2025-01-27 23:31:23,250 - INFO - Initializing the model
+2025-01-27 23:31:23,250 - INFO - Initializing the model
+2025-01-27 23:31:23,251 - INFO - training the model with our data
+2025-01-27 23:31:23,251 - INFO - training the model with our data
+2025-01-27 23:31:31,977 - INFO - Evaluate the models
+2025-01-27 23:31:31,977 - INFO - Evaluate the models
+2025-01-27 23:31:32,759 - INFO - Evaluate the models
+2025-01-27 23:31:32,759 - INFO - Evaluate the models
+2025-01-27 23:32:36,320 - INFO - splitting the data
+2025-01-27 23:32:36,320 - INFO - splitting the data
+2025-01-27 23:34:51,127 - INFO - importing the data
+2025-01-27 23:34:51,127 - INFO - importing the data
+2025-01-27 23:34:51,127 - INFO - importing the data
+2025-01-27 23:34:51,128 - INFO - loading the data
+2025-01-27 23:34:51,128 - INFO - loading the data
+2025-01-27 23:34:51,128 - INFO - loading the data
+2025-01-27 23:34:52,014 - INFO - Preprocessing the data
+2025-01-27 23:34:52,014 - INFO - Preprocessing the data
+2025-01-27 23:34:52,014 - INFO - Preprocessing the data
+2025-01-27 23:34:52,078 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:34:52,078 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:34:52,078 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:34:52,344 - INFO - Data preprocessing completed
+2025-01-27 23:34:52,344 - INFO - Data preprocessing completed
+2025-01-27 23:34:52,344 - INFO - Data preprocessing completed
+2025-01-27 23:34:52,839 - INFO - splitting the data
+2025-01-27 23:34:52,839 - INFO - splitting the data
+2025-01-27 23:34:52,839 - INFO - splitting the data
+2025-01-27 23:34:53,030 - INFO - train the model
+2025-01-27 23:34:53,030 - INFO - train the model
+2025-01-27 23:34:53,030 - INFO - train the model
+2025-01-27 23:34:53,259 - INFO - Initializing the model
+2025-01-27 23:34:53,259 - INFO - Initializing the model
+2025-01-27 23:34:53,259 - INFO - Initializing the model
+2025-01-27 23:34:53,260 - INFO - training the model with our data
+2025-01-27 23:34:53,260 - INFO - training the model with our data
+2025-01-27 23:34:53,260 - INFO - training the model with our data
+2025-01-27 23:35:02,151 - INFO - Evaluate the models
+2025-01-27 23:35:02,151 - INFO - Evaluate the models
+2025-01-27 23:35:02,151 - INFO - Evaluate the models
+2025-01-27 23:35:03,624 - INFO - Evaluate the models
+2025-01-27 23:35:03,624 - INFO - Evaluate the models
+2025-01-27 23:35:03,624 - INFO - Evaluate the models
+2025-01-27 23:36:51,390 - INFO - importing the data
+2025-01-27 23:36:51,390 - INFO - importing the data
+2025-01-27 23:36:51,390 - INFO - importing the data
+2025-01-27 23:36:51,390 - INFO - importing the data
+2025-01-27 23:36:51,391 - INFO - loading the data
+2025-01-27 23:36:51,391 - INFO - loading the data
+2025-01-27 23:36:51,391 - INFO - loading the data
+2025-01-27 23:36:51,391 - INFO - loading the data
+2025-01-27 23:36:52,581 - INFO - Preprocessing the data
+2025-01-27 23:36:52,581 - INFO - Preprocessing the data
+2025-01-27 23:36:52,581 - INFO - Preprocessing the data
+2025-01-27 23:36:52,581 - INFO - Preprocessing the data
+2025-01-27 23:36:52,653 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:36:52,653 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:36:52,653 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:36:52,653 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:36:52,973 - INFO - Data preprocessing completed
+2025-01-27 23:36:52,973 - INFO - Data preprocessing completed
+2025-01-27 23:36:52,973 - INFO - Data preprocessing completed
+2025-01-27 23:36:52,973 - INFO - Data preprocessing completed
+2025-01-27 23:36:53,509 - INFO - splitting the data
+2025-01-27 23:36:53,509 - INFO - splitting the data
+2025-01-27 23:36:53,509 - INFO - splitting the data
+2025-01-27 23:36:53,509 - INFO - splitting the data
+2025-01-27 23:36:53,777 - INFO - train the model
+2025-01-27 23:36:53,777 - INFO - train the model
+2025-01-27 23:36:53,777 - INFO - train the model
+2025-01-27 23:36:53,777 - INFO - train the model
+2025-01-27 23:36:54,016 - INFO - Initializing the model
+2025-01-27 23:36:54,016 - INFO - Initializing the model
+2025-01-27 23:36:54,016 - INFO - Initializing the model
+2025-01-27 23:36:54,016 - INFO - Initializing the model
+2025-01-27 23:36:54,019 - INFO - training the model with our data
+2025-01-27 23:36:54,019 - INFO - training the model with our data
+2025-01-27 23:36:54,019 - INFO - training the model with our data
+2025-01-27 23:36:54,019 - INFO - training the model with our data
+2025-01-27 23:37:03,850 - INFO - Evaluate the models
+2025-01-27 23:37:03,850 - INFO - Evaluate the models
+2025-01-27 23:37:03,850 - INFO - Evaluate the models
+2025-01-27 23:37:03,850 - INFO - Evaluate the models
+2025-01-27 23:37:05,335 - INFO - Evaluate the models
+2025-01-27 23:37:05,335 - INFO - Evaluate the models
+2025-01-27 23:37:05,335 - INFO - Evaluate the models
+2025-01-27 23:37:05,335 - INFO - Evaluate the models
+2025-01-27 23:43:55,170 - INFO - importing the data
+2025-01-27 23:43:55,172 - INFO - loading the data
+2025-01-27 23:43:59,417 - INFO - Preprocessing the data
+2025-01-27 23:43:59,491 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:43:59,788 - INFO - Data preprocessing completed
+2025-01-27 23:44:05,904 - INFO - splitting the data
+2025-01-27 23:44:09,286 - INFO - train the model
+2025-01-27 23:44:09,522 - INFO - Initializing the model
+2025-01-27 23:44:09,523 - INFO - training the model with our data
+2025-01-27 23:44:17,820 - INFO - Evaluate the models
+2025-01-27 23:44:18,804 - INFO - Evaluate the models
+2025-01-27 23:50:19,151 - INFO - importing the data
+2025-01-27 23:50:19,151 - INFO - importing the data
+2025-01-27 23:50:19,151 - INFO - importing the data
+2025-01-27 23:50:19,152 - INFO - loading the data
+2025-01-27 23:50:19,152 - INFO - loading the data
+2025-01-27 23:50:19,152 - INFO - loading the data
+2025-01-27 23:50:21,793 - INFO - Preprocessing the data
+2025-01-27 23:50:21,793 - INFO - Preprocessing the data
+2025-01-27 23:50:21,793 - INFO - Preprocessing the data
+2025-01-27 23:50:21,860 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:50:21,860 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:50:21,860 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:50:22,172 - INFO - Data preprocessing completed
+2025-01-27 23:50:22,172 - INFO - Data preprocessing completed
+2025-01-27 23:50:22,172 - INFO - Data preprocessing completed
+2025-01-27 23:53:10,273 - INFO - importing the data
+2025-01-27 23:53:10,275 - INFO - loading the data
+2025-01-27 23:53:11,152 - INFO - Preprocessing the data
+2025-01-27 23:53:11,213 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-27 23:53:11,530 - INFO - Data preprocessing completed
+2025-01-27 23:53:12,105 - INFO - splitting the data
+2025-01-27 23:53:12,307 - INFO - train the model
+2025-01-27 23:53:12,545 - INFO - Initializing the model
+2025-01-27 23:53:12,546 - INFO - training the model with our data
+2025-01-27 23:53:21,002 - INFO - Evaluate the models
+2025-01-27 23:53:21,917 - INFO - Evaluate the models
+2025-01-28 13:43:13,153 - INFO - importing the data
+2025-01-28 13:43:13,153 - INFO - importing the data
+2025-01-28 13:43:13,156 - INFO - loading the data
+2025-01-28 13:43:13,156 - INFO - loading the data
+2025-01-28 13:43:19,630 - INFO - Preprocessing the data
+2025-01-28 13:43:19,630 - INFO - Preprocessing the data
+2025-01-28 13:43:19,704 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-28 13:43:19,704 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-28 13:43:20,023 - INFO - Data preprocessing completed
+2025-01-28 13:43:20,023 - INFO - Data preprocessing completed
+2025-01-28 13:43:31,393 - INFO - splitting the data
+2025-01-28 13:43:31,393 - INFO - splitting the data
+2025-01-28 13:43:37,163 - INFO - train the model
+2025-01-28 13:43:37,163 - INFO - train the model
+2025-01-28 13:43:37,387 - INFO - Initializing the model
+2025-01-28 13:43:37,387 - INFO - Initializing the model
+2025-01-28 13:43:37,389 - INFO - training the model with our data
+2025-01-28 13:43:37,389 - INFO - training the model with our data
+2025-01-28 13:43:45,886 - INFO - Evaluate the models
+2025-01-28 13:43:45,886 - INFO - Evaluate the models
+2025-01-28 13:43:53,381 - INFO - Evaluate the models
+2025-01-28 13:43:53,381 - INFO - Evaluate the models
+2025-01-28 18:14:10,991 - INFO - importing the data
+2025-01-28 18:14:10,992 - INFO - loading the data
+2025-01-28 18:14:29,184 - INFO - Preprocessing the data
+2025-01-28 18:14:29,234 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-28 18:14:29,418 - INFO - Data preprocessing completed
+2025-01-28 18:25:37,181 - INFO - importing the data
+2025-01-28 18:25:37,182 - INFO - loading the data
+2025-01-28 18:25:40,036 - INFO - Preprocessing the data
+2025-01-28 18:25:40,083 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-28 18:25:40,279 - INFO - Data preprocessing completed
+2025-01-28 18:41:19,968 - INFO - importing the data
+2025-01-28 18:41:19,969 - INFO - loading the data
+2025-01-28 18:41:24,323 - INFO - Preprocessing the data
+2025-01-28 18:41:24,373 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-01-28 18:41:24,558 - INFO - Data preprocessing completed
+2025-01-28 18:41:32,917 - INFO - splitting the data
