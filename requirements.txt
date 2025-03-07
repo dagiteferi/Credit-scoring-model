@@ -1,0 +1,6 @@
+pandas 
+matplotlib
+seaborn 
+logging
+scikit-learn
+pytest
