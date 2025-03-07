@@ -3,121 +3,218 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
 
-class CreditScoringEDA:
-    
-    def __init__(self, file_path):
-        self.data = self.load_data(file_path)
-    
-    def load_data(self, file_path):
-        """Load the dataset."""
-        data = pd.read_csv(file_path)
-        return data
+# Set up logger for the module
+logger = logging.getLogger(__name__)
 
-    def data_overview(self):
-        """Print the structure of the dataset."""
-        print("Number of rows and columns:", self.data.shape)
-        print("Column names and data types:\n", self.data.dtypes)
-       
-    def summary_statistics(self):
-        """Display summary statistics of the dataset."""
-        print("Summary statistics:\n", self.data.describe())
 
-    def visualize_distribution(self, numeric_cols):
-        """Visualize the distribution of numerical features."""
-        plt.figure(figsize=(15, 10))
-        for i, col in enumerate(numeric_cols, 1):
-            plt.subplot(3, 3, i)  # Adjust the layout based on the number of numerical columns
-            plt.hist(self.data[col], bins=30, edgecolor='black')
-            plt.title(col)
-            plt.xlabel('Value')
-            plt.ylabel('Frequency')
-        plt.tight_layout()
-        plt.show()
 
-    def box_plot_for_outliers_detections(self, numeric_cols):
-        """Create box plots for outliers detection."""
-        plt.figure(figsize=(15, 10))
-        for i, col in enumerate(numeric_cols, 1):
-            plt.subplot(3, 3, i)  # Adjust the layout based on the number of numerical columns
-            sns.boxplot(self.data[col])
-            plt.title(col)
-            plt.ylabel('Value')
-        plt.tight_layout()
-        plt.show()
+def data_overview(data):
+    """
+    Print the structure of the dataset.
 
-    def pair_plots_for_multivariate_analysis(self, numeric_cols):
-        """Create pair plots for multivariate analysis."""
-        sns.pairplot(self.data[numeric_cols])
-        plt.show()
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    """
+    print("Number of rows and columns:", data.shape)
+    print("Column names and data types:\n", data.dtypes)
 
-    def check_for_skewness(self, numeric_cols):
-        """Check for skewness in numerical features."""
-        skewness = self.data[numeric_cols].skew()
-        print("Skewness for Numerical Features:\n", skewness)
-        # Visualize skewness with a bar plot
-        plt.figure(figsize=(10, 5))
-        skewness.plot(kind='bar')
-        plt.title('Skewness of Numerical Features')
-        plt.xlabel('Features')
-        plt.ylabel('Skewness')
-        plt.axhline(0, color='red', linestyle='--')
-        plt.show()
+def summary_statistics(data):
+    """
+    Display summary statistics of the dataset.
 
-    def distribution_of_numerical_features(self):
-        """Perform the process to show the distribution of numerical features."""
-        logger.info("Performing the process to show the distribution of numerical features")
-        try:
-            logger.info("Selecting columns of the numeric columns only")
-            numeric_cols = self.data.select_dtypes(include=['float64', 'int64']).columns
-            logger.info("Visualizing the numeric data")
-            self.visualize_distribution(numeric_cols)
-            logger.info("Box plot for outliers for numeric columns")
-            self.box_plot_for_outliers_detections(numeric_cols)
-            logger.info("Pair plots for multivariate analysis")
-            self.pair_plots_for_multivariate_analysis(numeric_cols)
-            logger.info("Checking for skewness in numeric columns")
-            self.check_for_skewness(numeric_cols)
-        except Exception as e:
-            logger.error(f"An error occurred: {e}")
-    
-    def correlation_analysis(self):
-        """Understand the relationship between numerical features."""
-        numeric_cols = self.data.select_dtypes(include=['float64', 'int64']).columns
-        correlation_matrix = self.data[numeric_cols].corr()
-        plt.figure(figsize=(12, 8))
-        sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
-        plt.title('Correlation Matrix')
-        plt.show()
-    
-    def identify_missing_values(self):
-        """Identify missing values in the dataset."""
-        missing_values = self.data.isnull().sum()
-        missing_values = missing_values[missing_values > 0]  # Filter only columns with missing values
-        print("Missing values in each column:\n", missing_values)
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    """
+    print("Summary statistics:\n", data.describe())
+
+def visualize_distribution(data, numeric_cols):
+    """
+    Visualize the distribution of numerical features with histograms.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    numeric_cols : list
+        List of numerical column names to visualize.
+    """
+    plt.figure(figsize=(15, 10))
+    for i, col in enumerate(numeric_cols, 1):
+        plt.subplot(3, 3, i)  # Adjust layout based on number of columns
+        plt.hist(data[col], bins=30, edgecolor='black')
+        plt.title(col)
+        plt.xlabel('Value')
+        plt.ylabel('Frequency')
+    plt.tight_layout()
     plt.show()
 
-    def plot_outliers(self):
-        """Use box plots to identify outliers."""
-        numeric_cols = self.data.select_dtypes(include=['float64', 'int64']).columns
-        plt.figure(figsize=(15, 10))
-        for i, col in enumerate(numeric_cols, 1):
-            plt.subplot(3, 3, i)  # Adjust the layout based on the number of numerical columns
-            sns.boxplot(self.data[col])
-            plt.title(col)
-            plt.ylabel('Value')
+def box_plot_for_outliers(data, numeric_cols):
+    """
+    Create box plots for outlier detection in numerical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    numeric_cols : list
+        List of numerical column names to visualize.
+    """
+    plt.figure(figsize=(15, 10))
+    for i, col in enumerate(numeric_cols, 1):
+        plt.subplot(3, 3, i)  # Adjust layout based on number of columns
+        sns.boxplot(data[col])
+        plt.title(col)
+        plt.ylabel('Value')
+    plt.tight_layout()
+    plt.show()
+
+def pair_plots(data, numeric_cols):
+    """
+    Create pair plots for multivariate analysis of numerical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    numeric_cols : list
+        List of numerical column names to include in pair plots.
+    """
+    sns.pairplot(data[numeric_cols])
+    plt.show()
+
+def check_for_skewness(data, numeric_cols):
+    """
+    Check and visualize skewness in numerical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    numeric_cols : list
+        List of numerical column names to check.
+    """
+    skewness = data[numeric_cols].skew()
+    print("Skewness for Numerical Features:\n", skewness)
+    plt.figure(figsize=(10, 5))
+    skewness.plot(kind='bar')
+    plt.title('Skewness of Numerical Features')
+    plt.xlabel('Features')
+    plt.ylabel('Skewness')
+    plt.axhline(0, color='red', linestyle='--')
+    plt.show()
+
+def distribution_of_numerical_features(data):
+    """
+    Perform and visualize the distribution analysis of numerical features.
+
+    This includes histograms, box plots for outliers, pair plots, and skewness checks.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+
+    Raises
+    ------
+    Exception
+        If an error occurs during the distribution analysis.
+    """
+    logger.info("Starting distribution analysis of numerical features")
+    try:
+        numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
+        logger.info(f"Identified {len(numeric_cols)} numerical columns: {numeric_cols}")
+        
+        logger.info("Generating histograms")
+        visualize_distribution(data, numeric_cols)
+        
+        logger.info("Generating box plots for outlier detection")
+        box_plot_for_outliers(data, numeric_cols)
+        
+        logger.info("Generating pair plots for multivariate analysis")
+        pair_plots(data, numeric_cols)
+        
+        logger.info("Checking for skewness")
+        check_for_skewness(data, numeric_cols)
+        
+        logger.info("Distribution analysis completed")
+    except Exception as e:
+        logger.error(f"An error occurred during distribution analysis: {e}")
+        raise e
+
+def correlation_analysis(data):
+    """
+    Plot a correlation matrix heatmap for numerical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    """
+    numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
+    correlation_matrix = data[numeric_cols].corr()
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+    plt.title('Correlation Matrix')
+    plt.show()
+
+def identify_missing_values(data):
+    """
+    Identify and print missing values in the dataset.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+    """
+    missing_values = data.isnull().sum()
+    missing_values = missing_values[missing_values > 0]
+    if not missing_values.empty:
+        print("Missing values in each column:\n", missing_values)
+    else:
+        print("No missing values found.")
+
+def distribution_of_categorical_features(data):
+    """
+    Analyze and visualize the distribution of categorical features.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The dataset to analyze.
+
+    Raises
+    ------
+    Exception
+        If an error occurs during categorical distribution analysis.
+    """
+    logger.info("Starting distribution analysis of categorical features")
+    try:
+        # Identify categorical columns
+        categorical_cols = data.select_dtypes(include=['object', 'category']).columns.tolist()
+        logger.info(f"Identified {len(categorical_cols)} categorical columns: {categorical_cols}")
+
+        if not categorical_cols:
+            logger.info("No categorical columns found in the dataset")
+            print("No categorical columns found.")
+            return
+
+        # Plot bar charts for each categorical column
+        plt.figure(figsize=(15, len(categorical_cols) * 5))
+        for i, col in enumerate(categorical_cols, 1):
+            plt.subplot(len(categorical_cols), 1, i)
+            data[col].value_counts().plot(kind='bar', edgecolor='black')
+            plt.title(f'Distribution of {col}')
+            plt.xlabel(col)
+            plt.ylabel('Count')
         plt.tight_layout()
         plt.show()
 
-# Initialize logger
-logger = logging.getLogger()
-logging.basicConfig(level=logging.INFO)
-
-# Example usage
-path = '../data/data.csv'
-eda = CreditScoringEDA(path)
-
-# Call the data_overview method to get an overview
-eda.data_overview()
-
-# Call the identify_missing_values method to detect missing values
-eda.identify_missing_values()
+        # Log completion
+        logger.info("Categorical distribution analysis completed")
+    except Exception as e:
+        logger.error(f"An error occurred during categorical distribution analysis: {e}")
+        raise e
