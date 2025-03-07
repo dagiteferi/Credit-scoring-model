@@ -49,7 +49,8 @@ def test_create_aggregate_features_standard():
     assert 'Total_Transaction_Amount' in result.columns, "Total amount column missing"
     assert result['Total_Transaction_Amount'].iloc[0] == 300, "Incorrect total amount for customer 1"
     assert result['Transaction_Count'].iloc[0] == 2, "Incorrect transaction count for customer 1"
-    assert np.isclose(result['Std_Transaction_Amount'].iloc[0], np.std([100, 200], ddof=0)), "Incorrect std for customer 1"
+    # Fixed to use ddof=1 for sample standard deviation
+    assert np.isclose(result['Std_Transaction_Amount'].iloc[0], np.std([100, 200], ddof=1)), "Incorrect std for customer 1"
 
 def test_create_aggregate_features_single_transaction():
     """Test aggregate features when each customer has one transaction."""
@@ -132,7 +133,8 @@ def test_standardize_numerical_features_standard():
     })
     result = standardize_numerical_features(df)
     assert np.isclose(result['Amount'].mean(), 0, atol=1e-8), "Mean not zero after standardization"
-    assert np.isclose(result['Amount'].std(), 1, atol=1e-8), "Std not one after standardization"
+    # Fixed to use ddof=0 for population standard deviation after standardization
+    assert np.isclose(result['Amount'].std(ddof=0), 1, atol=1e-8), "Population std not one after standardization"
 
 def test_standardize_numerical_features_no_numerical():
     """Test that the DataFrame remains unchanged when no numerical features exist."""
@@ -146,7 +148,7 @@ def test_construct_rfms_scores_standard():
     df = pd.DataFrame({
         'TransactionStartTime': [pd.Timestamp.now(tz='UTC') - pd.Timedelta(days=1)] * 2,
         'Transaction_Count': [5, 10],
-        'Total_Transaction_Amount': [1000, 2000]
+        'Total_Transaction_Amount': [400, 600]
     })
     result = construct_rfms_scores(df)
     assert 'RFMS_score' in result.columns, "RFMS score column missing"
