@@ -94,3 +94,7 @@ Name: count, dtype: int64
 2025-03-07 16:34:22,478 - INFO - Generating histograms
 2025-03-07 16:34:23,696 - INFO - Generating box plots for outlier detection
 2025-03-07 16:34:25,707 - INFO - Generating pair plots for multivariate analysis
+2025-03-07 16:37:59,313 - INFO - Checking for skewness
+2025-03-07 16:37:59,457 - INFO - Distribution analysis completed
+2025-03-07 16:37:59,747 - INFO - Starting distribution analysis of categorical features
+2025-03-07 16:37:59,775 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
