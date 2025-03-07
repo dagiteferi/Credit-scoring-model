@@ -98,3 +98,4 @@ Name: count, dtype: int64
 2025-03-07 16:37:59,457 - INFO - Distribution analysis completed
 2025-03-07 16:37:59,747 - INFO - Starting distribution analysis of categorical features
 2025-03-07 16:37:59,775 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
+2025-03-07 17:44:52,091 - INFO - Categorical distribution analysis completed
