@@ -89,3 +89,8 @@ Name: count, dtype: int64
 2025-03-07 16:32:25,668 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
 2025-03-07 16:32:40,090 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
 2025-03-07 16:32:40,661 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\data.csv
+2025-03-07 16:34:22,471 - INFO - Starting distribution analysis of numerical features
+2025-03-07 16:34:22,476 - INFO - Identified 5 numerical columns: ['CountryCode', 'Amount', 'Value', 'PricingStrategy', 'FraudResult']
+2025-03-07 16:34:22,478 - INFO - Generating histograms
+2025-03-07 16:34:23,696 - INFO - Generating box plots for outlier detection
+2025-03-07 16:34:25,707 - INFO - Generating pair plots for multivariate analysis
