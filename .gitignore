@@ -4,3 +4,4 @@ __pycache__
 logs
 db.sqlite3
 *.pyc
+.pytest_cache
