@@ -113,3 +113,9 @@ Name: count, dtype: int64
 2025-03-08 22:08:11,885 - INFO - Data preprocessing completed successfully
 2025-03-08 22:09:50,770 - INFO - Starting data splitting
 2025-03-08 22:09:50,883 - INFO - Data split into training and testing sets
+2025-03-08 22:12:50,308 - INFO - Defining machine learning models
+2025-03-08 22:12:50,309 - INFO - Models defined: LogisticRegression (with scaling), RandomForest
+2025-03-08 22:12:50,319 - INFO - Defining hyperparameter grids
+2025-03-08 22:12:50,320 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
+2025-03-08 22:14:00,720 - INFO - Starting Grid Search for hyperparameter tuning
+2025-03-08 22:14:00,721 - INFO - Performing Grid Search for LogisticRegression
