@@ -99,3 +99,17 @@ Name: count, dtype: int64
 2025-03-07 16:37:59,747 - INFO - Starting distribution analysis of categorical features
 2025-03-07 16:37:59,775 - INFO - Identified 11 categorical columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'CurrencyCode', 'ProviderId', 'ProductId', 'ProductCategory', 'ChannelId', 'TransactionStartTime']
 2025-03-07 17:44:52,091 - INFO - Categorical distribution analysis completed
+2025-03-08 22:05:29,726 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-08 22:05:29,726 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-08 22:06:32,719 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:06:33,453 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:06:47,519 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:06:48,243 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:08:11,579 - INFO - Starting data preprocessing
+2025-03-08 22:08:11,604 - INFO - Dropped unnecessary columns
+2025-03-08 22:08:11,673 - INFO - Encoded categorical variables
+2025-03-08 22:08:11,682 - INFO - Extracting datetime features from TransactionStartTime
+2025-03-08 22:08:11,884 - INFO - Datetime features extracted and original column dropped
+2025-03-08 22:08:11,885 - INFO - Data preprocessing completed successfully
+2025-03-08 22:09:50,770 - INFO - Starting data splitting
+2025-03-08 22:09:50,883 - INFO - Data split into training and testing sets
