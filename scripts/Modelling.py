@@ -63,42 +63,61 @@ def preprocess_data(data):
     try:
         # Check for duplicate columns
         duplicate_columns = data.columns[data.columns.duplicated()]
-        if not duplicate_columns.empty:
-            logger.warning(f"Duplicate columns found: {duplicate_columns}. Removing duplicates.")
+        num_duplicates = len(duplicate_columns)
+        if num_duplicates > 0:
+            logger.warning(f"Found {num_duplicates} duplicate columns: {list(duplicate_columns)}. Removing duplicates.")
             data = data.loc[:, ~data.columns.duplicated()]
-        
+        else:
+            logger.info("No duplicate columns found.")
+
         # Drop unnecessary columns if they exist
         columns_to_drop = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
-        data = data.drop(columns=[col for col in columns_to_drop if col in data.columns])
-        logger.info("Dropped unnecessary columns")
+        existing_columns_to_drop = [col for col in columns_to_drop if col in data.columns]
+        if existing_columns_to_drop:
+            data = data.drop(columns=existing_columns_to_drop)
+            logger.info(f"Dropped unnecessary columns: {existing_columns_to_drop}")
+        else:
+            logger.info("No unnecessary columns to drop.")
 
         # Handle missing values
         missing_values = data.isnull().sum()
-        if missing_values.any():
-            logger.info(f"Missing values found in columns: {missing_values[missing_values > 0].index.tolist()}")
+        missing_columns = missing_values[missing_values > 0]
+        if not missing_columns.empty:
+            logger.info("Missing values found in the following columns:")
+            for col, count in missing_columns.items():
+                logger.info(f"  - {col}: {count} missing values")
+            total_missing = missing_columns.sum()
             # Fill missing values with median for numerical columns
             for col in data.select_dtypes(include=['number']).columns:
                 data[col] = data[col].fillna(data[col].median())
             # Fill missing values with mode for categorical columns
             for col in data.select_dtypes(include=['object']).columns:
                 data[col] = data[col].fillna(data[col].mode()[0])
-            logger.info("Handled missing values")
+            logger.info(f"Handled {total_missing} missing values in total.")
+        else:
+            logger.info("No missing values found.")
 
         # Encode categorical variables
         categorical_columns = ['CurrencyCode', 'CountryCode', 'ProductId', 'ChannelId']
-        data = pd.get_dummies(data, columns=[col for col in categorical_columns if col in data.columns], drop_first=True)
-        logger.info("Encoded categorical variables")
+        existing_categorical_columns = [col for col in categorical_columns if col in data.columns]
+        if existing_categorical_columns:
+            data = pd.get_dummies(data, columns=existing_categorical_columns, drop_first=True)
+            logger.info(f"Encoded categorical variables: {existing_categorical_columns}")
+        else:
+            logger.info("No categorical columns to encode.")
 
         # Extract datetime features from TransactionStartTime
         if 'TransactionStartTime' in data.columns:
-            logger.info("Extracting datetime features from TransactionStartTime")
+            logger.info("Extracting datetime features from 'TransactionStartTime'")
             data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
             data['TransactionHour'] = data['TransactionStartTime'].dt.hour
             data['TransactionDay'] = data['TransactionStartTime'].dt.day
             data['TransactionMonth'] = data['TransactionStartTime'].dt.month
             data['TransactionWeekday'] = data['TransactionStartTime'].dt.weekday
             data = data.drop(columns=['TransactionStartTime'])
-            logger.info("Datetime features extracted and original column dropped")
+            logger.info("Datetime features extracted: 'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday'")
+        else:
+            logger.info("'TransactionStartTime' column not found. Skipping datetime feature extraction.")
 
         logger.info("Data preprocessing completed successfully")
         return data
