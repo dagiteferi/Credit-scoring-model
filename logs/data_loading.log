@@ -119,3 +119,15 @@ Name: count, dtype: int64
 2025-03-08 22:12:50,320 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
 2025-03-08 22:14:00,720 - INFO - Starting Grid Search for hyperparameter tuning
 2025-03-08 22:14:00,721 - INFO - Performing Grid Search for LogisticRegression
+2025-03-08 22:35:33,473 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-08 22:35:33,474 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-08 22:35:36,654 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:35:37,689 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-08 22:35:37,768 - INFO - Starting data preprocessing
+2025-03-08 22:35:37,769 - INFO - No duplicate columns found.
+2025-03-08 22:35:37,797 - INFO - Dropped unnecessary columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
+2025-03-08 22:35:37,822 - INFO - No missing values found.
+2025-03-08 22:35:37,891 - INFO - Encoded categorical variables: ['CurrencyCode', 'CountryCode', 'ProductId']
+2025-03-08 22:35:37,892 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-03-08 22:35:38,182 - INFO - Datetime features extracted: 'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday'
+2025-03-08 22:35:38,183 - INFO - Data preprocessing completed successfully
