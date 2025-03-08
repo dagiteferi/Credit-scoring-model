@@ -182,7 +182,3 @@ def save_best_models(self, save_dir='models'):
                 logging.info(f"Model {name} saved to {file_path}.")
             except Exception as e:
                 logging.error(f"Failed to save model {name}: {e}")
-# models = {
-#     "Logistic Regression": logistic_model,
-#     "Random Forest": random_forest_model
-# }
