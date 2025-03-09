@@ -94,18 +94,18 @@ def test_define_hyperparameter_grids(setup_logging):
 
 def test_perform_grid_search(sample_data, mocker, setup_logging):
     """Test perform_grid_search with mocked GridSearchCV to fully bypass real execution."""
-    # Mock GridSearchCV at the module level with autospec
-    mock_grid_search = mocker.patch('sklearn.model_selection.GridSearchCV', autospec=True)
-    
+    # Mock GridSearchCV in the Modelling module's namespace
+    mock_grid_search = mocker.patch('Modelling.GridSearchCV', autospec=True)
+
     # Create a mock instance with required attributes
     mock_instance = mocker.MagicMock()
     mock_instance.best_estimator_ = LogisticRegression()  # Mimic fitted model
-    mock_instance.best_params_ = {'C': 1.0}  # Provide a dummy best_params_ to avoid AttributeError
-    
+    mock_instance.best_params_ = {'C': 1.0}  # Provide dummy best_params_
+
     # Ensure instantiation returns the mock instance
     mock_grid_search.return_value = mock_instance
-    
-    # Mock fit to return the instance, ensuring no real execution
+
+    # Mock fit to return the instance itself
     mock_instance.fit.return_value = mock_instance
 
     # Prepare test data
@@ -116,7 +116,7 @@ def test_perform_grid_search(sample_data, mocker, setup_logging):
 
     # Call the function
     best_models = perform_grid_search(models, param_grids, X_train, y_train)
-    
+
     # Assertions
     assert best_models is not None, "perform_grid_search returned None"
     assert 'LogisticRegression' in best_models, "LogisticRegression missing from best_models"
