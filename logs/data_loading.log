@@ -178,3 +178,7 @@ Name: count, dtype: int64
 2025-03-09 18:09:32,159 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
 2025-03-09 18:09:32,177 - INFO - Starting Grid Search for hyperparameter tuning
 2025-03-09 18:09:32,178 - INFO - Performing Grid Search for LogisticRegression
+2025-03-09 18:46:51,846 - INFO - Starting Grid Search for hyperparameter tuning
+2025-03-09 18:46:51,847 - INFO - Performing Grid Search for LogisticRegression
+2025-03-09 18:47:30,178 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-09 18:47:30,178 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
