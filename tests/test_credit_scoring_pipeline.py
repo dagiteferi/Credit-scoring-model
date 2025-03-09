@@ -13,7 +13,7 @@ import logging
 
 # Import the functions from your credit scoring pipeline script
 # Assuming the script is saved as 'credit_scoring_pipeline.py'
-from credit_scoring_pipeline import (
+from ..scripts.Modelling import (
     preprocess_data,
     split_the_data,
     define_models,
