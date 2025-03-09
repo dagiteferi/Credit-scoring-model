@@ -93,19 +93,27 @@ def test_define_hyperparameter_grids(setup_logging):
     assert 'n_estimators' in param_grids['RandomForest'], "n_estimators missing for RandomForest"
 
 def test_perform_grid_search(sample_data, mocker, setup_logging):
-    """Test perform_grid_search with mocked GridSearchCV using cv=2 for small dataset."""
-    mock_grid_search = mocker.patch('sklearn.model_selection.GridSearchCV')
+    """Test perform_grid_search with mocked GridSearchCV to fully bypass real execution."""
+    # Mock GridSearchCV at the module level
+    mock_grid_search = mocker.patch('sklearn.model_selection.GridSearchCV', autospec=True)
+    # Create a mock instance with required attributes
     mock_instance = mocker.MagicMock()
-    mock_instance.best_estimator_ = LogisticRegression()
-    # Mock GridSearchCV with cv=2 to avoid n_splits error with small dataset
+    mock_instance.best_estimator_ = LogisticRegression()  # Mimic fitted model
+    # Ensure instantiation returns the mock instance
     mock_grid_search.return_value = mock_instance
-    mocker.patch.object(mock_grid_search, 'fit', return_value=mock_instance)
+    # Mock fit to return the instance, ensuring no real execution
+    mock_instance.fit.return_value = mock_instance
+
+    # Prepare test data
     models = define_models()
     param_grids = define_hyperparameter_grids()
     processed_data = preprocess_data(sample_data.copy())
     X_train, _, y_train, _ = split_the_data(processed_data, target_column='Label', test_size=0.2, random_state=42)
-    # Simulate GridSearchCV call with adjusted cv
+
+    # Call the function
     best_models = perform_grid_search(models, param_grids, X_train, y_train)
+
+    # Assertions
     assert best_models is not None, "perform_grid_search returned None"
     assert 'LogisticRegression' in best_models, "LogisticRegression missing from best_models"
     assert 'RandomForest' in best_models, "RandomForest missing from best_models"
