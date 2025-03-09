@@ -162,7 +162,7 @@ def define_models():
     models = {
         'LogisticRegression': Pipeline([
             ('scaler', StandardScaler()),
-            ('logistic', LogisticRegression(solver='liblinear', max_iter=1000, random_state=42))
+            ('logistic', LogisticRegression(solver='liblinear', max_iter=5000, random_state=42))
         ]),
         'RandomForest': RandomForestClassifier(random_state=42)
     }
@@ -179,7 +179,7 @@ def define_hyperparameter_grids():
     logger.info("Defining hyperparameter grids")
     param_grids = {
         'LogisticRegression': {
-            'logistic__C': [0.1, 1, 10],
+            'logistic__C': [0.1, 1, 10, 100],
             'logistic__penalty': ['l1', 'l2']
         },
         'RandomForest': {
