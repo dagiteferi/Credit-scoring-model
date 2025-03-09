@@ -131,3 +131,30 @@ Name: count, dtype: int64
 2025-03-08 22:35:37,892 - INFO - Extracting datetime features from 'TransactionStartTime'
 2025-03-08 22:35:38,182 - INFO - Datetime features extracted: 'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday'
 2025-03-08 22:35:38,183 - INFO - Data preprocessing completed successfully
+2025-03-09 15:29:00,092 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-09 15:29:00,100 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-09 15:29:30,186 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-09 15:29:31,065 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-09 15:29:31,173 - INFO - Starting data preprocessing
+2025-03-09 15:29:31,175 - INFO - No duplicate columns found.
+2025-03-09 15:29:31,203 - INFO - Dropped unnecessary columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
+2025-03-09 15:29:31,223 - INFO - No missing values found.
+2025-03-09 15:29:31,295 - INFO - Encoded categorical variables: ['CurrencyCode', 'CountryCode', 'ProductId']
+2025-03-09 15:29:31,296 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-03-09 15:29:31,526 - INFO - Datetime features extracted: 'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday'
+2025-03-09 15:29:31,528 - INFO - Data preprocessing completed successfully
+2025-03-09 15:29:38,155 - INFO - Starting data preprocessing
+2025-03-09 15:29:38,156 - INFO - No duplicate columns found.
+2025-03-09 15:29:38,159 - INFO - No unnecessary columns to drop.
+2025-03-09 15:29:38,176 - INFO - No missing values found.
+2025-03-09 15:29:38,178 - INFO - No categorical columns to encode.
+2025-03-09 15:29:38,180 - INFO - 'TransactionStartTime' column not found. Skipping datetime feature extraction.
+2025-03-09 15:29:38,181 - INFO - Data preprocessing completed successfully
+2025-03-09 15:29:48,699 - INFO - Starting data splitting
+2025-03-09 15:29:48,796 - INFO - Data split into training and testing sets
+2025-03-09 15:29:54,879 - INFO - Defining machine learning models
+2025-03-09 15:29:54,881 - INFO - Models defined: LogisticRegression (with scaling), RandomForest
+2025-03-09 15:29:54,883 - INFO - Defining hyperparameter grids
+2025-03-09 15:29:54,883 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
+2025-03-09 15:30:00,658 - INFO - Starting Grid Search for hyperparameter tuning
+2025-03-09 15:30:00,659 - INFO - Performing Grid Search for LogisticRegression
