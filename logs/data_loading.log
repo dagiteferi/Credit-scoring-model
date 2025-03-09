@@ -158,3 +158,23 @@ Name: count, dtype: int64
 2025-03-09 15:29:54,883 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
 2025-03-09 15:30:00,658 - INFO - Starting Grid Search for hyperparameter tuning
 2025-03-09 15:30:00,659 - INFO - Performing Grid Search for LogisticRegression
+2025-03-09 18:09:29,166 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-09 18:09:29,167 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-09 18:09:30,372 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-09 18:09:31,383 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-09 18:09:31,459 - INFO - Starting data preprocessing
+2025-03-09 18:09:31,460 - INFO - No duplicate columns found.
+2025-03-09 18:09:31,485 - INFO - Dropped unnecessary columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
+2025-03-09 18:09:31,523 - INFO - No missing values found.
+2025-03-09 18:09:31,623 - INFO - Encoded categorical variables: ['CurrencyCode', 'CountryCode', 'ProductId']
+2025-03-09 18:09:31,627 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-03-09 18:09:31,949 - INFO - Datetime features extracted: 'TransactionHour', 'TransactionDay', 'TransactionMonth', 'TransactionWeekday'
+2025-03-09 18:09:31,952 - INFO - Data preprocessing completed successfully
+2025-03-09 18:09:31,988 - INFO - Starting data splitting
+2025-03-09 18:09:32,133 - INFO - Data split into training and testing sets
+2025-03-09 18:09:32,153 - INFO - Defining machine learning models
+2025-03-09 18:09:32,156 - INFO - Models defined: LogisticRegression (with scaling), RandomForest
+2025-03-09 18:09:32,157 - INFO - Defining hyperparameter grids
+2025-03-09 18:09:32,159 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
+2025-03-09 18:09:32,177 - INFO - Starting Grid Search for hyperparameter tuning
+2025-03-09 18:09:32,178 - INFO - Performing Grid Search for LogisticRegression
