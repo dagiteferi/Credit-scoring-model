@@ -264,78 +264,89 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         shap_values = explainer.shap_values(X_test)  # Get SHAP values for all classes
         logger.info(f"SHAP values shape: {np.array(shap_values).shape if isinstance(shap_values, list) else shap_values.shape}, X_test shape: {X_test.shape}")
 
-        # For binary classification, shap_values is a list of arrays (one per class)
+        # Handle SHAP values format
         if isinstance(shap_values, list) and len(shap_values) == 2:
+            # Older SHAP format: list of arrays (one per class)
             shap_values_class1 = shap_values[1]  # SHAP values for class 1
             logger.info(f"SHAP values for class 1 shape: {shap_values_class1.shape}")
-            if shap_values_class1.shape[1] != len(feature_names):
-                raise ValueError(f"SHAP values feature count ({shap_values_class1.shape[1]}) does not match feature names count ({len(feature_names)})")
-            if shap_values_class1.shape[0] != X_test.shape[0]:
-                raise ValueError(f"SHAP values sample count ({shap_values_class1.shape[0]}) does not match X_test sample count ({X_test.shape[0]})")
-
-            plt.figure()
-            shap.summary_plot(shap_values_class1, X_test, feature_names=feature_names, show=False)
-            plt.title("SHAP Summary Plot for Random Forest (Class 1)")
-            plt.tight_layout()
-            plt.savefig(os.path.join(save_dir, 'random_forest_shap_summary.png'))
-            plt.show()
-
-            instance_idx = 0
-            plt.figure()
-            shap.force_plot(
-                explainer.expected_value[1],
-                shap_values_class1[instance_idx],
-                X_test.iloc[instance_idx],
-                feature_names=feature_names,
-                matplotlib=True,
-                show=False
-            )
-            plt.title(f"SHAP Force Plot for Instance {instance_idx} (Class 1)")
-            plt.tight_layout()
-            plt.savefig(os.path.join(save_dir, f'random_forest_shap_force_instance_{instance_idx}.png'))
-            plt.show()
-
-            top_feature = importance_df['Feature'].iloc[0]
-            plt.figure()
-            shap.dependence_plot(
-                top_feature,
-                shap_values_class1,
-                X_test,
-                feature_names=feature_names,
-                interaction_index='auto',
-                show=False
-            )
-            plt.title(f"SHAP Dependence Plot for {top_feature}")
-            plt.tight_layout()
-            plt.savefig(os.path.join(save_dir, f'random_forest_shap_dependence_{top_feature}.png'))
-            plt.show()
-
-            from sklearn.inspection import PartialDependenceDisplay
-            top_2_features = importance_df['Feature'].head(2).tolist()
-            top_2_indices = [feature_names.index(feat) for feat in top_2_features]
-            plt.figure()
-            PartialDependenceDisplay.from_estimator(
-                model,
-                X_test,
-                features=top_2_indices,
-                feature_names=feature_names,
-                kind='average'
-            )
-            plt.title(f"Partial Dependence Plot for {top_2_features}")
-            plt.tight_layout()
-            plt.savefig(os.path.join(save_dir, 'random_forest_pdp.png'))
-            plt.show()
-
+        elif isinstance(shap_values, np.ndarray) and len(shap_values.shape) == 3:
+            # Newer SHAP format: single array of shape (n_samples, n_features, n_classes)
+            logger.info("Detected newer SHAP output format (numpy array). Extracting SHAP values for class 1.")
+            shap_values_class1 = shap_values[:, :, 1]  # Extract SHAP values for class 1
+            logger.info(f"SHAP values for class 1 shape: {shap_values_class1.shape}")
         else:
             logger.warning(f"Unexpected SHAP values format: {type(shap_values)}, shape: {np.array(shap_values).shape if isinstance(shap_values, list) else shap_values.shape}")
             raise ValueError("Unsupported SHAP output format for binary classification")
+
+        # Validate SHAP values shape
+        if shap_values_class1.shape[1] != len(feature_names):
+            raise ValueError(f"SHAP values feature count ({shap_values_class1.shape[1]}) does not match feature names count ({len(feature_names)})")
+        if shap_values_class1.shape[0] != X_test.shape[0]:
+            raise ValueError(f"SHAP values sample count ({shap_values_class1.shape[0]}) does not match X_test sample count ({X_test.shape[0]})")
+
+        # SHAP Summary Plot
+        plt.figure()
+        shap.summary_plot(shap_values_class1, X_test, feature_names=feature_names, show=False)
+        plt.title("SHAP Summary Plot for Random Forest (Class 1)")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, 'random_forest_shap_summary.png'))
+        plt.show()
+
+        # SHAP Force Plot for a single instance
+        instance_idx = 0
+        plt.figure()
+        shap.force_plot(
+            explainer.expected_value[1] if isinstance(explainer.expected_value, list) else explainer.expected_value,
+            shap_values_class1[instance_idx],
+            X_test.iloc[instance_idx] if isinstance(X_test, pd.DataFrame) else X_test[instance_idx],
+            feature_names=feature_names,
+            matplotlib=True,
+            show=False
+        )
+        plt.title(f"SHAP Force Plot for Instance {instance_idx} (Class 1)")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, f'random_forest_shap_force_instance_{instance_idx}.png'))
+        plt.show()
+
+        # SHAP Dependence Plot for the top feature
+        top_feature = importance_df['Feature'].iloc[0]
+        plt.figure()
+        shap.dependence_plot(
+            top_feature,
+            shap_values_class1,
+            X_test,
+            feature_names=feature_names,
+            interaction_index='auto',
+            show=False
+        )
+        plt.title(f"SHAP Dependence Plot for {top_feature}")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, f'random_forest_shap_dependence_{top_feature}.png'))
+        plt.show()
+
+        # Partial Dependence Plot (PDP) for top 2 features
+        from sklearn.inspection import PartialDependenceDisplay
+        top_2_features = importance_df['Feature'].head(2).tolist()
+        top_2_indices = [feature_names.index(feat) for feat in top_2_features]
+        plt.figure()
+        PartialDependenceDisplay.from_estimator(
+            model,
+            X_test,
+            features=top_2_indices,
+            feature_names=feature_names,
+            kind='average'
+        )
+        plt.title(f"Partial Dependence Plot for {top_2_features}")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, 'random_forest_pdp.png'))
+        plt.show()
 
         print("\nRandom Forest Feature Importance:")
         print(importance_df.head(10))
 
         return {
             'feature_importance': importance_df,
-            'shap_values': shap_values_class1 if isinstance(shap_values, list) else shap_values
+            'shap_values': shap_values_class1
         }
     except Exception as e:
         logger.error(f"Error explaining Random Forest: {str(e)}\n{traceback.format_exc()}")
