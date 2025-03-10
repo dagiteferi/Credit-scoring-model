@@ -52,12 +52,16 @@ async def startup_event():
 async def predict_route(data: RawInputData):
     """API endpoint to predict credit score from raw input data."""
     try:
+        logger.info(f"Received data: {data.dict()}")
         model = app.state.model
         if model is None:
             raise ValueError("Model not loaded")
         prediction = predict(model, data.dict())
         logger.info(f"Prediction successful: {prediction}")
         return prediction
+    except HTTPException as he:
+        # Re-raise HTTP exceptions directly
+        raise he
     except Exception as e:
-        logger.error(f"Prediction failed: {traceback.format_exc()}")
+        logger.error(f"Prediction failed: {str(e)}\n{traceback.format_exc()}")
         raise HTTPException(status_code=400, detail=f"Prediction error: {str(e)}")
