@@ -141,7 +141,11 @@ def load_or_preprocess_data(data_path, target_column='Label'):
             extra_cols = [col for col in X.columns if col.lower().strip() in extra_cols_normalized]
             X = X.drop(columns=extra_cols)
             logger.info(f"Dropped extra columns: {extra_cols}")
-        X = X[TRAINING_FEATURE_NAMES]  # Reorder columns to match training
+        # Force alignment to TRAINING_FEATURE_NAMES
+        X = X[TRAINING_FEATURE_NAMES]  # Reorder and subset to exactly 50 features
+        if len(X.columns) != len(TRAINING_FEATURE_NAMES):
+            logger.warning(f"Alignment failed: Expected 50 features, got {len(X.columns)}. Forcing subset.")
+            X = X[TRAINING_FEATURE_NAMES[:len(X.columns)]]  # Subset to match available columns
         logger.info(f"After alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
 
         X_train, X_test, y_train, y_test = train_test_split(
