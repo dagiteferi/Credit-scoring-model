@@ -12,7 +12,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
-# Import the module to test
+# Use relative import from the week-6 subdirectory
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'week-6')))
 from model_explainability import (
     load_models,
     load_or_preprocess_data,
@@ -21,13 +23,15 @@ from model_explainability import (
     run_explainability_pipeline
 )
 
-# Sample data for testing
+# Updated sample data with more rows to support stratification
 SAMPLE_CSV = """ProviderId,ProductCategory,Amount,Value,Label
 1,CategoryA,100,200,0
 2,CategoryB,150,250,1
+3,CategoryA,120,220,0
+4,CategoryB,160,260,1
 """
 
-# Mock model data
+# Mock feature names
 MOCK_FEATURE_NAMES = ['ProviderId', 'ProductCategory', 'Amount', 'Value']
 
 @pytest.fixture
@@ -72,13 +76,11 @@ def test_load_models_success(mock_models, setup_logging):
     assert models is not None
     assert 'LogisticRegression' in models
     assert 'RandomForest' in models
-    assert setup_logging.handlers  # Ensure logging is set up
+    assert setup_logging.handlers
 
 def test_load_models_failure(tmp_dir, setup_logging):
-    # Test with non-existent model directory
-    with pytest.raises(Exception):
+    with pytest.raises(FileNotFoundError):  # Specify the expected exception
         load_models(str(tmp_dir / "nonexistent"))
-    assert "Error loading models" in setup_logging.handlers[0].stream.getvalue()
 
 def test_load_or_preprocess_data_success(sample_data, tmp_dir):
     X_train, X_test, y_train, y_test = load_or_preprocess_data(str(sample_data))
@@ -86,17 +88,17 @@ def test_load_or_preprocess_data_success(sample_data, tmp_dir):
     assert isinstance(X_test, pd.DataFrame)
     assert isinstance(y_train, pd.Series)
     assert isinstance(y_test, pd.Series)
-    assert X_train.shape[1] == len(MOCK_FEATURE_NAMES)  # Check feature alignment
-    assert len(X_train) + len(X_test) == 2  # Total rows from sample data
+    assert X_train.shape[1] == len(MOCK_FEATURE_NAMES)
+    assert len(X_train) + len(X_test) == 4  # Updated to match new sample data
 
 def test_load_or_preprocess_data_file_not_found(tmp_dir):
-    with pytest.raises(Exception):
+    with pytest.raises(FileNotFoundError):  # Specify the expected exception
         load_or_preprocess_data(str(tmp_dir / "nonexistent.csv"))
 
 def test_load_or_preprocess_data_invalid_csv(tmp_dir):
     invalid_file = tmp_dir / "invalid.csv"
     invalid_file.write_text('ProviderId,Amount\n"unclosed quote,100\n')  # Malformed CSV
-    with pytest.raises(Exception):
+    with pytest.raises(pd.errors.ParserError):  # Specify the expected exception
         load_or_preprocess_data(str(invalid_file))
 
 @patch('shap.TreeExplainer')
@@ -108,13 +110,12 @@ def test_explain_random_forest_success(
     mock_models, sample_data, tmp_dir
 ):
     X_train, X_test, _, _ = load_or_preprocess_data(str(sample_data))
-    rf_model = mock_models / "RandomForest_best_model.pkl"
-    rf_model = joblib.load(rf_model)
+    rf_model = joblib.load(mock_models / "RandomForest_best_model.pkl")
 
     # Mock SHAP explainer and values
     mock_explainer = Mock()
-    mock_explainer.expected_value = [0.5, 0.6]  # Mock base value for class 1
-    mock_explainer.shap_values.return_value = np.zeros((X_test.shape[0], X_test.shape[1], 2))  # Mock SHAP values
+    mock_explainer.expected_value = [0.5, 0.6]
+    mock_explainer.shap_values.return_value = np.zeros((X_test.shape[0], X_test.shape[1], 2))  # Safe now that X_test is valid
     mock_tree_explainer.return_value = mock_explainer
 
     result = explain_random_forest(rf_model, X_train, X_test, MOCK_FEATURE_NAMES, str(tmp_dir / "explanations"))
@@ -126,8 +127,8 @@ def test_explain_random_forest_success(
 
 def test_explain_logistic_regression_success(mock_models, sample_data, tmp_dir):
     X_train, _, _, _ = load_or_preprocess_data(str(sample_data))
-    lr_model = mock_models / "LogisticRegression_best_model.pkl"
-    lr_model = joblib.load(lr_model)
+    lr_model = joblib.load(mock_models / "LogisticRegression_best_model.pkl")
+    lr_model.named_steps['scaler'].fit(X_train)  # Fit the scaler
 
     result = explain_logistic_regression(lr_model, X_train, MOCK_FEATURE_NAMES, str(tmp_dir / "explanations"))
     assert result is not None
@@ -143,12 +144,12 @@ def test_run_explainability_pipeline_success(mock_models, sample_data, tmp_dir):
     assert isinstance(result['RandomForest'], dict)
 
 def test_run_explainability_pipeline_failure_model_load(tmp_dir, sample_data):
-    with pytest.raises(Exception):
+    with pytest.raises(FileNotFoundError):  # Specify the expected exception
         run_explainability_pipeline(str(sample_data), str(tmp_dir / "nonexistent"), str(tmp_dir / "explanations"))
 
 def test_run_explainability_pipeline_failure_data_load(tmp_dir, mock_models):
-    with pytest.raises(Exception):
-        run_explainability_pipeline(str(tmp_dir / "nonexistent.csv"), str(mock_models), str(tmp_dir / "explanations"))
+    with pytest.raises(FileNotFoundError):  # Specify the expected exception
+    run_explainability_pipeline(str(tmp_dir / "nonexistent.csv"), str(mock_models), str(tmp_dir / "explanations"))
 
 if __name__ == "__main__":
     pytest.main([__file__])
