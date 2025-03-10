@@ -1,19 +1,14 @@
-# models/predictor.py
 import sys
 import os
 import joblib
 import pandas as pd
 import numpy as np
-from datetime import datetime
+import traceback
 
-# Define the root directory (one level up from models/)
+# Adjust sys.path to include the root directory
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
-
-# Debug: Print sys.path to verify
-print("predictor.py - Initial sys.path:", sys.path)
-print("predictor.py - Added root directory to sys.path:", ROOT_DIR)
 
 # Import logger from config
 from credit_scoring_app.config import logger
@@ -31,11 +26,10 @@ def load_model(model_path: str):
 def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
     """Preprocess raw input data to match the features expected by the model."""
     try:
-        # Convert the input dictionary to a DataFrame
+        logger.info(f"Preprocessing data: {data}")
         df = pd.DataFrame([data])
 
-        # Extract features from TransactionStartTime
-        df['TransactionStartTime'] = pd.to_datetime(df['TransactionStartTime'])
+        df['TransactionStartTime'] = pd.to_datetime(df['TransactionStartTime'], utc=True)
         df['Transaction_Hour'] = df['TransactionStartTime'].dt.hour
         df['Transaction_Day'] = df['TransactionStartTime'].dt.day
         df['Transaction_Month'] = df['TransactionStartTime'].dt.month
@@ -44,29 +38,24 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         df['TransactionDay'] = df['Transaction_Day']
         df['TransactionMonth'] = df['Transaction_Month']
 
-        # Calculate Recency
         current_date = pd.Timestamp.now(tz='UTC')
         df['Recency'] = (current_date - df['TransactionStartTime']).dt.days
 
-        # Feature engineering
         df['Total_Transaction_Amount'] = df['Amount']
         df['Average_Transaction_Amount'] = df['Amount']
         df['Transaction_Count'] = 1
         df['Std_Transaction_Amount'] = 0
 
-        # Calculate RFMS_score
         df['RFMS_score'] = (1 / (df['Recency'] + 1) * 0.4) + (df['Transaction_Count'] * 0.3) + (df['Total_Transaction_Amount'] * 0.3)
         df['RFMS_score'] = df['RFMS_score'].replace([np.inf, -np.inf], np.nan).fillna(0)
-        df['RFMS_score_binned'] = 0  # Placeholder
+        df['RFMS_score_binned'] = 0
 
-        # Add missing features with default values
         df['ProviderId'] = 0
         df['ProductCategory'] = 0
         df['Value'] = 0
         df['PricingStrategy'] = 0
         df['FraudResult'] = 0
 
-        # WOE features (placeholders)
         df['RFMS_score_binned_WOE'] = 0.0
         df['ProviderId_WOE'] = 0.0
         df['ProviderId_WOE.1'] = 0.0
@@ -75,26 +64,22 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         df['ProductCategory_WOE'] = 0.0
         df['ProductCategory_WOE.1'] = 0.0
 
-        # One-hot encode ChannelId
         df = pd.get_dummies(df, columns=['ChannelId'], prefix='ChannelId_ChannelId')
         for value in [2, 3, 5]:
             col_name = f'ChannelId_ChannelId_{value}'
             if col_name not in df.columns:
                 df[col_name] = 0
 
-        # One-hot encode ProductId
         df = pd.get_dummies(df, columns=['ProductId'], prefix='ProductId')
         for value in range(1, 23):
             col_name = f'ProductId_{value}'
             if col_name not in df.columns:
                 df[col_name] = 0
 
-        # Drop raw columns
         columns_to_drop = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId',
                            'CurrencyCode', 'CountryCode', 'TransactionStartTime']
         df = df.drop(columns=columns_to_drop, errors='ignore')
 
-        # Define expected features
         expected_features = [
             'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy',
             'FraudResult', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
@@ -112,38 +97,32 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
             'TransactionDay', 'TransactionMonth'
         ]
 
-        # Add missing columns
         for col in expected_features:
             if col not in df.columns:
                 df[col] = 0
 
-        # Ensure correct order
         df = df[expected_features]
-
         rfms_score = df['RFMS_score'].iloc[0]
         logger.info("Data preprocessed successfully")
         return df, rfms_score
     except Exception as e:
-        logger.error(f"Preprocessing failed: {str(e)}")
+        logger.error(f"Preprocessing failed: {str(e)}\n{traceback.format_exc()}")
         raise
 
 def predict(model, data: dict) -> dict:
     """Make a prediction using the loaded model and preprocessed data."""
     try:
-        # Preprocess the input data
         X, rfms_score = preprocess_data(data)
+        logger.info(f"Preprocessed data shape: {X.shape}")
 
-        # Make prediction
         prediction = model.predict(X)[0]
+        logger.info(f"Raw prediction: {prediction}")
 
-        # Calculate credit score (0-800 scale)
-        credit_score = 800 if prediction == 0 else 400  # Simplified scoring
-        logger.info(f"Prediction made: {prediction}, RFMS_score: {rfms_score}, Credit_score: {credit_score}")
+        # Return only the raw prediction (0 or 1) and rfms_score
         return {
             "prediction": int(prediction),
-            "rfms_score": float(rfms_score),
-            "credit_score": int(credit_score)
+            "rfms_score": float(rfms_score)
         }
     except Exception as e:
-        logger.error(f"Prediction failed: {str(e)}")
+        logger.error(f"Prediction failed: {str(e)}\n{traceback.format_exc()}")
         raise
