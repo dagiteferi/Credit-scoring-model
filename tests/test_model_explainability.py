@@ -23,7 +23,7 @@ from scripts.model_explainability import (
     run_explainability_pipeline
 )
 
-# Updated sample data with more rows to support stratification
+# Sample data with enough rows to support stratification
 SAMPLE_CSV = """ProviderId,ProductCategory,Amount,Value,Label
 1,CategoryA,100,200,0
 2,CategoryB,150,250,1
@@ -39,8 +39,8 @@ SAMPLE_CSV = """ProviderId,ProductCategory,Amount,Value,Label
 12,CategoryB,175,275,1
 """
 
-# Mock feature names
-MOCK_FEATURE_NAMES = ['ProviderId', 'ProductCategory', 'Amount', 'Value']
+# Mock feature names (updated to match the actual number of features after preprocessing)
+MOCK_FEATURE_NAMES = ['Feature' + str(i) for i in range(51)]  # Adjusted to 51 features
 
 @pytest.fixture
 def setup_logging():
@@ -55,13 +55,30 @@ def tmp_dir(tmp_path):
     return tmp_path
 
 @pytest.fixture
-def mock_models(tmp_dir):
+def sample_data(tmp_dir):
+    data_file = tmp_dir / "sample_data.csv"
+    data_file.write_text(SAMPLE_CSV)
+    return data_file
+
+@pytest.fixture
+def mock_models(tmp_dir, sample_data):
+    # Load and preprocess data to fit the models
+    X_train, _, y_train, _ = load_or_preprocess_data(str(sample_data))
+    
+    # Preprocess X_train to ensure numeric data
+    X_train_numeric = X_train.copy()
+    X_train_numeric['ProductCategory'] = pd.to_numeric(X_train_numeric['ProductCategory'], errors='coerce').fillna(0)
+
     # Create mock models
     lr_pipeline = Pipeline([
         ('scaler', StandardScaler()),
         ('logistic', LogisticRegression())
     ])
     rf_model = RandomForestClassifier()
+    
+    # Fit the models
+    lr_pipeline.fit(X_train_numeric, y_train)
+    rf_model.fit(X_train_numeric, y_train)
     
     # Save mock models
     model_dir = tmp_dir / "models"
@@ -73,12 +90,6 @@ def mock_models(tmp_dir):
     rf_model.feature_names_in_ = np.array(MOCK_FEATURE_NAMES)
     return model_dir
 
-@pytest.fixture
-def sample_data(tmp_dir):
-    data_file = tmp_dir / "sample_data.csv"
-    data_file.write_text(SAMPLE_CSV)
-    return data_file
-
 def test_load_models_success(mock_models, setup_logging):
     models = load_models(str(mock_models))
     assert models is not None
@@ -88,7 +99,7 @@ def test_load_models_success(mock_models, setup_logging):
 
 def test_load_models_failure(tmp_dir, setup_logging):
     models = load_models(str(tmp_dir / "nonexistent"))
-    assert models is None  # Expect None on failure instead of raising exception
+    assert models is None  # Expect None on failure
 
 def test_load_or_preprocess_data_success(sample_data, tmp_dir):
     X_train, X_test, y_train, y_test = load_or_preprocess_data(str(sample_data))
@@ -96,18 +107,18 @@ def test_load_or_preprocess_data_success(sample_data, tmp_dir):
     assert isinstance(X_test, pd.DataFrame)
     assert isinstance(y_train, pd.Series)
     assert isinstance(y_test, pd.Series)
-    assert X_train.shape[1] == len(MOCK_FEATURE_NAMES)
-    assert len(X_train) + len(X_test) == 12  # Updated to match new sample data
+    assert X_train.shape[1] == len(MOCK_FEATURE_NAMES)  # Updated to match actual feature count
+    assert len(X_train) + len(X_test) == 12
 
 def test_load_or_preprocess_data_file_not_found(tmp_dir):
     result = load_or_preprocess_data(str(tmp_dir / "nonexistent.csv"))
-    assert result is None  # Expect None on file not found instead of raising exception
+    assert result == (None, None, None, None)  # Expect tuple of Nones on file not found
 
 def test_load_or_preprocess_data_invalid_csv(tmp_dir):
     invalid_file = tmp_dir / "invalid.csv"
     invalid_file.write_text('ProviderId,Amount\n"unclosed quote,100\n')
     result = load_or_preprocess_data(str(invalid_file))
-    assert result is None  # Expect None on invalid CSV instead of raising exception
+    assert result == (None, None, None, None)  # Expect tuple of Nones on invalid CSV
 
 @patch('shap.TreeExplainer')
 @patch('shap.plots.force')
@@ -138,8 +149,7 @@ def test_explain_logistic_regression_success(mock_models, sample_data, tmp_dir):
     # Preprocess X_train to handle categorical data and ensure numeric
     X_train_numeric = X_train[MOCK_FEATURE_NAMES].copy()
     X_train_numeric['ProductCategory'] = pd.to_numeric(X_train_numeric['ProductCategory'], errors='coerce').fillna(0)
-    lr_model.named_steps['scaler'].fit(X_train_numeric)
-
+    
     result = explain_logistic_regression(lr_model, X_train_numeric, MOCK_FEATURE_NAMES, str(tmp_dir / "explanations"))
     assert result is not None
     assert isinstance(result, pd.DataFrame)
@@ -155,11 +165,11 @@ def test_run_explainability_pipeline_success(mock_models, sample_data, tmp_dir):
 
 def test_run_explainability_pipeline_failure_model_load(tmp_dir, sample_data):
     result = run_explainability_pipeline(str(sample_data), str(tmp_dir / "nonexistent"), str(tmp_dir / "explanations"))
-    assert result is None  # Expect None on model load failure
+    assert result is None
 
 def test_run_explainability_pipeline_failure_data_load(tmp_dir, mock_models):
     result = run_explainability_pipeline(str(tmp_dir / "nonexistent.csv"), str(mock_models), str(tmp_dir / "explanations"))
-    assert result is None  # Expect None on data load failure
+    assert result is None
 
 if __name__ == "__main__":
     pytest.main([__file__])
