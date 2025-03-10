@@ -1,9 +1,16 @@
 # models/predictor.py
+import sys
+import os
 import joblib
 import pandas as pd
 import numpy as np
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
+
+# Add the root directory to the module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# Now import from credit_scoring_app.config
 from credit_scoring_app.config import logger
 
 def load_model(model_path: str):
@@ -16,7 +23,7 @@ def load_model(model_path: str):
         logger.error(f"Failed to load model from {model_path}: {str(e)}")
         raise
 
-def preprocess_data(data: dict) -> pd.DataFrame:
+def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
     """Preprocess raw input data to match the features expected by the model."""
     try:
         # Convert the input dictionary to a DataFrame
@@ -33,23 +40,29 @@ def preprocess_data(data: dict) -> pd.DataFrame:
         df['TransactionDay'] = df['Transaction_Day']
         df['TransactionMonth'] = df['Transaction_Month']
 
-        # Simulate feature engineering (align with training data)
-        df['Total_Transaction_Amount'] = df['Amount']  # Match training feature
-        df['Average_Transaction_Amount'] = df['Amount']  # Match training feature
+        # Calculate Recency
+        current_date = pd.Timestamp.now(tz='UTC')
+        df['Recency'] = (current_date - df['TransactionStartTime']).dt.days
+
+        # Feature engineering
+        df['Total_Transaction_Amount'] = df['Amount']
+        df['Average_Transaction_Amount'] = df['Amount']
         df['Transaction_Count'] = 1
         df['Std_Transaction_Amount'] = 0
-        df['Recency'] = (datetime.now() - df['TransactionStartTime']).dt.days
-        df['RFMS_score'] = 0.5  # Placeholder
+
+        # Calculate RFMS_score
+        df['RFMS_score'] = (1 / (df['Recency'] + 1) * 0.4) + (df['Transaction_Count'] * 0.3) + (df['Total_Transaction_Amount'] * 0.3)
+        df['RFMS_score'] = df['RFMS_score'].replace([np.inf, -np.inf], np.nan).fillna(0)
         df['RFMS_score_binned'] = 0  # Placeholder (adjust binning logic if known)
 
         # Add missing features with default values
-        df['ProviderId'] = 0  # Default value (adjust if needed)
-        df['ProductCategory'] = 0  # Default value (numeric instead of 'Unknown')
-        df['Value'] = 0  # Default value (adjust if needed)
-        df['PricingStrategy'] = 0  # Default value (adjust if needed)
-        df['FraudResult'] = 0  # Default value (adjust if needed)
+        df['ProviderId'] = 0
+        df['ProductCategory'] = 0
+        df['Value'] = 0
+        df['PricingStrategy'] = 0
+        df['FraudResult'] = 0
 
-        # WOE features (placeholders, adjust if actual WOE logic is known)
+        # WOE features (placeholders)
         df['RFMS_score_binned_WOE'] = 0.0
         df['ProviderId_WOE'] = 0.0
         df['ProviderId_WOE.1'] = 0.0
@@ -58,28 +71,26 @@ def preprocess_data(data: dict) -> pd.DataFrame:
         df['ProductCategory_WOE'] = 0.0
         df['ProductCategory_WOE.1'] = 0.0
 
-        # One-hot encode ChannelId with the correct prefix (ChannelId_ChannelId_X)
+        # One-hot encode ChannelId
         df = pd.get_dummies(df, columns=['ChannelId'], prefix='ChannelId_ChannelId')
-        # Ensure all possible ChannelId values from training are included
-        for value in [2, 3, 5]:  # From training data
+        for value in [2, 3, 5]:
             col_name = f'ChannelId_ChannelId_{value}'
             if col_name not in df.columns:
                 df[col_name] = 0
 
-        # One-hot encode ProductId with the correct prefix (ProductId_X)
+        # One-hot encode ProductId
         df = pd.get_dummies(df, columns=['ProductId'], prefix='ProductId')
-        # Ensure all possible ProductId values from training are included
-        for value in range(1, 23):  # ProductId_1 to ProductId_22
+        for value in range(1, 23):
             col_name = f'ProductId_{value}'
             if col_name not in df.columns:
                 df[col_name] = 0
 
-        # Drop raw columns that are not used by the model
+        # Drop raw columns
         columns_to_drop = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId',
                            'CurrencyCode', 'CountryCode', 'TransactionStartTime']
         df = df.drop(columns=columns_to_drop, errors='ignore')
 
-        # Define the exact features expected by the model (from model.feature_names_in_ + missing features)
+        # Define expected features
         expected_features = [
             'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy',
             'FraudResult', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
@@ -97,30 +108,38 @@ def preprocess_data(data: dict) -> pd.DataFrame:
             'TransactionDay', 'TransactionMonth'
         ]
 
-        # Add missing columns with default values (0)
+        # Add missing columns
         for col in expected_features:
             if col not in df.columns:
                 df[col] = 0
 
-        # Ensure the DataFrame has exactly the expected features in the correct order
+        # Ensure correct order
         df = df[expected_features]
 
+        rfms_score = df['RFMS_score'].iloc[0]
         logger.info("Data preprocessed successfully")
-        return df
+        return df, rfms_score
     except Exception as e:
         logger.error(f"Preprocessing failed: {str(e)}")
         raise
 
-def predict(model, data: dict) -> int:
+def predict(model, data: dict) -> dict:
     """Make a prediction using the loaded model and preprocessed data."""
     try:
         # Preprocess the input data
-        X = preprocess_data(data)
+        X, rfms_score = preprocess_data(data)
 
         # Make prediction
         prediction = model.predict(X)[0]
-        logger.info(f"Prediction made: {prediction}")
-        return int(prediction)  # Ensure the prediction is returned as an integer
+
+        # Calculate credit score (0-800 scale)
+        credit_score = 800 if prediction == 0 else 400  # Simplified scoring
+        logger.info(f"Prediction made: {prediction}, RFMS_score: {rfms_score}, Credit_score: {credit_score}")
+        return {
+            "prediction": int(prediction),
+            "rfms_score": float(rfms_score),
+            "credit_score": int(credit_score)
+        }
     except Exception as e:
         logger.error(f"Prediction failed: {str(e)}")
         raise
