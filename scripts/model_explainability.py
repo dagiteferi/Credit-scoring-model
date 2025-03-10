@@ -52,7 +52,6 @@ TRAINING_FEATURE_NAMES = [
 ]
 
 # Function to load preprocessed data (or re-preprocess if needed)
-# Function to load preprocessed data (or re-preprocess if needed)
 def load_or_preprocess_data(data_path, target_column='Label'):
     """
     Load preprocessed data or preprocess raw data for explainability, aligning with training features.
@@ -131,9 +130,16 @@ def load_or_preprocess_data(data_path, target_column='Label'):
         for col in missing_cols:
             X[col] = 0  # Add missing columns with default value 0
         extra_cols = set(X.columns) - set(TRAINING_FEATURE_NAMES)
-        logger.info(f"Extra columns: {extra_cols}")
-        if extra_cols:
-            X = X.drop(columns=list(extra_cols))  # Drop extra columns
+        logger.info(f"Raw extra columns: {extra_cols}")  # Raw difference
+        # Normalize column names for case-insensitive comparison
+        x_cols_normalized = {col.lower().strip() for col in X.columns}
+        training_cols_normalized = {col.lower().strip() for col in TRAINING_FEATURE_NAMES}
+        extra_cols_normalized = x_cols_normalized - training_cols_normalized
+        logger.info(f"Normalized extra columns: {extra_cols_normalized}")
+        if extra_cols_normalized:
+            extra_cols = [col for col in X.columns if col.lower().strip() in extra_cols_normalized]
+            X = X.drop(columns=extra_cols)
+            logger.info(f"Dropped extra columns: {extra_cols}")
         X = X[TRAINING_FEATURE_NAMES]  # Reorder columns to match training
         logger.info(f"After alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
 
