@@ -89,7 +89,8 @@ def load_or_preprocess_data(data_path, target_column='Label'):
                 for col in categorical_cols:
                     data[col] = data[col].fillna(data[col].mode()[0])
 
-                categorical_columns = ['CurrencyCode', 'CountryCode', 'ProductId', 'ChannelId']
+                # Only encode ProductId and ChannelId, exclude CurrencyCode and CountryCode
+                categorical_columns = ['ProductId', 'ChannelId']  # Removed CurrencyCode and CountryCode
                 existing_categorical = [col for col in categorical_columns if col in data.columns]
                 if existing_categorical:
                     data = pd.get_dummies(data, columns=existing_categorical, drop_first=True)
@@ -130,7 +131,7 @@ def load_or_preprocess_data(data_path, target_column='Label'):
         for col in missing_cols:
             X[col] = 0  # Add missing columns with default value 0
         extra_cols = set(X.columns) - set(TRAINING_FEATURE_NAMES)
-        logger.info(f"Raw extra columns: {extra_cols}")  # Raw difference
+        logger.info(f"Raw extra columns: {extra_cols}")
         # Normalize column names for case-insensitive comparison
         x_cols_normalized = {col.lower().strip() for col in X.columns}
         training_cols_normalized = {col.lower().strip() for col in TRAINING_FEATURE_NAMES}
@@ -225,7 +226,7 @@ def explain_logistic_regression(model, X_train, feature_names, save_dir='explana
 
 def explain_random_forest(model, X_train, X_test, feature_names, save_dir='explanations'):
     """
-    Explain the Random Forest model using feature importance and SHAP values.
+    Explain the Random Forest model using feature importance, SHAP values, PDP, and SHAP dependence plots.
 
     Parameters:
     - model: Trained RandomForestClassifier model.
@@ -256,7 +257,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.tight_layout()
         os.makedirs(save_dir, exist_ok=True)
         plt.savefig(os.path.join(save_dir, 'random_forest_importance.png'))
-        plt.show()  # Explicitly show the plot
+        plt.show()
 
         # SHAP Values (Local and Global)
         explainer = shap.TreeExplainer(model)
@@ -268,7 +269,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.title("SHAP Summary Plot for Random Forest (Class 1)")
         plt.tight_layout()
         plt.savefig(os.path.join(save_dir, 'random_forest_shap_summary.png'))
-        plt.show()  # Explicitly show the plot
+        plt.show()
 
         instance_idx = 0
         plt.figure()
@@ -283,7 +284,40 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.title(f"SHAP Force Plot for Instance {instance_idx} (Class 1)")
         plt.tight_layout()
         plt.savefig(os.path.join(save_dir, f'random_forest_shap_force_instance_{instance_idx}.png'))
-        plt.show()  # Explicitly show the plot
+        plt.show()
+
+        # SHAP Dependence Plot for the top feature
+        top_feature = importance_df['Feature'].iloc[0]  # Most important feature
+        plt.figure()
+        shap.dependence_plot(
+            top_feature,
+            shap_values[1],
+            X_test,
+            feature_names=feature_names,
+            interaction_index='auto',  # Automatically select a feature to show interaction
+            show=False
+        )
+        plt.title(f"SHAP Dependence Plot for {top_feature}")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, f'random_forest_shap_dependence_{top_feature}.png'))
+        plt.show()
+
+        # Partial Dependence Plot for the top 2 features
+        from sklearn.inspection import PartialDependenceDisplay
+        top_2_features = importance_df['Feature'].head(2).tolist()
+        top_2_indices = [feature_names.index(feat) for feat in top_2_features]
+        plt.figure()
+        PartialDependenceDisplay.from_estimator(
+            model,
+            X_test,
+            features=top_2_indices,
+            feature_names=feature_names,
+            kind='average'  # Can also use 'individual' for ICE plots
+        )
+        plt.title(f"Partial Dependence Plot for {top_2_features}")
+        plt.tight_layout()
+        plt.savefig(os.path.join(save_dir, 'random_forest_pdp.png'))
+        plt.show()
 
         print("\nRandom Forest Feature Importance:")
         print(importance_df.head(10))
@@ -295,7 +329,6 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
     except Exception as e:
         logger.error(f"Error explaining Random Forest: {str(e)}\n{traceback.format_exc()}")
         return None
-
 # Main Explainability Pipeline
 def run_explainability_pipeline(data_path, model_dir='models', save_dir='explanations'):
     """
