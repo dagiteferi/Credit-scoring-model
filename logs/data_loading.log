@@ -219,3 +219,29 @@ Name: count, dtype: int64
 2025-03-10 10:30:21,722 - INFO - Hyperparameter grids defined with regularization for RandomForest
 2025-03-10 10:30:31,681 - INFO - Starting Randomized Search for hyperparameter tuning
 2025-03-10 10:30:31,682 - INFO - Performing Randomized Search for LogisticRegression
+2025-03-10 10:30:51,752 - INFO - LogisticRegression best parameters: {'logistic__penalty': 'l2', 'logistic__C': 10}
+2025-03-10 10:30:51,755 - INFO - LogisticRegression best CV ROC-AUC: 0.9943
+2025-03-10 10:30:51,756 - INFO - Performing Randomized Search for RandomForest
+2025-03-10 10:31:03,522 - INFO - RandomForest best parameters: {'n_estimators': 50, 'min_samples_split': 5, 'min_samples_leaf': 4, 'max_depth': 15}
+2025-03-10 10:31:03,523 - INFO - RandomForest best CV ROC-AUC: 1.0000
+2025-03-10 10:31:03,525 - INFO - Randomized Search completed successfully
+2025-03-10 10:31:23,140 - INFO - Starting evaluation of best models
+2025-03-10 10:31:23,143 - INFO - Evaluating LogisticRegression
+2025-03-10 10:31:23,296 - INFO - LogisticRegression Test Accuracy: 0.9653
+2025-03-10 10:31:23,306 - INFO - LogisticRegression Test Precision: 0.9791
+2025-03-10 10:31:23,306 - INFO - LogisticRegression Test Recall: 0.9509
+2025-03-10 10:31:23,307 - INFO - LogisticRegression Test F1 Score: 0.9648
+2025-03-10 10:31:23,311 - INFO - LogisticRegression Test ROC-AUC: 0.9962
+2025-03-10 10:31:31,405 - INFO - LogisticRegression 5-Fold CV ROC-AUC: 0.9952 (±0.0001)
+2025-03-10 10:31:31,408 - INFO - Evaluating RandomForest
+2025-03-10 10:31:31,651 - INFO - RandomForest Test Accuracy: 0.9998
+2025-03-10 10:31:31,655 - INFO - RandomForest Test Precision: 0.9997
+2025-03-10 10:31:31,657 - INFO - RandomForest Test Recall: 1.0000
+2025-03-10 10:31:31,659 - INFO - RandomForest Test F1 Score: 0.9998
+2025-03-10 10:31:31,663 - INFO - RandomForest Test ROC-AUC: 1.0000
+2025-03-10 10:31:35,099 - INFO - RandomForest 5-Fold CV ROC-AUC: 1.0000 (±0.0000)
+2025-03-10 10:31:35,101 - INFO - Model evaluation completed successfully
+2025-03-10 10:32:06,810 - INFO - Starting process to save best models
+2025-03-10 10:32:06,821 - INFO - Saved LogisticRegression to models\LogisticRegression_best_model.pkl
+2025-03-10 10:32:06,852 - INFO - Saved RandomForest to models\RandomForest_best_model.pkl
+2025-03-10 10:32:06,853 - INFO - All best models saved successfully
