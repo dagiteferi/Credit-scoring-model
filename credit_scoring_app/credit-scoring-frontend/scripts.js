@@ -115,13 +115,14 @@ async function handleSubmit(form) {
         if (resultElement) {
             console.log("Result element found, removing hidden class and setting display...");
             resultElement.classList.remove('hidden');
-            resultElement.style.display = 'block'; // Force display
-            resultElement.style.opacity = '1'; // Override transition opacity
-            resultElement.style.transform = 'translateY(0)'; // Override transition transform
+            resultElement.style.display = 'block';
+            resultElement.style.opacity = '1';
+            resultElement.style.transform = 'translateY(0)';
             document.getElementById('creditScore').textContent = finalCreditScore;
             document.getElementById('rfmsScore').textContent = `RFMS Score: ${poorData.rfms_score ? poorData.rfms_score.toFixed(2) : 'N/A'}`;
             document.getElementById('riskStatus').textContent = finalCreditScore === 1 ? 'Low Risk' : 'High Risk';
             document.getElementById('recommendation').textContent = finalCreditScore === 1 ? 'Recommend Approval' : 'Further Verification Required';
+            document.getElementById('explanation').textContent = poorData.explanation || goodData.explanation || 'No specific reasoning available.';
             const statusIndicator = document.getElementById('statusIndicator');
             if (statusIndicator) {
                 statusIndicator.style.backgroundColor = finalCreditScore === 1 ? 'var(--success)' : 'var(--danger)';
