@@ -52,6 +52,11 @@ def preprocess_data(data: dict, target_label: str = "TRUE") -> tuple[pd.DataFram
         df['Value'] = 0
         df['PricingStrategy'] = 0
 
+        # Ensure FraudResult is included
+        if 'FraudResult' not in df.columns:
+            logger.warning("FraudResult not provided in input data. Defaulting to 0.")
+            df['FraudResult'] = 0
+
         # Set WOE features based on target_label
         if target_label == "TRUE":
             df['RFMS_score_binned_WOE'] = -0.071
@@ -86,9 +91,10 @@ def preprocess_data(data: dict, target_label: str = "TRUE") -> tuple[pd.DataFram
                           'CurrencyCode', 'CountryCode', 'TransactionStartTime']
         df = df.drop(columns=columns_to_drop, errors='ignore')
 
+        # Use the exact feature names and order from the model
         expected_features = [
             'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy',
-            'Total_Transaction_Amount', 'Average_Transaction_Amount',
+            'FraudResult', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
             'Transaction_Count', 'Std_Transaction_Amount', 'Transaction_Hour',
             'Transaction_Day', 'Transaction_Month', 'Transaction_Year', 'Recency',
             'RFMS_score', 'RFMS_score_binned', 'RFMS_score_binned_WOE', 'ProviderId_WOE',

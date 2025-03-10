@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from datetime import datetime
+from typing import Optional
 
 class RawInputData(BaseModel):
     TransactionId: int
@@ -10,5 +12,6 @@ class RawInputData(BaseModel):
     CountryCode: str
     ProductId: int
     ChannelId: int
-    TransactionStartTime: str
+    TransactionStartTime: datetime
     Amount: float
+    FraudResult: Optional[int] = 0  # Add FraudResult as optional, default to 0

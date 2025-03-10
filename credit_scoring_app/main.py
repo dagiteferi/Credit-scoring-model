@@ -21,11 +21,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:8080", "http://localhost:8080"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],  # Explicitly allow OPTIONS
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
-# Debug middleware setup
 @app.on_event("startup")
 async def startup_event():
     try:
@@ -33,7 +32,6 @@ async def startup_event():
             raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
         app.state.model = load_model(MODEL_PATH)
         logger.info("Model loaded successfully")
-        # Log CORS configuration
         logger.info("CORS Middleware configured with origins: %s", ["http://127.0.0.1:8080", "http://localhost:8080"])
     except Exception as e:
         logger.error(f"Failed to load model: {traceback.format_exc()}")

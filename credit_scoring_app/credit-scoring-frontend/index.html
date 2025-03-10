@@ -3,182 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Intelligence Dashboard | Risk Assessment Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Credit Risk Analysis Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        }
-        .form-transition {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-    </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- Header -->
-        <header class="mb-8 text-center">
-            <div class="gradient-bg text-white p-6 rounded-2xl shadow-xl">
-                <h1 class="text-3xl font-bold mb-2">Credit Intelligence Platform</h1>
-                <p class="opacity-90">AI-powered credit risk assessment & analysis</p>
-            </div>
+<body>
+    <div class="assessment-card">
+        <header class="assessment-header">
+            <h1>Credit Risk Analyzer</h1>
+            <p>AI-powered credit risk assessment platform</p>
         </header>
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-            <!-- Navigation -->
-            <nav class="flex space-x-4 mb-8 border-b border-gray-200">
-                <button id="detailedFormBtn" class="px-4 py-2 font-medium text-indigo-600 border-b-2 border-indigo-600">
-                    Technical Assessment
-                </button>
-                <button id="simpleFormBtn" class="px-4 py-2 font-medium text-gray-500 hover:text-indigo-600 transition-colors">
-                    Quick Analysis
-                </button>
-            </nav>
+        <nav class="nav-tabs">
+            <button class="nav-button active" id="detailedFormBtn">Technical Analysis</button>
+            <button class="nav-button" id="simpleFormBtn">Quick Assessment</button>
+        </nav>
 
-            <!-- Detailed Form -->
-            <form id="detailedForm" class="space-y-6 form-transition">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left Column -->
-                    <div class="space-y-4">
-                        <div class="form-group">
-                            <label class="block text-sm font-medium mb-1 flex items-center">
-                                Transaction Details
-                                <hero-icon-outline:information-circle class="w-4 h-4 ml-1 text-gray-400" />
-                            </label>
-                            <div class="space-y-3">
-                                <input type="number" id="transactionId" placeholder="Transaction ID" class="input-field">
-                                <input type="number" id="batchId" placeholder="Batch ID" class="input-field">
-                                <input type="datetime-local" id="transactionStartTime" class="input-field">
-                            </div>
-                        </div>
+        <!-- Detailed Form -->
+        <form id="detailedForm" class="assessment-form">
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Transaction Details</label>
+                    <input type="number" class="input-field" placeholder="Transaction ID" id="transactionId" required>
+                    <input type="number" class="input-field" placeholder="Batch ID" id="batchId" required>
+                    <input type="datetime-local" class="input-field" id="transactionStartTime" required>
+                </div>
 
-                        <div class="form-group">
-                            <label class="block text-sm font-medium mb-1">Financial Details</label>
-                            <div class="space-y-3">
-                                <input type="number" id="amount" placeholder="Amount" step="0.01" class="input-field">
-                                <select id="currencyCode" class="input-field">
-                                    <option value="UGX">UGX - Ugandan Shilling</option>
-                                    <option value="USD">USD - US Dollar</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label>Customer Information</label>
+                    <input type="number" class="input-field" placeholder="Account ID" id="accountId" required>
+                    <input type="number" class="input-field" placeholder="Customer ID" id="customerId" required>
+                </div>
+            </div>
 
-                    <!-- Right Column -->
-                    <div class="space-y-4">
-                        <div class="form-group">
-                            <label class="block text-sm font-medium mb-1">User Information</label>
-                            <div class="space-y-3">
-                                <input type="number" id="customerId" placeholder="Customer ID" class="input-field">
-                                <input type="number" id="accountId" placeholder="Account ID" class="input-field">
-                                <input type="number" id="subscriptionId" placeholder="Subscription ID" class="input-field">
-                            </div>
-                        </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Product Details</label>
+                    <input type="number" class="input-field" placeholder="Product ID" id="productId" required>
+                    <select class="input-field" id="channelId" required>
+                        <option value="2">Online Channel</option>
+                        <option value="3">Mobile App</option>
+                        <option value="5">POS Terminal</option>
+                    </select>
+                </div>
 
-                        <div class="form-group">
-                            <label class="block text-sm font-medium mb-1">Product Details</label>
-                            <div class="space-y-3">
-                                <input type="number" id="productId" placeholder="Product ID" class="input-field">
-                                <select id="channelId" class="input-field">
-                                    <option value="2">Online Channel</option>
-                                    <option value="3">Mobile App</option>
-                                    <option value="5">POS Terminal</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label>Financial Details</label>
+                    <input type="number" step="0.01" class="input-field" placeholder="Amount" id="amount" required>
+                    <div class="input-group">
+                        <input type="text" class="input-field" value="UGX" id="currencyCode" readonly>
+                        <input type="text" class="input-field" value="256" id="countryCode" readonly>
                     </div>
                 </div>
-                <button type="submit" class="w-full primary-button">
-                    <span class="mr-2">Run Risk Analysis</span>
-                    <hero-icon-outline:arrow-right class="w-5 h-5" />
-                </button>
-            </form>
+            </div>
 
-            <!-- Simple Form -->
-            <form id="simpleForm" class="hidden space-y-6 form-transition">
-                <div class="space-y-4">
-                    <div class="form-group">
-                        <label class="block text-sm font-medium mb-1">Monthly Transaction Pattern</label>
-                        <input type="number" id="avgTransactionAmount" placeholder="Average Transaction Amount" step="0.01" class="input-field">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="block text-sm font-medium mb-1">Last Transaction Date</label>
-                        <input type="date" id="lastTransactionDate" class="input-field">
-                    </div>
-                </div>
-                <button type="submit" class="w-full primary-button">
-                    Quick Assessment
-                    <hero-icon-outline:bolt class="w-5 h-5 ml-2" />
-                </button>
-            </form>
+            <button type="submit" class="primary-button" style="grid-column: span 2;">
+                Analyze Risk
+                <hero-icon-outline:calculator class="w-5 h-5"></hero-icon-outline:calculator>
+            </button>
+        </form>
+
+        <!-- Simple Form -->
+        <form id="simpleForm" class="assessment-form hidden">
+            <div class="form-group">
+                <label>Average Transaction Amount</label>
+                <input type="number" step="0.01" class="input-field" id="avgTransactionAmount" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Transaction Date</label>
+                <input type="date" class="input-field" id="lastTransactionDate" required>
+            </div>
+
+            <button type="submit" class="primary-button" style="grid-column: span 2;">
+                Quick Analyze
+                <hero-icon-outline:bolt class="w-5 h-5"></hero-icon-outline:bolt>
+            </button>
+        </form>
+
+        <!-- Results Section -->
+        <div id="result" class="results-card hidden">
+            <h2 class="assessment-header">Risk Analysis Result</h2>
+            <div class="score-display" id="creditScore">-</div>
+            <div class="risk-indicator" id="statusIndicator"></div>
+            <div class="result-details">
+                <p class="risk-status" id="riskStatus"></p>
+                <p class="recommendation" id="recommendation"></p>
+            </div>
         </div>
+    </div>
 
-        <!-- Results Card --><!-- Keep previous results card structure -->
-
-        <!-- Loading and Error States --><!-- Keep previous loading/error states -->
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analyzing Transaction Patterns...</p>
     </div>
 
     <script>
-        // Tabs functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.assessment-card').classList.remove('hidden');
+        });
+
+        // Tab Switching
         document.getElementById('detailedFormBtn').addEventListener('click', () => {
-            showForm('detailed');
-            updateTabStyle('detailed');
+            document.getElementById('detailedForm').classList.remove('hidden');
+            document.getElementById('simpleForm').classList.add('hidden');
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('detailedFormBtn').classList.add('active');
         });
 
         document.getElementById('simpleFormBtn').addEventListener('click', () => {
-            showForm('simple');
-            updateTabStyle('simple');
+            document.getElementById('simpleForm').classList.remove('hidden');
+            document.getElementById('detailedForm').classList.add('hidden');
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('simpleFormBtn').classList.add('active');
         });
 
-        function showForm(formType) {
-            const detailedForm = document.getElementById('detailedForm');
-            const simpleForm = document.getElementById('simpleForm');
-            
-            if (formType === 'detailed') {
-                detailedForm.classList.remove('hidden');
-                simpleForm.classList.add('hidden');
-            } else {
-                detailedForm.classList.add('hidden');
-                simpleForm.classList.remove('hidden');
-            }
-        }
-
-        function updateTabStyle(activeTab) {
-            const detailedBtn = document.getElementById('detailedFormBtn');
-            const simpleBtn = document.getElementById('simpleFormBtn');
-            
-            if (activeTab === 'detailed') {
-                detailedBtn.classList.add('text-indigo-600', 'border-indigo-600');
-                detailedBtn.classList.remove('text-gray-500', 'border-transparent');
-                simpleBtn.classList.add('text-gray-500', 'border-transparent');
-                simpleBtn.classList.remove('text-indigo-600', 'border-indigo-600');
-            } else {
-                simpleBtn.classList.add('text-indigo-600', 'border-indigo-600');
-                simpleBtn.classList.remove('text-gray-500', 'border-transparent');
-                detailedBtn.classList.add('text-gray-500', 'border-transparent');
-                detailedBtn.classList.remove('text-indigo-600', 'border-indigo-600');
-            }
-        }
-
-        // Initialize with detailed form
-        showForm('detailed');
-        updateTabStyle('detailed');
-
-        // Form submissions
-        document.getElementById('detailedForm').addEventListener('submit', handleSubmit);
-        document.getElementById('simpleForm').addEventListener('submit', handleSubmit);
-
+        // Form Submission
         async function handleSubmit(e) {
             e.preventDefault();
-            // ... (keep previous submission logic)
+            const form = e.target;
+            let formData;
+
+            if(form.id === 'detailedForm') {
+                formData = {
+                    TransactionId: parseInt(document.getElementById('transactionId').value),
+                    BatchId: parseInt(document.getElementById('batchId').value),
+                    AccountId: parseInt(document.getElementById('accountId').value),
+                    SubscriptionId: 1, // Dummy value
+                    CustomerId: parseInt(document.getElementById('customerId').value),
+                    CurrencyCode: document.getElementById('currencyCode').value,
+                    CountryCode: document.getElementById('countryCode').value,
+                    ProductId: parseInt(document.getElementById('productId').value),
+                    ChannelId: parseInt(document.getElementById('channelId').value),
+                    TransactionStartTime: new Date(document.getElementById('transactionStartTime').value).toISOString(),
+                    Amount: parseFloat(document.getElementById('amount').value)
+                };
+            } else {
+                formData = {
+                    TransactionId: 1, // Dummy value
+                    BatchId: 1,      // Dummy value
+                    AccountId: 1,    // Dummy value
+                    SubscriptionId: 1,// Dummy value
+                    CustomerId: 256, // Dummy value
+                    CurrencyCode: 'UGX',
+                    CountryCode: '256',
+                    ProductId: 0,     // Dummy value
+                    ChannelId: 2,    // Dummy value
+                    TransactionStartTime: new Date(document.getElementById('lastTransactionDate').value).toISOString(),
+                    Amount: parseFloat(document.getElementById('avgTransactionAmount').value)
+                };
+            }
+
+            try {
+                document.getElementById('loading').classList.remove('hidden');
+                document.querySelector('.assessment-card').classList.add('blur-sm');
+
+                const response = await fetch('http://localhost:8000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Server error');
+                
+                const data = await response.json();
+                
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('creditScore').textContent = data.credit_score;
+                document.getElementById('statusIndicator').style.backgroundColor = 
+                    data.credit_score >= 600 ? '#10b981' : '#ef4444';
+                document.getElementById('riskStatus').textContent = 
+                    data.credit_score >= 600 ? 'Low Risk' : 'High Risk';
+                document.getElementById('recommendation').textContent = 
+                    data.credit_score >= 600 ? 'Recommend Approval' : 'Further Verification Required';
+
+            } catch (error) {
+                alert('Analysis failed: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+                document.querySelector('.assessment-card').classList.remove('blur-sm');
+            }
         }
+
+        document.getElementById('detailedForm').addEventListener('submit', handleSubmit);
+        document.getElementById('simpleForm').addEventListener('submit', handleSubmit);
     </script>
 </body>
 </html>

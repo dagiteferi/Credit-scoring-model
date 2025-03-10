@@ -1,12 +1,13 @@
-POST http://127.0.0.1:8000/predict HTTP/1.1
-Content-Type: application/json
-
-
 
 
 // predtion out put 1  1 means high risk or low creditworthiness: The prediction 1 indicates that the transaction 
 //is associated with a higher risk of default or lower creditworthiness,
 // as its RFMS_score (driven by a high Amount: 100.0) exceeds the median threshold from the training data.
+
+POST http://127.0.0.1:8000/predict/poor
+Content-Type: application/json
+
+
 {
     "TransactionId": 2,
     "BatchId": 2,
@@ -17,9 +18,15 @@ Content-Type: application/json
     "CountryCode": "US",
     "ProductId": 1,
     "ChannelId": 2,
-    "TransactionStartTime": "2023-01-01 12:00:00",
-    "Amount": 33012.23
+    "TransactionStartTime": "2023-01-01T12:00:00Z",
+    "Amount": 300.0,
+    "FraudResult": 0
 }
+
+
+
+
+
 
 //and below is the 0
 // 0 means low risk or high creditworthiness: The prediction 0 indicates that the transaction
@@ -37,5 +44,6 @@ Content-Type: application/json
 #     "ProductId": 0,
 #     "ChannelId": 2,
 #     "TransactionStartTime": "2018-11-01T00:00:00Z",
-#     "Amount": 0.05043
+#     "Amount": 0.05043,
+#       "FraudResult": 0
 # }
