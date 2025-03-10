@@ -1,10 +1,10 @@
-# models/predictor.py
+
 import joblib
 import pandas as pd
 import numpy as np
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
-from ..config import logger  # Adjusted import to go up one directory
+from credit_scoring_app.config import logger  # Adjusted import to point to credit_scoring_app
 
 def load_model(model_path: str):
     """Load the trained machine learning model from the specified path."""

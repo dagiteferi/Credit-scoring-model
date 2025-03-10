@@ -1,4 +1,4 @@
-# schemas.py
+# credit_scoring_app/schemas.py
 from pydantic import BaseModel
 
 class RawInputData(BaseModel):
