@@ -1,7 +1,13 @@
-# main.py
+
+import sys
+import os
+
+# Add the root directory to the module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from fastapi import FastAPI, HTTPException
 from schemas import RawInputData
-from models.predictor import load_model, predict  # Updated import
+from models.predictor import load_model, predict  # Import from the root-level models folder
 from config import MODEL_PATH, logger
 
 app = FastAPI(title="Credit Scoring Prediction API")
