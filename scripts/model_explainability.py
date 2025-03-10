@@ -10,6 +10,7 @@ import traceback
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
+from sklearn.inspection import PartialDependenceDisplay
 
 # Configure logging
 logging.basicConfig(
@@ -269,11 +270,13 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
             # Older SHAP format: list of arrays (one per class)
             shap_values_class1 = shap_values[1]  # SHAP values for class 1
             logger.info(f"SHAP values for class 1 shape: {shap_values_class1.shape}")
+            expected_value = explainer.expected_value[1]  # Base value for class 1
         elif isinstance(shap_values, np.ndarray) and len(shap_values.shape) == 3:
             # Newer SHAP format: single array of shape (n_samples, n_features, n_classes)
             logger.info("Detected newer SHAP output format (numpy array). Extracting SHAP values for class 1.")
             shap_values_class1 = shap_values[:, :, 1]  # Extract SHAP values for class 1
             logger.info(f"SHAP values for class 1 shape: {shap_values_class1.shape}")
+            expected_value = explainer.expected_value[1]  # Base value for class 1
         else:
             logger.warning(f"Unexpected SHAP values format: {type(shap_values)}, shape: {np.array(shap_values).shape if isinstance(shap_values, list) else shap_values.shape}")
             raise ValueError("Unsupported SHAP output format for binary classification")
@@ -292,13 +295,13 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.savefig(os.path.join(save_dir, 'random_forest_shap_summary.png'))
         plt.show()
 
-        # SHAP Force Plot for a single instance
+        # SHAP Force Plot for a single instance (Fixed for SHAP v0.20+)
         instance_idx = 0
         plt.figure()
-        shap.force_plot(
-            explainer.expected_value[1] if isinstance(explainer.expected_value, list) else explainer.expected_value,
-            shap_values_class1[instance_idx],
-            X_test.iloc[instance_idx] if isinstance(X_test, pd.DataFrame) else X_test[instance_idx],
+        shap.plots.force(
+            expected_value,  # Base value as first parameter
+            shap_values_class1[instance_idx],  # SHAP values for the instance
+            X_test.iloc[instance_idx] if isinstance(X_test, pd.DataFrame) else X_test[instance_idx],  # Features for the instance
             feature_names=feature_names,
             matplotlib=True,
             show=False
@@ -325,7 +328,6 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.show()
 
         # Partial Dependence Plot (PDP) for top 2 features
-        from sklearn.inspection import PartialDependenceDisplay
         top_2_features = importance_df['Feature'].head(2).tolist()
         top_2_indices = [feature_names.index(feat) for feat in top_2_features]
         plt.figure()
@@ -377,3 +379,4 @@ def run_explainability_pipeline(data_path, model_dir='models', save_dir='explana
     )
 
     return explanations
+
