@@ -27,6 +27,49 @@ document.getElementById('simpleForm').addEventListener('submit', async (e) => {
     await handleSubmit(e.target);
 });
 
+function generateExplanation(formData, poorData, goodData, finalCreditScore) {
+    const currentDate = new Date(2025, 2, 10); // March 10, 2025 (month is 0-based)
+    const transactionDate = new Date(formData.TransactionStartTime);
+    const daysDifference = Math.floor((currentDate - transactionDate) / (1000 * 60 * 60 * 24));
+    const yearsDifference = Math.floor(daysDifference / 365);
+    const rfmsScore = poorData.rfms_score || goodData.rfms_score;
+
+    let explanation = [];
+    if (finalCreditScore === 1) { // Low risk
+        explanation.push("This transaction is assessed as low risk due to several factors.");
+        if (formData.FraudResult === 0) {
+            explanation.push("Firstly, no fraud was detected (FraudResult: 0), which significantly reduces the risk profile.");
+        }
+        if (rfmsScore >= 20.0) {
+            explanation.push(`Secondly, the RFMS Score of ${rfmsScore.toFixed(2)} indicates strong overall customer engagement, likely due to a history of frequent transactions by this customer (CustomerId: ${formData.CustomerId}).`);
+        }
+        if (formData.Amount < 1.0 && daysDifference > 365) {
+            explanation.push(`While the transaction amount of ${formData.Amount} ${formData.CurrencyCode} is low and the transaction date (${transactionDate.toISOString().split('T')[0]}) is over ${yearsDifference} years old, these factors are outweighed by the customer’s consistent activity and the absence of fraudulent behavior.`);
+        }
+        if (formData.ChannelId === 3) {
+            explanation.push("Additionally, the use of the Mobile App channel (ChannelId: 3) may contribute positively, as mobile transactions might be associated with lower risk in our model.");
+        }
+        explanation.push("Based on these weighted factors, the model predicts a low likelihood of credit risk, leading to a recommendation for approval.");
+    } else { // High risk
+        explanation.push("This transaction is assessed as high risk due to several factors.");
+        if (formData.FraudResult === 1) {
+            explanation.push("Firstly, fraud was detected (FraudResult: 1), which significantly increases the risk profile.");
+        }
+        if (rfmsScore < 20.0) {
+            explanation.push(`Secondly, the RFMS Score of ${rfmsScore.toFixed(2)} indicates poor customer engagement, possibly due to infrequent transactions or low monetary activity by this customer (CustomerId: ${formData.CustomerId}).`);
+        }
+        if (formData.Amount < 1.0) {
+            explanation.push(`The transaction amount of ${formData.Amount} ${formData.CurrencyCode} is very low, suggesting limited financial activity.`);
+        }
+        if (daysDifference > 365) {
+            explanation.push(`The transaction date (${transactionDate.toISOString().split('T')[0]}) is over ${yearsDifference} years old, indicating low recency and higher risk.`);
+        }
+        explanation.push("Based on these weighted factors, the model predicts a higher likelihood of credit risk, requiring further verification.");
+    }
+
+    return "Reasoning: " + explanation.join(" ");
+}
+
 async function handleSubmit(form) {
     console.log("Starting handleSubmit for form:", form.id);
 
@@ -122,7 +165,7 @@ async function handleSubmit(form) {
             document.getElementById('rfmsScore').textContent = `RFMS Score: ${poorData.rfms_score ? poorData.rfms_score.toFixed(2) : 'N/A'}`;
             document.getElementById('riskStatus').textContent = finalCreditScore === 1 ? 'Low Risk' : 'High Risk';
             document.getElementById('recommendation').textContent = finalCreditScore === 1 ? 'Recommend Approval' : 'Further Verification Required';
-            document.getElementById('explanation').textContent = poorData.explanation || goodData.explanation || 'No specific reasoning available.';
+            document.getElementById('explanation').textContent = generateExplanation(formData, poorData, goodData, finalCreditScore);
             const statusIndicator = document.getElementById('statusIndicator');
             if (statusIndicator) {
                 statusIndicator.style.backgroundColor = finalCreditScore === 1 ? 'var(--success)' : 'var(--danger)';
