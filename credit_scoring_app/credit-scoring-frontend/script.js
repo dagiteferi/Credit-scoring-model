@@ -1,7 +1,11 @@
-document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+document.getElementById('creditForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Collect form data
+    // Show loading spinner
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('error').classList.add('hidden');
+
     const formData = {
         TransactionId: parseInt(document.getElementById('transactionId').value),
         BatchId: parseInt(document.getElementById('batchId').value),
@@ -12,31 +16,47 @@ document.getElementById('predictionForm').addEventListener('submit', async (e) =
         CountryCode: document.getElementById('countryCode').value,
         ProductId: parseInt(document.getElementById('productId').value),
         ChannelId: parseInt(document.getElementById('channelId').value),
-        TransactionStartTime: document.getElementById('transactionStartTime').value,
+        TransactionStartTime: new Date(document.getElementById('transactionStartTime').value).toISOString(),
         Amount: parseFloat(document.getElementById('amount').value)
     };
 
-    // API endpoint (update with your deployed URL or local URL)
-    const apiUrl = 'http://localhost:8000/predict'; // Change to Heroku URL after deployment, e.g., https://credit-scoring-api.herokuapp.com/predict
-
     try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
+        // Test both endpoints and choose the most likely prediction
+        const [poorResponse, goodResponse] = await Promise.all([
+            fetch('http://127.0.0.1:8000/predict/poor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            }),
+            fetch('http://127.0.0.1:8000/predict/good', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+        ]);
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        const poorData = await poorResponse.json();
+        const goodData = await goodResponse.json();
 
-        const result = await response.json();
-        document.getElementById('result').innerHTML = `
-            <p>Prediction: ${result.prediction} (${result.prediction === 0 ? 'Low Risk' : 'High Risk'})</p>
-            <p>RFMS Score: ${result.rfms_score.toFixed(2)}</p>
-            <p>Credit Score: ${result.credit_score} / 800</p>
-        `;
+        // Hide loading spinner
+        document.getElementById('loading').classList.add('hidden');
+
+        // Display results
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('prediction').textContent = `Credit Score: ${poorData.prediction === 1 || goodData.prediction === 1 ? 1 : 0}`;
+        document.getElementById('rfmsScore').textContent = `RFMS Score: ${poorData.rfms_score.toFixed(2)}`;
+
+        // Update status indicator
+        const statusIndicator = document.getElementById('statusIndicator');
+        if (poorData.prediction === 1 || goodData.prediction === 1) {
+            statusIndicator.className = 'w-16 h-16 mx-auto mt-4 rounded-full bg-green-500';
+        } else {
+            statusIndicator.className = 'w-16 h-16 mx-auto mt-4 rounded-full bg-red-500';
+        }
+
     } catch (error) {
-        document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('error').textContent = `Error: ${error.message}`;
     }
 });
