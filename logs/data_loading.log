@@ -200,3 +200,22 @@ Name: count, dtype: int64
 2025-03-09 18:47:39,525 - INFO - Hyperparameter grids defined for LogisticRegression and RandomForest
 2025-03-09 18:47:39,669 - INFO - Starting Grid Search for hyperparameter tuning
 2025-03-09 18:47:39,675 - INFO - Performing Grid Search for LogisticRegression
+2025-03-10 10:29:50,229 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data
+2025-03-10 10:29:50,231 - INFO - Directory already exists: c:\Users\HP\Documents\Dagii\Credit-scoring-model\src\../logs
+2025-03-10 10:30:20,140 - INFO - Attempting to load data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-10 10:30:21,078 - INFO - Successfully loaded data from: c:\Users\HP\Documents\Dagii\Credit-scoring-model\data\transformed_data_credit_scoring.csv
+2025-03-10 10:30:21,169 - INFO - Starting data preprocessing
+2025-03-10 10:30:21,171 - INFO - Initial dataset shape: (95662, 37)
+2025-03-10 10:30:21,193 - INFO - Dropped columns: ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
+2025-03-10 10:30:21,246 - INFO - Encoding categorical columns: ['CurrencyCode', 'CountryCode', 'ProductId']
+2025-03-10 10:30:21,300 - INFO - Extracting datetime features from 'TransactionStartTime'
+2025-03-10 10:30:21,545 - INFO - Preprocessed dataset shape: (95662, 53)
+2025-03-10 10:30:21,580 - INFO - Starting data splitting
+2025-03-10 10:30:21,604 - INFO - Dataset size: (95662, 53), Target distribution: {0: 0.5000418138863917, 1: 0.4999581861136083}
+2025-03-10 10:30:21,700 - INFO - Train set size: (76529, 52), Test set size: (19133, 52)
+2025-03-10 10:30:21,717 - INFO - Defining models
+2025-03-10 10:30:21,718 - INFO - Models defined: LogisticRegression (with scaling), RandomForest (with regularization)
+2025-03-10 10:30:21,720 - INFO - Defining hyperparameter grids
+2025-03-10 10:30:21,722 - INFO - Hyperparameter grids defined with regularization for RandomForest
+2025-03-10 10:30:31,681 - INFO - Starting Randomized Search for hyperparameter tuning
+2025-03-10 10:30:31,682 - INFO - Performing Randomized Search for LogisticRegression
