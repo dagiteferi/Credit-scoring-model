@@ -233,6 +233,76 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+.result-details {
+    text-align: center;
+}
+
+.risk-status {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.recommendation {
+    font-size: 1rem;
+    color: #5f6368;
+    margin-bottom: 0.5rem;
+}
+
+.explanation {
+    font-size: 0.9rem;
+    color: #5f6368;
+    line-height: 1.5;
+    padding: 0.5rem;
+    background: #f1f3f4;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.see-more-button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.see-more-button:hover {
+    background: #1557b0;
+}
+
+.rfms-score {
+    text-align: center;
+    font-size: 1rem;
+    color: #5f6368;
+    margin-top: 1rem;
+}
+
+/* Media Queries (unchanged, ensure button fits) */
+@media (max-width: 768px) {
+    .see-more-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    /* ... (other styles remain unchanged) ... */
+}
+
+@media (max-width: 480px) {
+    .see-more-button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    /* ... (other styles remain unchanged) ... */
+}
 /* Add these media queries at the bottom of your CSS file */
 
 /* Mobile Responsive Styles */

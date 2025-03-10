@@ -36,38 +36,214 @@ function generateExplanation(formData, poorData, goodData, finalCreditScore) {
 
     let explanation = [];
     if (finalCreditScore === 1) { // Low risk
-        explanation.push("This transaction is assessed as low risk due to several factors.");
+        explanation.push("This transaction is low risk with an RFMS Score of " + rfmsScore.toFixed(2) + ".");
         if (formData.FraudResult === 0) {
-            explanation.push("Firstly, no fraud was detected (FraudResult: 0), which significantly reduces the risk profile.");
-        }
-        if (rfmsScore >= 20.0) {
-            explanation.push(`Secondly, the RFMS Score of ${rfmsScore.toFixed(2)} indicates strong overall customer engagement, likely due to a history of frequent transactions by this customer (CustomerId: ${formData.CustomerId}).`);
-        }
-        if (formData.Amount < 1.0 && daysDifference > 365) {
-            explanation.push(`While the transaction amount of ${formData.Amount} ${formData.CurrencyCode} is low and the transaction date (${transactionDate.toISOString().split('T')[0]}) is over ${yearsDifference} years old, these factors are outweighed by the customer’s consistent activity and the absence of fraudulent behavior.`);
-        }
-        if (formData.ChannelId === 3) {
-            explanation.push("Additionally, the use of the Mobile App channel (ChannelId: 3) may contribute positively, as mobile transactions might be associated with lower risk in our model.");
-        }
-        explanation.push("Based on these weighted factors, the model predicts a low likelihood of credit risk, leading to a recommendation for approval.");
-    } else { // High risk
-        explanation.push("This transaction is assessed as high risk due to several factors.");
-        if (formData.FraudResult === 1) {
-            explanation.push("Firstly, fraud was detected (FraudResult: 1), which significantly increases the risk profile.");
-        }
-        if (rfmsScore < 20.0) {
-            explanation.push(`Secondly, the RFMS Score of ${rfmsScore.toFixed(2)} indicates poor customer engagement, possibly due to infrequent transactions or low monetary activity by this customer (CustomerId: ${formData.CustomerId}).`);
-        }
-        if (formData.Amount < 1.0) {
-            explanation.push(`The transaction amount of ${formData.Amount} ${formData.CurrencyCode} is very low, suggesting limited financial activity.`);
+            explanation.push("No fraud (FraudResult: 0) supports this.");
         }
         if (daysDifference > 365) {
-            explanation.push(`The transaction date (${transactionDate.toISOString().split('T')[0]}) is over ${yearsDifference} years old, indicating low recency and higher risk.`);
+            explanation.push("The " + yearsDifference + "-year-old transaction is offset by strong customer activity.");
         }
-        explanation.push("Based on these weighted factors, the model predicts a higher likelihood of credit risk, requiring further verification.");
+        if (formData.Amount < 1.0) {
+            explanation.push("The low amount (" + formData.Amount + " " + formData.CurrencyCode + ") is balanced by overall engagement.");
+        }
+    } else { // High risk
+        explanation.push("This transaction is high risk with an RFMS Score of " + rfmsScore.toFixed(2) + ".");
+        if (formData.FraudResult === 1) {
+            explanation.push("Fraud (FraudResult: 1) increases the risk.");
+        }
+        if (daysDifference > 365) {
+            explanation.push("The " + yearsDifference + "-year-old transaction indicates low recency.");
+        }
+        if (formData.Amount < 1.0) {
+            explanation.push("The low amount (" + formData.Amount + " " + formData.CurrencyCode + ") suggests limited activity.");
+        }
     }
+    return explanation.join(" ");
+}
 
-    return "Reasoning: " + explanation.join(" ");
+function openDetailedView(formData, poorData, goodData, finalCreditScore) {
+    const currentDate = new Date(2025, 2, 10); // March 10, 2025
+    const transactionDate = new Date(formData.TransactionStartTime);
+    const daysDifference = Math.floor((currentDate - transactionDate) / (1000 * 60 * 60 * 24));
+    const yearsDifference = Math.floor(daysDifference / 365);
+    const rfmsScore = poorData.rfms_score || goodData.rfms_score;
+
+    let detailedContent = `
+        <html>
+        <head>
+            <title>Detailed Risk Analysis</title>
+            <style>
+                body { 
+                    font-family: 'Arial', sans-serif; 
+                    margin: 20px; 
+                    background: #f8f9fa; 
+                    color: #202124; 
+                    line-height: 1.6; 
+                }
+                h2 { 
+                    color: #1a73e8; 
+                    font-size: 1.8em; 
+                    border-bottom: 2px solid #1a73e8; 
+                    padding-bottom: 5px; 
+                    margin-bottom: 20px; 
+                }
+                p { 
+                    font-size: 1em; 
+                    margin: 10px 0; 
+                }
+                ul { 
+                    list-style-type: disc; 
+                    padding-left: 30px; 
+                    margin: 10px 0; 
+                }
+                li { 
+                    margin: 5px 0; 
+                    font-size: 0.95em; 
+                }
+                .graph-container { 
+                    margin: 30px 0; 
+                    padding: 15px; 
+                    background: #ffffff; 
+                    border-radius: 8px; 
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+                }
+                canvas { 
+                    max-width: 100%; 
+                    border-radius: 5px; 
+                }
+            </style>
+        </head>
+        <body>
+            <h2>Detailed Risk Analysis</h2>
+            <p><strong>Transaction Details:</strong></p>
+            <ul>
+                <li>Customer ID: ${formData.CustomerId}</li>
+                <li>Transaction Date: ${transactionDate.toISOString().split('T')[0]}</li>
+                <li>Amount: ${formData.Amount} ${formData.CurrencyCode}</li>
+                <li>Fraud Result: ${formData.FraudResult === 0 ? 'Not Fraudulent' : 'Fraudulent'}</li>
+                <li>Channel: ${formData.ChannelId === 2 ? 'Online' : formData.ChannelId === 3 ? 'Mobile App' : 'POS Terminal'}</li>
+                <li>RFMS Score: ${rfmsScore.toFixed(2)}</li>
+                <li>Credit Score: ${finalCreditScore} (${finalCreditScore === 1 ? 'Low Risk' : 'High Risk'})</li>
+            </ul>
+            <p><strong>How the Label is Determined:</strong></p>
+            <p>The 'Label' (0 or 1) is based on the RFMS score, calculated as:</p>
+            <ul>
+                <li><strong>Recency:</strong> Days since transaction (${daysDifference} days, or ${yearsDifference} years). Score contribution: 1 / (Recency + 1) * 0.4 (lower Recency boosts score).</li>
+                <li><strong>Frequency:</strong> Number of transactions per customer. Score contribution: Transaction_Count * 0.3 (higher counts increase score).</li>
+                <li><strong>Monetary:</strong> Total transaction amount per customer. Score contribution: Total_Transaction_Amount * 0.3 (higher totals improve score).</li>
+            </ul>
+            <p>Formula: RFMS_score = (1 / (Recency + 1) * 0.4) + (Transaction_Count * 0.3) + (Total_Transaction_Amount * 0.3)</p>
+            <p>The Label is 1 if RFMS_score exceeds the dataset median, 0 otherwise. WOE adjusts bins of RFMS scores based on historical risk patterns.</p>
+            <p><strong>How the Result is Calculated:</strong></p>
+            <p>The credit score (0 or 1) comes from API predictions:</p>
+            <ul>
+                <li>/predict/poor and /predict/good return a prediction (0 or 1).</li>
+                <li>Final Score = 1 if either prediction is 1, 0 if both are 0.</li>
+                <li>For your data, an RFMS score of ${rfmsScore.toFixed(2)} and no fraud led to the current prediction.</li>
+            </ul>
+            <p><strong>Why This Result?</strong></p>
+            <p>${finalCreditScore === 1 ? 
+                "The score of 1 (Low Risk) reflects a high RFMS score (" + rfmsScore.toFixed(2) + "), suggesting strong engagement. The old transaction and low amount are offset by frequent activity and no fraud (FraudResult: 0)." : 
+                "The score of 0 (High Risk) reflects a low RFMS score (" + rfmsScore.toFixed(2) + "), possibly due to infrequent transactions, an old date, or limited activity."}</p>
+            <div class="graph-container">
+                <canvas id="rfmScatter"></canvas>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('rfmScatter').getContext('2d');
+                new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Transaction Point',
+                            data: [{x: ${daysDifference}, y: ${formData.Amount}, r: 15}],
+                            backgroundColor: 'rgba(26, 115, 232, 0.7)', // Vibrant blue with slight transparency
+                            borderColor: '#1a73e8',
+                            borderWidth: 2,
+                            pointHoverRadius: 20,
+                            pointHoverBackgroundColor: '#1a73e8',
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Transaction Recency vs. Amount',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#202124',
+                                padding: { top: 10, bottom: 20 }
+                            },
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: { size: 12 },
+                                    color: '#202124'
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += \`Recency: \${context.parsed.x} days, Amount: \${context.parsed.y} UGX\`;
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Recency (Days)',
+                                    font: { size: 14 },
+                                    color: '#202124'
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    color: '#202124',
+                                    stepSize: 100 // Adjust for better readability
+                                },
+                                min: ${daysDifference - 50}, // Center the point
+                                max: ${daysDifference + 50}
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Amount (UGX)',
+                                    font: { size: 14 },
+                                    color: '#202124'
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    color: '#202124',
+                                    stepSize: 0.01 // Adjust for small amounts
+                                },
+                                min: 0,
+                                max: 0.06 // Adjust to fit the single point
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            </script>
+        </body>
+        </html>
+    `;
+
+    const newTab = window.open('', '_blank');
+    newTab.document.write(detailedContent);
+    newTab.document.close();
 }
 
 async function handleSubmit(form) {
@@ -166,8 +342,11 @@ async function handleSubmit(form) {
             document.getElementById('riskStatus').textContent = finalCreditScore === 1 ? 'Low Risk' : 'High Risk';
             document.getElementById('recommendation').textContent = finalCreditScore === 1 ? 'Recommend Approval' : 'Further Verification Required';
             document.getElementById('explanation').textContent = generateExplanation(formData, poorData, goodData, finalCreditScore);
+            const seeMoreBtn = document.getElementById('seeMoreBtn');
+            seeMoreBtn.onclick = () => openDetailedView(formData, poorData, goodData, finalCreditScore);
             const statusIndicator = document.getElementById('statusIndicator');
             if (statusIndicator) {
+                console.log("Setting status indicator color...");
                 statusIndicator.style.backgroundColor = finalCreditScore === 1 ? 'var(--success)' : 'var(--danger)';
             } else {
                 console.error("Status indicator element not found!");
