@@ -233,3 +233,121 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+/* Add these media queries at the bottom of your CSS file */
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .assessment-card {
+        padding: 1.5rem;
+        margin: 1rem;
+        border-radius: 1rem;
+    }
+
+    .nav-tabs {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .nav-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .assessment-form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .form-column {
+        gap: 1rem;
+    }
+
+    .primary-button {
+        grid-column: span 1 !important;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .input-field {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .results-card {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .score-display {
+        font-size: 2.5rem;
+    }
+
+    .risk-indicator {
+        width: 80px;
+        height: 80px;
+    }
+
+    .assessment-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .assessment-header p {
+        font-size: 0.8rem;
+    }
+
+    .form-group label {
+        font-size: 0.8rem;
+    }
+
+    .loading-text {
+        font-size: 0.9rem;
+        padding: 0 1rem;
+        text-align: center;
+    }
+}
+
+/* Additional adjustments for very small screens */
+@media (max-width: 480px) {
+    .assessment-card {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .input-group {
+        grid-template-columns: 1fr;
+    }
+
+    .score-display {
+        font-size: 2rem;
+    }
+
+    .risk-indicator {
+        width: 60px;
+        height: 60px;
+    }
+
+    .loading-spinner {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+/* Existing results-card styles */
+.results-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    display: none;
+}
+
+.results-card.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
