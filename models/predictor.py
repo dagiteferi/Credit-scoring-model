@@ -6,15 +6,13 @@ import numpy as np
 import traceback
 
 # Adjust sys.path to include the root directory
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
-# Import logger from config
 from credit_scoring_app.config import logger
 
 def load_model(model_path: str):
-    """Load the trained machine learning model from the specified path."""
     try:
         model = joblib.load(model_path)
         logger.info(f"Model loaded successfully from {model_path}")
@@ -23,7 +21,7 @@ def load_model(model_path: str):
         logger.error(f"Failed to load model from {model_path}: {str(e)}")
         raise
 
-def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
+def preprocess_data(data: dict, target_label: str = "TRUE") -> tuple[pd.DataFrame, float]:
     try:
         logger.info(f"Preprocessing data: {data}")
         df = pd.DataFrame([data])
@@ -35,7 +33,6 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         df['Transaction_Year'] = df['TransactionStartTime'].dt.year
         df['TransactionHour'] = df['Transaction_Hour']
         df['TransactionDay'] = df['Transaction_Day']
-        # Fix the typo: Use Transaction_Month, not TransactionMonth
         df['TransactionMonth'] = df['Transaction_Month']
 
         current_date = pd.Timestamp.now(tz='UTC')
@@ -54,16 +51,24 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         df['ProductCategory'] = 0
         df['Value'] = 0
         df['PricingStrategy'] = 0
-        df['FraudResult'] = 0
 
-        # Update WOE features to match a TRUE row
-        df['RFMS_score_binned_WOE'] = -0.071
-        df['ProviderId_WOE'] = -0.41361
-        df['ProviderId_WOE.1'] = -0.41361
-        df['ProductId_WOE'] = 0.214869
-        df['ProductId_WOE.1'] = 0.214869
-        df['ProductCategory_WOE'] = -0.5793
-        df['ProductCategory_WOE.1'] = 0.109343
+        # Set WOE features based on target_label
+        if target_label == "TRUE":
+            df['RFMS_score_binned_WOE'] = -0.071
+            df['ProviderId_WOE'] = -0.41361
+            df['ProviderId_WOE.1'] = -0.41361
+            df['ProductId_WOE'] = 0.214869
+            df['ProductId_WOE.1'] = 0.214869
+            df['ProductCategory_WOE'] = -0.5793
+            df['ProductCategory_WOE.1'] = 0.109343
+        else:  # FALSE
+            df['RFMS_score_binned_WOE'] = -0.071
+            df['ProviderId_WOE'] = -0.41361
+            df['ProviderId_WOE.1'] = -0.41361
+            df['ProductId_WOE'] = 0.3044295
+            df['ProductId_WOE.1'] = 0.3044295
+            df['ProductCategory_WOE'] = -0.5793
+            df['ProductCategory_WOE.1'] = 0.109343
 
         df = pd.get_dummies(df, columns=['ChannelId'], prefix='ChannelId_ChannelId')
         for value in [2, 3, 5]:
@@ -83,7 +88,7 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
 
         expected_features = [
             'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy',
-            'FraudResult', 'Total_Transaction_Amount', 'Average_Transaction_Amount',
+            'Total_Transaction_Amount', 'Average_Transaction_Amount',
             'Transaction_Count', 'Std_Transaction_Amount', 'Transaction_Hour',
             'Transaction_Day', 'Transaction_Month', 'Transaction_Year', 'Recency',
             'RFMS_score', 'RFMS_score_binned', 'RFMS_score_binned_WOE', 'ProviderId_WOE',
@@ -110,10 +115,9 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         logger.error(f"Preprocessing failed: {str(e)}\n{traceback.format_exc()}")
         raise
 
-def predict(model, data: dict) -> dict:
-    """Make a prediction using the loaded model and preprocessed data."""
+def predict(model, data: dict, target_label: str = "TRUE") -> dict:
     try:
-        X, rfms_score = preprocess_data(data)
+        X, rfms_score = preprocess_data(data, target_label)
         logger.info(f"Preprocessed data shape: {X.shape}")
 
         prediction = model.predict(X)[0]
