@@ -5,12 +5,17 @@ import joblib
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from sklearn.preprocessing import LabelEncoder
 
-# Add the root directory to the module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Define the root directory (one level up from models/)
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
-# Now import from credit_scoring_app.config
+# Debug: Print sys.path to verify
+print("predictor.py - Initial sys.path:", sys.path)
+print("predictor.py - Added root directory to sys.path:", ROOT_DIR)
+
+# Import logger from config
 from credit_scoring_app.config import logger
 
 def load_model(model_path: str):
@@ -35,7 +40,6 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         df['Transaction_Day'] = df['TransactionStartTime'].dt.day
         df['Transaction_Month'] = df['TransactionStartTime'].dt.month
         df['Transaction_Year'] = df['TransactionStartTime'].dt.year
-        # Duplicate features as TransactionHour, TransactionDay, TransactionMonth (as per model)
         df['TransactionHour'] = df['Transaction_Hour']
         df['TransactionDay'] = df['Transaction_Day']
         df['TransactionMonth'] = df['Transaction_Month']
@@ -53,7 +57,7 @@ def preprocess_data(data: dict) -> tuple[pd.DataFrame, float]:
         # Calculate RFMS_score
         df['RFMS_score'] = (1 / (df['Recency'] + 1) * 0.4) + (df['Transaction_Count'] * 0.3) + (df['Total_Transaction_Amount'] * 0.3)
         df['RFMS_score'] = df['RFMS_score'].replace([np.inf, -np.inf], np.nan).fillna(0)
-        df['RFMS_score_binned'] = 0  # Placeholder (adjust binning logic if known)
+        df['RFMS_score_binned'] = 0  # Placeholder
 
         # Add missing features with default values
         df['ProviderId'] = 0
