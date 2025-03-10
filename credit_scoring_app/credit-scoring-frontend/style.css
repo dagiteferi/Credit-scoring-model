@@ -143,16 +143,7 @@ body {
     box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
 }
 
-.results-card {
-    background: var(--card-bg);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-top: 2rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-}
+
 
 .results-card.visible {
     opacity: 1;
@@ -224,4 +215,21 @@ body {
     text-align: center;
     color: var(--text-secondary);
     margin-top: 0.5rem;
+}
+.results-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    opacity: 1; /* Remove initial hidden state */
+    transform: translateY(0); /* Remove initial transform */
+    transition: all 0.3s ease; /* Keep transition for future visibility */
+    display: none; /* Controlled by JavaScript */
+}
+
+.results-card.visible {
+    display: block; /* Ensure visible when class is added */
+    opacity: 1;
+    transform: translateY(0);
 }

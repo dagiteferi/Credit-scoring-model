@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Risk Analysis Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
 </head>
 <body>
     <div class="assessment-card">
@@ -32,6 +31,7 @@
                 <div class="form-group">
                     <label>Customer Information</label>
                     <input type="number" class="input-field" placeholder="Account ID" id="accountId" required>
+                    <input type="number" class="input-field" placeholder="Subscription ID" id="subscriptionId" required>
                     <input type="number" class="input-field" placeholder="Customer ID" id="customerId" required>
                 </div>
             </div>
@@ -44,6 +44,10 @@
                         <option value="2">Online Channel</option>
                         <option value="3">Mobile App</option>
                         <option value="5">POS Terminal</option>
+                    </select>
+                    <select class="input-field" id="fraudResult" required>
+                        <option value="0">0 (Not Fraudulent)</option>
+                        <option value="1">1 (Fraudulent)</option>
                     </select>
                 </div>
 
@@ -59,7 +63,6 @@
 
             <button type="submit" class="primary-button" style="grid-column: span 2;">
                 Analyze Risk
-                <hero-icon-outline:calculator class="w-5 h-5"></hero-icon-outline:calculator>
             </button>
         </form>
 
@@ -75,9 +78,16 @@
                 <input type="date" class="input-field" id="lastTransactionDate" required>
             </div>
 
+            <div class="form-group">
+                <label>Fraud Result</label>
+                <select class="input-field" id="simpleFraudResult" required>
+                    <option value="0">0 (Not Fraudulent)</option>
+                    <option value="1">1 (Fraudulent)</option>
+                </select>
+            </div>
+
             <button type="submit" class="primary-button" style="grid-column: span 2;">
                 Quick Analyze
-                <hero-icon-outline:bolt class="w-5 h-5"></hero-icon-outline:bolt>
             </button>
         </form>
 
@@ -90,7 +100,11 @@
                 <p class="risk-status" id="riskStatus"></p>
                 <p class="recommendation" id="recommendation"></p>
             </div>
+            <p class="rfms-score" id="rfmsScore"></p>
         </div>
+
+        <!-- Error Section -->
+        <div id="error" class="error-message hidden" style="color: var(--danger); text-align: center; margin-top: 1rem;"></div>
     </div>
 
     <!-- Loading Overlay -->
@@ -99,95 +113,7 @@
         <p class="loading-text">Analyzing Transaction Patterns...</p>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector('.assessment-card').classList.remove('hidden');
-        });
-
-        // Tab Switching
-        document.getElementById('detailedFormBtn').addEventListener('click', () => {
-            document.getElementById('detailedForm').classList.remove('hidden');
-            document.getElementById('simpleForm').classList.add('hidden');
-            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('detailedFormBtn').classList.add('active');
-        });
-
-        document.getElementById('simpleFormBtn').addEventListener('click', () => {
-            document.getElementById('simpleForm').classList.remove('hidden');
-            document.getElementById('detailedForm').classList.add('hidden');
-            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('simpleFormBtn').classList.add('active');
-        });
-
-        // Form Submission
-        async function handleSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            let formData;
-
-            if(form.id === 'detailedForm') {
-                formData = {
-                    TransactionId: parseInt(document.getElementById('transactionId').value),
-                    BatchId: parseInt(document.getElementById('batchId').value),
-                    AccountId: parseInt(document.getElementById('accountId').value),
-                    SubscriptionId: 1, // Dummy value
-                    CustomerId: parseInt(document.getElementById('customerId').value),
-                    CurrencyCode: document.getElementById('currencyCode').value,
-                    CountryCode: document.getElementById('countryCode').value,
-                    ProductId: parseInt(document.getElementById('productId').value),
-                    ChannelId: parseInt(document.getElementById('channelId').value),
-                    TransactionStartTime: new Date(document.getElementById('transactionStartTime').value).toISOString(),
-                    Amount: parseFloat(document.getElementById('amount').value)
-                };
-            } else {
-                formData = {
-                    TransactionId: 1, // Dummy value
-                    BatchId: 1,      // Dummy value
-                    AccountId: 1,    // Dummy value
-                    SubscriptionId: 1,// Dummy value
-                    CustomerId: 256, // Dummy value
-                    CurrencyCode: 'UGX',
-                    CountryCode: '256',
-                    ProductId: 0,     // Dummy value
-                    ChannelId: 2,    // Dummy value
-                    TransactionStartTime: new Date(document.getElementById('lastTransactionDate').value).toISOString(),
-                    Amount: parseFloat(document.getElementById('avgTransactionAmount').value)
-                };
-            }
-
-            try {
-                document.getElementById('loading').classList.remove('hidden');
-                document.querySelector('.assessment-card').classList.add('blur-sm');
-
-                const response = await fetch('http://localhost:8000/predict', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-
-                if (!response.ok) throw new Error('Server error');
-                
-                const data = await response.json();
-                
-                document.getElementById('result').classList.remove('hidden');
-                document.getElementById('creditScore').textContent = data.credit_score;
-                document.getElementById('statusIndicator').style.backgroundColor = 
-                    data.credit_score >= 600 ? '#10b981' : '#ef4444';
-                document.getElementById('riskStatus').textContent = 
-                    data.credit_score >= 600 ? 'Low Risk' : 'High Risk';
-                document.getElementById('recommendation').textContent = 
-                    data.credit_score >= 600 ? 'Recommend Approval' : 'Further Verification Required';
-
-            } catch (error) {
-                alert('Analysis failed: ' + error.message);
-            } finally {
-                document.getElementById('loading').classList.add('hidden');
-                document.querySelector('.assessment-card').classList.remove('blur-sm');
-            }
-        }
-
-        document.getElementById('detailedForm').addEventListener('submit', handleSubmit);
-        document.getElementById('simpleForm').addEventListener('submit', handleSubmit);
-    </script>
+    <!-- Reference the external scripts.js file -->
+    <script src="scripts.js"></script>
 </body>
 </html>
