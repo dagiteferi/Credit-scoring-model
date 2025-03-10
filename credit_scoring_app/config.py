@@ -1,7 +1,9 @@
 # config.py
 import logging
+import os
 
-MODEL_PATH = "models/path/to /mymodel"  # Adjust to your saved model path
+# Path to the saved model
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "RandomForest_best_model.pkl")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

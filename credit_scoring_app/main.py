@@ -1,8 +1,8 @@
 # main.py
 from fastapi import FastAPI, HTTPException
-from .schemas import RawInputData
-from .models.predictor import load_model, predict
-from .config import MODEL_PATH, logger
+from schemas import RawInputData
+from predictor import load_model, predict
+from config import MODEL_PATH, logger
 
 app = FastAPI(title="Credit Scoring Prediction API")
 
