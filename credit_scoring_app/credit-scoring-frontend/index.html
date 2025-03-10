@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Risk Analysis Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="assessment-card">
+        <header class="assessment-header">
+            <h1>Credit Risk Analyzer</h1>
+            <p>AI-powered credit risk assessment platform</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-button active" id="detailedFormBtn">Technical Analysis</button>
+            <button class="nav-button" id="simpleFormBtn">Quick Assessment</button>
+        </nav>
+
+        <!-- Detailed Form -->
+        <form id="detailedForm" class="assessment-form">
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Transaction Details</label>
+                    <input type="number" class="input-field" placeholder="Transaction ID" id="transactionId" required>
+                    <input type="number" class="input-field" placeholder="Batch ID" id="batchId" required>
+                    <input type="datetime-local" class="input-field" id="transactionStartTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Information</label>
+                    <input type="number" class="input-field" placeholder="Account ID" id="accountId" required>
+                    <input type="number" class="input-field" placeholder="Subscription ID" id="subscriptionId" required>
+                    <input type="number" class="input-field" placeholder="Customer ID" id="customerId" required>
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Product Details</label>
+                    <input type="number" class="input-field" placeholder="Product ID" id="productId" required>
+                    <select class="input-field" id="channelId" required>
+                        <option value="2">Online Channel</option>
+                        <option value="3">Mobile App</option>
+                        <option value="5">POS Terminal</option>
+                    </select>
+                    <select class="input-field" id="fraudResult" required>
+                        <option value="0">0 (Not Fraudulent)</option>
+                        <option value="1">1 (Fraudulent)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Financial Details</label>
+                    <input type="number" step="0.01" class="input-field" placeholder="Amount" id="amount" required>
+                    <div class="input-group">
+                        <input type="text" class="input-field" value="UGX" id="currencyCode" readonly>
+                        <input type="text" class="input-field" value="256" id="countryCode" readonly>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="primary-button" style="grid-column: span 2;">
+                Analyze Risk
+            </button>
+        </form>
+
+        <!-- Simple Form -->
+        <form id="simpleForm" class="assessment-form hidden">
+            <div class="form-group">
+                <label>Average Transaction Amount</label>
+                <input type="number" step="0.01" class="input-field" id="avgTransactionAmount" required>
+            </div>
+            <div class="form-group">
+                <label>Last Transaction Date</label>
+                <input type="date" class="input-field" id="lastTransactionDate" required>
+            </div>
+            <div class="form-group">
+                <label>Fraud Result</label>
+                <select class="input-field" id="simpleFraudResult" required>
+                    <option value="0">0 (Not Fraudulent)</option>
+                    <option value="1">1 (Fraudulent)</option>
+                </select>
+            </div>
+            <button type="submit" class="primary-button" style="grid-column: span 2;">
+                Quick Analyze
+            </button>
+        </form>
+
+        <!-- Results Section -->
+        <div id="result" class="results-card hidden">
+            <h2 class="assessment-header">Risk Analysis Result</h2>
+            <div class="score-display" id="creditScore">-</div>
+            <div class="risk-indicator" id="statusIndicator"></div>
+            <div class="result-details">
+                <p class="risk-status" id="riskStatus"></p>
+                <p class="recommendation" id="recommendation"></p>
+                <p class="explanation" id="explanation"></p>
+                <button class="see-more-button" id="seeMoreBtn">See More</button>
+            </div>
+            <p class="rfms-score" id="rfmsScore"></p>
+        </div>
+
+        <!-- Error Section -->
+        <div id="error" class="error-message hidden" style="color: var(--danger); text-align: center; margin-top: 1rem;"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analyzing Transaction Patterns...</p>
+    </div>
+
+    <!-- Reference the external scripts.js file -->
+    <script src="scripts.js"></script>
+</body>
+</html>
