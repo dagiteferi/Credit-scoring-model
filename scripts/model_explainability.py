@@ -9,6 +9,7 @@ import os
 import traceback
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
 
 # Configure logging
 logging.basicConfig(
