@@ -1,3 +1,6 @@
+const BASE_URL = window.location.hostname.includes("localhost")
+    ? "http://127.0.0.1:8000"
+    : "https://credit-scoring-model-ai.onrender.com";
 // Toggle between forms
 document.getElementById('detailedFormBtn').addEventListener('click', () => {
     document.getElementById('detailedForm').classList.remove('hidden');
