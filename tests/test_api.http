@@ -2,47 +2,40 @@ POST http://127.0.0.1:8000/predict HTTP/1.1
 Content-Type: application/json
 
 
-{
-    "TransactionId": 1,
-    "BatchId": 1,
-    "AccountId": 1,
-    "SubscriptionId": 1,
-    "CustomerId": 1,
-    "CurrencyCode": "USD",
-    "CountryCode": "US",
-    "ProductId": 1,
-    "ChannelId": 2,
-    "TransactionStartTime": "2023-01-01 12:00:00",
-    "Amount": 100.0
-}
-
-
-
-
-
-
-
 
 
 // predtion out put 1  1 means high risk or low creditworthiness: The prediction 1 indicates that the transaction 
 //is associated with a higher risk of default or lower creditworthiness,
 // as its RFMS_score (driven by a high Amount: 100.0) exceeds the median threshold from the training data.
+{
+    "TransactionId": 2,
+    "BatchId": 2,
+    "AccountId": 2,
+    "SubscriptionId": 2,
+    "CustomerId": 2,
+    "CurrencyCode": "UGX",
+    "CountryCode": "US",
+    "ProductId": 1,
+    "ChannelId": 2,
+    "TransactionStartTime": "2023-01-01 12:00:00",
+    "Amount": 33012.23
+}
 
 //and below is the 0
 // 0 means low risk or high creditworthiness: The prediction 0 indicates that the transaction
 // is associated with a lower risk of default or higher creditworthiness,
 // as its RFMS_score (driven by a small Amount: 1.0 and recent TransactionStartTime) 
 // is at or below the median threshold from the training data.
-{
-  "TransactionId": 76872,
-  "BatchId": 36124,
-  "AccountId": 3957,
-  "SubscriptionId": 887,
-  "CustomerId": 4406,
-  "CurrencyCode": "UGX",
-  "CountryCode": "256",
-  "ProductId": 1,
-  "ChannelId": 1,
-  "TransactionStartTime": "2025-03-09 12:00:00",
-  "Amount": 1.0
-}
+# {
+#     "TransactionId": 2,
+#     "BatchId": 5,
+#     "AccountId": 1,
+#     "SubscriptionId": 1,
+#     "CustomerId": 256,
+#     "CurrencyCode": "UGX",
+#     "CountryCode": "256",
+#     "ProductId": 0,
+#     "ChannelId": 2,
+#     "TransactionStartTime": "2018-11-01T00:00:00Z",
+#     "Amount": 0.05043
+# }
