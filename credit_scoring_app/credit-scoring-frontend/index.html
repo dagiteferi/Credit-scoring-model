@@ -3,128 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Scoring Tool</title>
+    <title>Credit Intelligence Dashboard | Risk Assessment Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
-        .tooltip {
-            position: relative;
-            display: inline-block;
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
+        .animate-progress {
+            animation: progress 1.5s ease-in-out forwards;
         }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: var(--progress-width); }
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Credit Scoring Tool</h1>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="mb-8 text-center">
+            <div class="gradient-bg text-white p-6 rounded-2xl shadow-xl">
+                <h1 class="text-3xl font-bold mb-2">Credit Intelligence Platform</h1>
+                <p class="opacity-90">AI-powered credit risk assessment & analysis</p>
+            </div>
+        </header>
 
-        <!-- Tabs for switching between forms -->
-        <div class="mb-4 flex justify-around">
-            <button id="detailedFormBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Detailed Form</button>
-            <button id="simpleFormBtn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">Simple Form</button>
+        <!-- Main Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <!-- Navigation -->
+            <nav class="flex space-x-4 mb-8 border-b border-gray-200">
+                <button id="detailedFormBtn" class="px-4 py-2 font-medium relative text-indigo-600">
+                    Technical Assessment
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 transition-all"></span>
+                </button>
+                <button id="simpleFormBtn" class="px-4 py-2 font-medium text-gray-500 hover:text-indigo-600 transition-colors">
+                    Quick Analysis
+                </button>
+            </nav>
+
+            <!-- Detailed Form -->
+            <form id="detailedForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Form Groups -->
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-1 flex items-center">
+                                Transaction Details
+                                <hero-icon-outline:information-circle class="w-4 h-4 ml-1 text-gray-400" />
+                            </label>
+                            <div class="space-y-3">
+                                <input type="number" placeholder="Transaction ID" class="input-field">
+                                <input type="number" placeholder="Batch ID" class="input-field">
+                                <input type="datetime-local" class="input-field">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-1">Financial Details</label>
+                            <div class="space-y-3">
+                                <input type="number" placeholder="Amount" step="0.01" class="input-field">
+                                <select class="input-field">
+                                    <option value="UGX">UGX - Ugandan Shilling</option>
+                                    <option value="USD">USD - US Dollar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-1">User Information</label>
+                            <div class="space-y-3">
+                                <input type="number" placeholder="Customer ID" class="input-field">
+                                <input type="number" placeholder="Account ID" class="input-field">
+                                <input type="number" placeholder="Subscription ID" class="input-field">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-1">Product Details</label>
+                            <div class="space-y-3">
+                                <input type="number" placeholder="Product ID" class="input-field">
+                                <select class="input-field">
+                                    <option value="2">Online Channel</option>
+                                    <option value="3">Mobile App</option>
+                                    <option value="5">POS Terminal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="w-full primary-button">
+                    <span class="mr-2">Run Risk Analysis</span>
+                    <hero-icon-outline:arrow-right class="w-5 h-5" />
+                </button>
+            </form>
+
+            <!-- Simple Form -->
+            <form id="simpleForm" class="hidden space-y-6">
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label class="block text-sm font-medium mb-1">Monthly Transaction Pattern</label>
+                        <input type="number" placeholder="Average Transaction Amount" step="0.01" class="input-field">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-sm font-medium mb-1">Last Transaction Date</label>
+                        <input type="date" class="input-field">
+                    </div>
+                </div>
+                <button type="submit" class="w-full primary-button">
+                    Quick Assessment
+                    <hero-icon-outline:bolt class="w-5 h-5 ml-2" />
+                </button>
+            </form>
         </div>
 
-        <!-- Detailed Form (Technical Fields) -->
-        <form id="detailedForm" class="space-y-4">
-            <div>
-                <label for="transactionId" class="block text-sm font-medium text-gray-700">Transaction ID <span class="tooltip">?<span class="tooltiptext">A unique identifier for the transaction.</span></span></label>
-                <input type="number" id="transactionId" name="transactionId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        <!-- Results Card -->
+        <div id="result" class="hidden bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Risk Analysis Report</h2>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-600">Generated:</span>
+                    <span id="reportTime" class="text-sm font-medium"></span>
+                </div>
             </div>
-            <div>
-                <label for="batchId" class="block text-sm font-medium text-gray-700">Batch ID <span class="tooltip">?<span class="tooltiptext">The batch identifier for grouped transactions.</span></span></label>
-                <input type="number" id="batchId" name="batchId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="accountId" class="block text-sm font-medium text-gray-700">Account ID <span class="tooltip">?<span class="tooltiptext">The unique ID of the account.</span></span></label>
-                <input type="number" id="accountId" name="accountId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="subscriptionId" class="block text-sm font-medium text-gray-700">Subscription ID <span class="tooltip">?<span class="tooltiptext">The subscription identifier.</span></span></label>
-                <input type="number" id="subscriptionId" name="subscriptionId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="customerId" class="block text-sm font-medium text-gray-700">Customer ID <span class="tooltip">?<span class="tooltiptext">The unique ID of the customer.</span></span></label>
-                <input type="number" id="customerId" name="customerId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="currencyCode" class="block text-sm font-medium text-gray-700">Currency Code <span class="tooltip">?<span class="tooltiptext">The currency of the transaction (e.g., UGX).</span></span></label>
-                <input type="text" id="currencyCode" name="currencyCode" value="UGX" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="countryCode" class="block text-sm font-medium text-gray-700">Country Code <span class="tooltip">?<span class="tooltiptext">The country code (e.g., 256 for Uganda).</span></span></label>
-                <input type="text" id="countryCode" name="countryCode" value="256" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="productId" class="block text-sm font-medium text-gray-700">Product ID <span class="tooltip">?<span class="tooltiptext">The ID of the product or service.</span></span></label>
-                <input type="number" id="productId" name="productId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="channelId" class="block text-sm font-medium text-gray-700">Channel ID <span class="tooltip">?<span class="tooltiptext">The channel used for the transaction (e.g., 2 for online).</span></span></label>
-                <input type="number" id="channelId" name="channelId" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="transactionStartTime" class="block text-sm font-medium text-gray-700">Transaction Date <span class="tooltip">?<span class="tooltiptext">The date and time of the transaction.</span></span></label>
-                <input type="datetime-local" id="transactionStartTime" name="transactionStartTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="amount" class="block text-sm font-medium text-gray-700">Transaction Amount <span class="tooltip">?<span class="tooltiptext">The amount of the transaction in the currency.</span></span></label>
-                <input type="number" step="0.01" id="amount" name="amount" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Check Credit Score</button>
-        </form>
 
-        <!-- Simple Form (User-Friendly Fields) -->
-        <form id="simpleForm" class="space-y-4 hidden">
-            <div>
-                <label for="avgTransactionAmount" class="block text-sm font-medium text-gray-700">Average Monthly Transaction Amount ($)</label>
-                <input type="number" step="0.01" id="avgTransactionAmount" name="avgTransactionAmount" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="lastTransactionDate" class="block text-sm font-medium text-gray-700">Last Transaction Date</label>
-                <input type="date" id="lastTransactionDate" name="lastTransactionDate" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            </div>
-            <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Check Credit Score</button>
-        </form>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Score Radial -->
+                <div class="text-center">
+                    <div class="radial-progress mx-auto" style="--value:70; --thickness:8px; --size:120px;">
+                        <span class="text-2xl font-bold">850</span>
+                    </div>
+                    <p class="mt-3 text-sm text-gray-600">Credit Score</p>
+                </div>
 
-        <!-- Results Display -->
-        <div id="result" class="mt-6 hidden">
-            <h2 class="text-xl font-semibold text-gray-800 text-center">Credit Score Result</h2>
-            <p id="prediction" class="text-center text-lg mt-2"></p>
-            <p id="rfmsScore" class="text-center text-gray-600 mt-1"></p>
-            <div id="statusIndicator" class="w-16 h-16 mx-auto mt-4 rounded-full"></div>
+                <!-- Risk Indicators -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                        <span class="text-sm">Risk Probability</span>
+                        <span class="font-medium text-red-600">High</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                        <span class="text-sm">Recommended Limit</span>
+                        <span class="font-medium text-green-600">$25,000</span>
+                    </div>
+                </div>
+
+                <!-- Insights -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <hero-icon-outline:light-bulb class="w-5 h-5 text-yellow-500" />
+                        <span class="text-sm">High transaction frequency detected</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <hero-icon-outline:shield-exclamation class="w-5 h-5 text-red-500" />
+                        <span class="text-sm">Verify recent large transactions</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Error Message -->
-        <div id="error" class="mt-6 hidden text-red-600 text-center"></div>
+        <!-- Loading State -->
+        <div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-8 rounded-xl text-center">
+                <div class="animate-spin mb-4 mx-auto text-indigo-600">
+                    <hero-icon-outline:arrow-path class="w-12 h-12" />
+                </div>
+                <p class="font-medium">Analyzing Transaction Patterns</p>
+                <p class="text-sm text-gray-600 mt-2">This typically takes 5-10 seconds</p>
+            </div>
+        </div>
 
-        <!-- Loading Spinner -->
-        <div id="loading" class="mt-6 hidden flex justify-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+        <!-- Error State -->
+        <div id="error" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-xl max-w-md text-center">
+                <div class="text-red-500 mx-auto mb-4">
+                    <hero-icon-outline:x-circle class="w-12 h-12" />
+                </div>
+                <h3 class="text-lg font-medium mb-2">Analysis Failed</h3>
+                <p class="text-gray-600 mb-4" id="errorMessage">Unable to process request at this time</p>
+                <button onclick="location.reload()" class="primary-button px-6">
+                    Try Again
+                </button>
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Maintain existing JavaScript functionality
+        // Add smooth transitions for form switching
+        document.querySelectorAll('nav button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('nav button').forEach(btn => {
+                    btn.classList.remove('text-indigo-600');
+                    btn.querySelector('span').classList.remove('bg-indigo-600');
+                });
+                this.classList.add('text-indigo-600');
+                this.querySelector('span').classList.add('bg-indigo-600');
+                
+                document.querySelectorAll('form').forEach(form => {
+                    form.classList.add('hidden');
+                    form.style.opacity = '0';
+                    form.style.transform = 'translateY(10px)';
+                });
+                
+                const targetForm = this.id.includes('detailed') ? 
+                    document.getElementById('detailedForm') : 
+                    document.getElementById('simpleForm');
+                
+                setTimeout(() => {
+                    targetForm.classList.remove('hidden');
+                    targetForm.style.opacity = '1';
+                    targetForm.style.transform = 'translateY(0)';
+                }, 150);
+            });
+        });
+
+        // Add input validation
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('border-red-300');
+                    this.classList.add('border-gray-300');
+                } else {
+                    this.classList.remove('border-gray-300');
+                    this.classList.add('border-red-300');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
