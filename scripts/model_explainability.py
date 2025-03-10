@@ -1,4 +1,4 @@
-# Import necessary libraries
+# model_explainability.py (Updated)
 import pandas as pd
 import numpy as np
 import joblib
@@ -35,10 +35,27 @@ error_handler.setFormatter(formatter)
 logger.addHandler(info_handler)
 logger.addHandler(error_handler)
 
+# Hardcoded feature names from training (temporary for debugging)
+TRAINING_FEATURE_NAMES = [
+    'ProviderId', 'ProductCategory', 'Amount', 'Value', 'PricingStrategy', 'FraudResult',
+    'Total_Transaction_Amount', 'Average_Transaction_Amount', 'Transaction_Count',
+    'Std_Transaction_Amount', 'Transaction_Hour', 'Transaction_Day', 'Transaction_Month',
+    'Transaction_Year', 'Recency', 'RFMS_score', 'RFMS_score_binned', 'RFMS_score_binned_WOE',
+    'ProviderId_WOE', 'ProviderId_WOE.1', 'ProductId_WOE', 'ProductId_WOE.1',
+    'ProductCategory_WOE', 'ProductCategory_WOE.1', 'ChannelId_ChannelId_2',
+    'ChannelId_ChannelId_3', 'ChannelId_ChannelId_5', 'ProductId_1', 'ProductId_2',
+    'ProductId_3', 'ProductId_4', 'ProductId_5', 'ProductId_6', 'ProductId_7',
+    'ProductId_8', 'ProductId_9', 'ProductId_10', 'ProductId_11', 'ProductId_12',
+    'ProductId_13', 'ProductId_14', 'ProductId_15', 'ProductId_16', 'ProductId_17',
+    'ProductId_18', 'ProductId_19', 'ProductId_20', 'ProductId_21', 'ProductId_22',
+    'TransactionHour', 'TransactionDay', 'TransactionMonth'
+]
+
+# Function to load preprocessed data (or re-preprocess if needed)
 # Function to load preprocessed data (or re-preprocess if needed)
 def load_or_preprocess_data(data_path, target_column='Label'):
     """
-    Load preprocessed data or preprocess raw data for explainability.
+    Load preprocessed data or preprocess raw data for explainability, aligning with training features.
 
     Parameters:
     - data_path (str): Path to the raw or preprocessed data CSV.
@@ -78,6 +95,14 @@ def load_or_preprocess_data(data_path, target_column='Label'):
                 if existing_categorical:
                     data = pd.get_dummies(data, columns=existing_categorical, drop_first=True)
 
+                # Explicitly drop CurrencyCode and CountryCode columns if they exist
+                currency_cols = [col for col in data.columns if 'CurrencyCode' in col]
+                country_cols = [col for col in data.columns if 'CountryCode' in col]
+                cols_to_drop = currency_cols + country_cols
+                if cols_to_drop:
+                    data = data.drop(columns=cols_to_drop)
+                    logger.info(f"Dropped CurrencyCode/CountryCode columns: {cols_to_drop}")
+
                 if 'TransactionStartTime' in data.columns:
                     data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
                     data['TransactionHour'] = data['TransactionStartTime'].dt.hour
@@ -97,6 +122,21 @@ def load_or_preprocess_data(data_path, target_column='Label'):
         # Split the data
         X = preprocessed_data.drop(columns=[target_column])
         y = preprocessed_data[target_column]
+
+        # Align the features with the training data
+        logger.info(f"Before alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
+        logger.info(f"Training feature names: {TRAINING_FEATURE_NAMES} (Count: {len(TRAINING_FEATURE_NAMES)})")
+        missing_cols = set(TRAINING_FEATURE_NAMES) - set(X.columns)
+        logger.info(f"Missing columns: {missing_cols}")
+        for col in missing_cols:
+            X[col] = 0  # Add missing columns with default value 0
+        extra_cols = set(X.columns) - set(TRAINING_FEATURE_NAMES)
+        logger.info(f"Extra columns: {extra_cols}")
+        if extra_cols:
+            X = X.drop(columns=list(extra_cols))  # Drop extra columns
+        X = X[TRAINING_FEATURE_NAMES]  # Reorder columns to match training
+        logger.info(f"After alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
+
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42, stratify=y
         )
@@ -105,7 +145,6 @@ def load_or_preprocess_data(data_path, target_column='Label'):
     except Exception as e:
         logger.error(f"Error loading/preprocessing data: {str(e)}\n{traceback.format_exc()}")
         return None, None, None, None
-
 # Load saved models
 def load_models(model_dir='models'):
     """
@@ -122,6 +161,7 @@ def load_models(model_dir='models'):
         models = {}
         for model_name in ['LogisticRegression', 'RandomForest']:
             model_path = os.path.join(model_dir, f"{model_name}_best_model.pkl")
+            logger.info(f"Attempting to load model from: {model_path}")
             models[model_name] = joblib.load(model_path)
             logger.info(f"Loaded {model_name} from {model_path}")
         return models
@@ -168,7 +208,7 @@ def explain_logistic_regression(model, X_train, feature_names, save_dir='explana
 
         os.makedirs(save_dir, exist_ok=True)
         plt.savefig(os.path.join(save_dir, 'logistic_regression_explanation.png'))
-        plt.close()
+        plt.show()  # Explicitly show the plot
 
         print("\nLogistic Regression Explanation:")
         print(explanation_df.head(10))
@@ -210,18 +250,19 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.tight_layout()
         os.makedirs(save_dir, exist_ok=True)
         plt.savefig(os.path.join(save_dir, 'random_forest_importance.png'))
-        plt.close()
+        plt.show()  # Explicitly show the plot
 
         # SHAP Values (Local and Global)
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(X_test)
+        logger.info(f"SHAP values shape: {np.array(shap_values[1]).shape}, X_test shape: {X_test.shape}")
 
         plt.figure()
         shap.summary_plot(shap_values[1], X_test, feature_names=feature_names, show=False)
         plt.title("SHAP Summary Plot for Random Forest (Class 1)")
         plt.tight_layout()
         plt.savefig(os.path.join(save_dir, 'random_forest_shap_summary.png'))
-        plt.close()
+        plt.show()  # Explicitly show the plot
 
         instance_idx = 0
         plt.figure()
@@ -236,7 +277,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
         plt.title(f"SHAP Force Plot for Instance {instance_idx} (Class 1)")
         plt.tight_layout()
         plt.savefig(os.path.join(save_dir, f'random_forest_shap_force_instance_{instance_idx}.png'))
-        plt.close()
+        plt.show()  # Explicitly show the plot
 
         print("\nRandom Forest Feature Importance:")
         print(importance_df.head(10))
@@ -287,4 +328,3 @@ def run_explainability_pipeline(data_path, model_dir='models', save_dir='explana
     )
 
     return explanations
-
