@@ -15,7 +15,7 @@ from sklearn.pipeline import Pipeline
 # Use relative import from the week-6 subdirectory
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'week-6')))
-from model_explainability import (
+from scripts.model_explainability import (
     load_models,
     load_or_preprocess_data,
     explain_logistic_regression,
@@ -149,7 +149,6 @@ def test_run_explainability_pipeline_failure_model_load(tmp_dir, sample_data):
 
 def test_run_explainability_pipeline_failure_data_load(tmp_dir, mock_models):
     with pytest.raises(FileNotFoundError):  # Specify the expected exception
-    run_explainability_pipeline(str(tmp_dir / "nonexistent.csv"), str(mock_models), str(tmp_dir / "explanations"))
-
+        run_explainability_pipeline(str(tmp_dir / "nonexistent.csv"), str(mock_models), str(tmp_dir / "explanations"))
 if __name__ == "__main__":
     pytest.main([__file__])
