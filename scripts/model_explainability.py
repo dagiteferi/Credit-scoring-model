@@ -67,48 +67,58 @@ def load_or_preprocess_data(data_path, target_column='Label'):
     try:
         # Load data
         data = pd.read_csv(data_path)
-        
-        # Preprocess (reusing your original preprocess_data function)
+        logger.info(f"Raw data columns: {list(data.columns)} (Count: {len(data.columns)})")
+
+        # Preprocess data
         def preprocess_data(data):
             logger.info("Starting data preprocessing")
             try:
+                # Remove duplicate columns
                 duplicate_columns = data.columns[data.columns.duplicated()]
                 if len(duplicate_columns) > 0:
                     logger.warning(f"Found {len(duplicate_columns)} duplicate columns. Removing.")
                     data = data.loc[:, ~data.columns.duplicated()]
+                    logger.info(f"After removing duplicates - Columns: {list(data.columns)} (Count: {len(data.columns)})")
 
+                # Drop unnecessary columns
                 columns_to_drop = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId']
                 existing_columns = [col for col in columns_to_drop if col in data.columns]
                 if existing_columns:
                     data = data.drop(columns=existing_columns)
                     logger.info(f"Dropped columns: {existing_columns}")
+                    logger.info(f"After dropping columns - Columns: {list(data.columns)} (Count: {len(data.columns)})")
 
+                # Handle missing values
                 numeric_cols = data.select_dtypes(include=['number']).columns
                 data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].median())
                 categorical_cols = data.select_dtypes(include=['object']).columns
                 for col in categorical_cols:
                     data[col] = data[col].fillna(data[col].mode()[0])
 
-                # Only encode ProductId and ChannelId, exclude CurrencyCode and CountryCode
-                categorical_columns = ['ProductId', 'ChannelId']  # Removed CurrencyCode and CountryCode
+                # Encode categorical variables (ProductId and ChannelId only)
+                categorical_columns = ['ProductId', 'ChannelId']
                 existing_categorical = [col for col in categorical_columns if col in data.columns]
                 if existing_categorical:
                     data = pd.get_dummies(data, columns=existing_categorical, drop_first=True)
+                    logger.info(f"After pd.get_dummies - Columns: {list(data.columns)} (Count: {len(data.columns)})")
 
-                # Explicitly drop CurrencyCode and CountryCode columns if they exist
+                # Explicitly drop CurrencyCode and CountryCode columns
                 currency_cols = [col for col in data.columns if 'CurrencyCode' in col]
                 country_cols = [col for col in data.columns if 'CountryCode' in col]
                 cols_to_drop = currency_cols + country_cols
                 if cols_to_drop:
                     data = data.drop(columns=cols_to_drop)
                     logger.info(f"Dropped CurrencyCode/CountryCode columns: {cols_to_drop}")
+                    logger.info(f"After dropping CurrencyCode/CountryCode - Columns: {list(data.columns)} (Count: {len(data.columns)})")
 
+                # Process TransactionStartTime
                 if 'TransactionStartTime' in data.columns:
                     data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
                     data['TransactionHour'] = data['TransactionStartTime'].dt.hour
                     data['TransactionDay'] = data['TransactionStartTime'].dt.day
                     data['TransactionMonth'] = data['TransactionStartTime'].dt.month
                     data = data.drop(columns=['TransactionStartTime'])
+                    logger.info(f"After processing TransactionStartTime - Columns: {list(data.columns)} (Count: {len(data.columns)})")
 
                 return data
             except Exception as e:
@@ -117,19 +127,26 @@ def load_or_preprocess_data(data_path, target_column='Label'):
 
         preprocessed_data = preprocess_data(data)
         if preprocessed_data is None:
+            logger.error("Preprocessing failed.")
             return None, None, None, None
+        logger.info(f"Preprocessed data columns: {list(preprocessed_data.columns)} (Count: {len(preprocessed_data.columns)})")
 
         # Split the data
         X = preprocessed_data.drop(columns=[target_column])
         y = preprocessed_data[target_column]
+        logger.info(f"X columns before alignment: {list(X.columns)} (Count: {len(X.columns)})")
 
         # Align the features with the training data
-        logger.info(f"Before alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
         logger.info(f"Training feature names: {TRAINING_FEATURE_NAMES} (Count: {len(TRAINING_FEATURE_NAMES)})")
+
+        # Step 1: Add missing columns from TRAINING_FEATURE_NAMES
         missing_cols = set(TRAINING_FEATURE_NAMES) - set(X.columns)
         logger.info(f"Missing columns: {missing_cols}")
         for col in missing_cols:
             X[col] = 0  # Add missing columns with default value 0
+            logger.info(f"Added missing column: {col}")
+
+        # Step 2: Identify extra columns
         extra_cols = set(X.columns) - set(TRAINING_FEATURE_NAMES)
         logger.info(f"Raw extra columns: {extra_cols}")
         # Normalize column names for case-insensitive comparison
@@ -139,23 +156,42 @@ def load_or_preprocess_data(data_path, target_column='Label'):
         logger.info(f"Normalized extra columns: {extra_cols_normalized}")
         if extra_cols_normalized:
             extra_cols = [col for col in X.columns if col.lower().strip() in extra_cols_normalized]
-            X = X.drop(columns=extra_cols)
-            logger.info(f"Dropped extra columns: {extra_cols}")
-        # Force alignment to TRAINING_FEATURE_NAMES
-        X = X[TRAINING_FEATURE_NAMES]  # Reorder and subset to exactly 50 features
-        if len(X.columns) != len(TRAINING_FEATURE_NAMES):
-            logger.warning(f"Alignment failed: Expected 50 features, got {len(X.columns)}. Forcing subset.")
-            X = X[TRAINING_FEATURE_NAMES[:len(X.columns)]]  # Subset to match available columns
+            logger.info(f"Dropping extra columns: {extra_cols}")
+            X = X.drop(columns=extra_cols, errors='ignore')
+            logger.info(f"After dropping extra columns - X columns: {list(X.columns)} (Count: {len(X.columns)})")
+
+        # Step 3: Force alignment to TRAINING_FEATURE_NAMES
+        try:
+            X = X[TRAINING_FEATURE_NAMES]  # Reorder and subset to exactly 50 features
+        except KeyError as e:
+            logger.error(f"KeyError during alignment: {str(e)}")
+            missing_from_X = [col for col in TRAINING_FEATURE_NAMES if col not in X.columns]
+            logger.error(f"Columns missing from X: {missing_from_X}")
+            raise
         logger.info(f"After alignment - X columns: {list(X.columns)} (Count: {len(X.columns)})")
+
+        # Step 4: Validate the number of features
+        expected_feature_count = len(TRAINING_FEATURE_NAMES)
+        if len(X.columns) != expected_feature_count:
+            logger.error(f"Alignment failed: Expected {expected_feature_count} features, got {len(X.columns)}")
+            raise ValueError(f"Feature count mismatch: Expected {expected_feature_count}, got {len(X.columns)}")
 
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42, stratify=y
         )
         logger.info(f"Preprocessed data split: Train {X_train.shape}, Test {X_test.shape}")
+        logger.info(f"X_test columns after split: {list(X_test.columns)} (Count: {len(X_test.columns)})")
+
+        # Final validation for X_test
+        if len(X_test.columns) != expected_feature_count:
+            logger.error(f"X_test feature count mismatch: Expected {expected_feature_count}, got {len(X_test.columns)}")
+            raise ValueError(f"X_test feature count mismatch: Expected {expected_feature_count}, got {len(X_test.columns)}")
+
         return X_train, X_test, y_train, y_test
     except Exception as e:
         logger.error(f"Error loading/preprocessing data: {str(e)}\n{traceback.format_exc()}")
         return None, None, None, None
+
 # Load saved models
 def load_models(model_dir='models'):
     """
@@ -175,6 +211,16 @@ def load_models(model_dir='models'):
             logger.info(f"Attempting to load model from: {model_path}")
             models[model_name] = joblib.load(model_path)
             logger.info(f"Loaded {model_name} from {model_path}")
+            # Debug: Log feature names if available (Random Forest)
+            if model_name == 'RandomForest':
+                try:
+                    feature_names = getattr(models[model_name], 'feature_names_in_', None)
+                    if feature_names is not None:
+                        logger.info(f"Random Forest trained feature names: {list(feature_names)} (Count: {len(feature_names)})")
+                    else:
+                        logger.warning("Feature names not stored in Random Forest model.")
+                except Exception as e:
+                    logger.warning(f"Could not retrieve feature names from Random Forest: {str(e)}")
         return models
     except Exception as e:
         logger.error(f"Error loading models: {str(e)}\n{traceback.format_exc()}")
@@ -219,7 +265,7 @@ def explain_logistic_regression(model, X_train, feature_names, save_dir='explana
 
         os.makedirs(save_dir, exist_ok=True)
         plt.savefig(os.path.join(save_dir, 'logistic_regression_explanation.png'))
-        plt.show()  # Explicitly show the plot
+        plt.show()
 
         print("\nLogistic Regression Explanation:")
         print(explanation_df.head(10))
@@ -298,7 +344,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
             shap_values[1],
             X_test,
             feature_names=feature_names,
-            interaction_index='auto',  # Automatically select a feature to show interaction
+            interaction_index='auto',
             show=False
         )
         plt.title(f"SHAP Dependence Plot for {top_feature}")
@@ -316,7 +362,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
             X_test,
             features=top_2_indices,
             feature_names=feature_names,
-            kind='average'  # Can also use 'individual' for ICE plots
+            kind='average'
         )
         plt.title(f"Partial Dependence Plot for {top_2_features}")
         plt.tight_layout()
@@ -333,6 +379,7 @@ def explain_random_forest(model, X_train, X_test, feature_names, save_dir='expla
     except Exception as e:
         logger.error(f"Error explaining Random Forest: {str(e)}\n{traceback.format_exc()}")
         return None
+
 # Main Explainability Pipeline
 def run_explainability_pipeline(data_path, model_dir='models', save_dir='explanations'):
     """
