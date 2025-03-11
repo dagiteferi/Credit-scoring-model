@@ -1,6 +1,7 @@
 const BASE_URL = window.location.hostname.includes("localhost")
     ? "http://127.0.0.1:8000"
     : "https://credit-scoring-model-ai.onrender.com";
+
 // Toggle between forms
 document.getElementById('detailedFormBtn').addEventListener('click', () => {
     document.getElementById('detailedForm').classList.remove('hidden');
@@ -160,7 +161,7 @@ function openDetailedView(formData, poorData, goodData, finalCreditScore) {
                         datasets: [{
                             label: 'Transaction Point',
                             data: [{x: ${daysDifference}, y: ${formData.Amount}, r: 15}],
-                            backgroundColor: 'rgba(26, 115, 232, 0.7)', // Vibrant blue with slight transparency
+                            backgroundColor: 'rgba(26, 115, 232, 0.7)',
                             borderColor: '#1a73e8',
                             borderWidth: 2,
                             pointHoverRadius: 20,
@@ -212,9 +213,9 @@ function openDetailedView(formData, poorData, goodData, finalCreditScore) {
                                 },
                                 ticks: {
                                     color: '#202124',
-                                    stepSize: 100 // Adjust for better readability
+                                    stepSize: 100
                                 },
-                                min: ${daysDifference - 50}, // Center the point
+                                min: ${daysDifference - 50},
                                 max: ${daysDifference + 50}
                             },
                             y: {
@@ -229,10 +230,10 @@ function openDetailedView(formData, poorData, goodData, finalCreditScore) {
                                 },
                                 ticks: {
                                     color: '#202124',
-                                    stepSize: 0.01 // Adjust for small amounts
+                                    stepSize: 0.01
                                 },
                                 min: 0,
-                                max: 0.06 // Adjust to fit the single point
+                                max: 0.06
                             }
                         },
                         responsive: true,
@@ -297,14 +298,14 @@ async function handleSubmit(form) {
     console.log('Sending data as JSON:', JSON.stringify(formData));
 
     try {
-        console.log("Sending requests to /predict/poor and /predict/good...");
+        console.log("Sending requests to:", `${BASE_URL}/predict/poor`, `${BASE_URL}/predict/good`);
         const [poorResponse, goodResponse] = await Promise.all([
-            fetch('http://127.0.0.1:8000/predict/poor', {
+            fetch(`${BASE_URL}/predict/poor`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             }),
-            fetch('http://127.0.0.1:8000/predict/good', {
+            fetch(`${BASE_URL}/predict/good`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -320,7 +321,7 @@ async function handleSubmit(form) {
         }
         if (!goodResponse.ok) {
             const errorText = await goodResponse.text();
-            throw new Error(`Good prediction failed: ${poorResponse.status} - ${errorText}`);
+            throw new Error(`Good prediction failed: ${goodResponse.status} - ${errorText}`);
         }
 
         const poorData = await poorResponse.json();
