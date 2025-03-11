@@ -86,3 +86,6 @@ async def predict_good_credit(data: RawInputData):
     except Exception as e:
         logger.error(f"Prediction failed: {traceback.format_exc()}")
         raise HTTPException(status_code=400, detail=str(e))
+current_dir = os.path.dirname(os.path.abspath(__file__))  # /opt/render/project/src/credit_scoring_app
+REPO_ROOT = os.path.dirname(current_dir)                  # /opt/render/project/src
+sys.path.insert(0, REPO_ROOT)
