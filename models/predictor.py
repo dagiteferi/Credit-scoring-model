@@ -5,10 +5,14 @@ import pandas as pd
 import numpy as np
 import traceback
 
-# Adjust sys.path to include the root directory (Render uses flat structure)
+# Adjust sys.path for Render's working directory
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
+# Ensure the parent directory is in sys.path for Render
+PARENT_DIR = os.path.abspath(os.path.join(ROOT_DIR, ".."))
+if PARENT_DIR not in sys.path:
+    sys.path.insert(0, PARENT_DIR)
 
 from credit_scoring_app.config import logger
 
