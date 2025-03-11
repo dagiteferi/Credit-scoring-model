@@ -18,7 +18,7 @@ from models.predictor import load_model, predict
 from credit_scoring_app.config import logger
 
 # Model path for Render
-MODEL_PATH = os.path.join(ROOT_DIR, "models", "RandomForest_best_model.pkl")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "RandomForest_best_model.pkl")
 app = FastAPI(title="Credit Scoring Prediction API")
 
 # Add CORS middleware for production and local testing
