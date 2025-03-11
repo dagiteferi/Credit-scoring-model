@@ -4,44 +4,52 @@ import traceback
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+# --- Path Adjustments for Imports ---
 # Get the root directory (parent of credit_scoring_app)
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT_DIR)  # Add root to path
+sys.path.insert(0, ROOT_DIR)
 
 # Now import your modules
 from credit_scoring_app.schemas import RawInputData
 from models.predictor import load_model, predict
 from credit_scoring_app.config import logger
 
-# Model path for Render
+# --- Model Path Configuration ---
 MODEL_PATH = os.path.join(ROOT_DIR, "models", "RandomForest_best_model.pkl")
+
 app = FastAPI(title="Credit Scoring Prediction API")
 
-# Add CORS middleware for production and local testing
+# --- CORS Middleware ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://credit-scoring-frontend.onrender.com",  # Production frontend
-        "http://127.0.0.1:8080",  # Local dev
-        "http://localhost:8080"   # Local dev
+        "https://credit-scoring-frontend.onrender.com",
+        "http://127.0.0.1:8080",
+        "http://localhost:8080"
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
+# --- Startup Event (Fixed Version) ---
 @app.on_event("startup")
 async def startup_event():
     try:
+        # Model loading
         if not os.path.exists(MODEL_PATH):
             raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
         app.state.model = load_model(MODEL_PATH)
         logger.info("Model loaded successfully")
-        logger.info("CORS Middleware configured with origins: %s", app.middleware_stack.app.origins)
+        
+        # CORS confirmation (simplified logging)
+        logger.info("CORS Middleware configured successfully")
+        
     except Exception as e:
         logger.error(f"Failed to load model: {traceback.format_exc()}")
         raise RuntimeError(f"Model loading failed: {str(e)}")
 
+# --- API Endpoints ---
 @app.get("/predict/info")
 async def predict_info():
     return {"message": "Use /predict/poor for poor credit (0) or /predict/good for good credit (1)."}
