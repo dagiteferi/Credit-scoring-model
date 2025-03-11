@@ -1,16 +1,16 @@
 # credit_scoring_app/main.py
-import os
 import sys
+import os
 import traceback
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# --- Critical Path Fixes for Render ---
-# Get the root directory of the project (parent of credit_scoring_app)
+# --- Critical Path Fix for Render ---
+# Add the parent directory of credit_scoring_app to Python's module search path
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT_DIR)
 
-# Now import modules from direct packages
+# Now import modules
 from credit_scoring_app.schemas import RawInputData
 from models.predictor import load_model, predict
 from credit_scoring_app.config import logger
@@ -37,7 +37,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     try:
-        logger.info(f"Loading model from: {MODEL_PATH}")
+        logger.info(f"Model path: {MODEL_PATH}")
         
         if not os.path.exists(MODEL_PATH):
             raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
