@@ -4,21 +4,17 @@ import traceback
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Adjust sys.path for Render's working directory
-ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
-# Ensure the parent directory is in sys.path for Render
-PARENT_DIR = os.path.abspath(os.path.join(ROOT_DIR, ".."))
-if PARENT_DIR not in sys.path:
-    sys.path.insert(0, PARENT_DIR)
+# Get the root directory (parent of credit_scoring_app)
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT_DIR)  # Add root to path
 
+# Now import your modules
 from credit_scoring_app.schemas import RawInputData
 from models.predictor import load_model, predict
 from credit_scoring_app.config import logger
 
 # Model path for Render
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "RandomForest_best_model.pkl")
+MODEL_PATH = os.path.join(ROOT_DIR, "models", "RandomForest_best_model.pkl")
 app = FastAPI(title="Credit Scoring Prediction API")
 
 # Add CORS middleware for production and local testing
