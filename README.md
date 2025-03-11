@@ -25,7 +25,7 @@
 - [🎯 Challenges and Solutions](#-challenges-and-solutions)
 - [🔮 Future Work](#-future-work)
 - [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
+
 
 ---
 
