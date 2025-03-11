@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 # Adjust sys.path to include the root directory
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
@@ -13,13 +13,18 @@ from credit_scoring_app.schemas import RawInputData
 from models.predictor import load_model, predict
 from credit_scoring_app.config import logger
 
+# Model path adjusted for Render (assumes models folder is in the root of the deployed app)
 MODEL_PATH = os.path.join(ROOT_DIR, "models", "RandomForest_best_model.pkl")
 app = FastAPI(title="Credit Scoring Prediction API")
 
-# Add CORS middleware
+# Add CORS middleware for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8080", "http://localhost:8080"],
+    allow_origins=[
+        "https://credit-scoring-frontend.onrender.com",  # Production frontend
+        "http://127.0.0.1:8080",  # Local dev (optional for testing)
+        "http://localhost:8080"   # Local dev (optional for testing)
+    ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -32,7 +37,7 @@ async def startup_event():
             raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
         app.state.model = load_model(MODEL_PATH)
         logger.info("Model loaded successfully")
-        logger.info("CORS Middleware configured with origins: %s", ["http://127.0.0.1:8080", "http://localhost:8080"])
+        logger.info("CORS Middleware configured with origins: %s", app.middleware_stack.app.origins)
     except Exception as e:
         logger.error(f"Failed to load model: {traceback.format_exc()}")
         raise RuntimeError(f"Model loading failed: {str(e)}")

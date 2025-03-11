@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 import traceback
 
-# Adjust sys.path to include the root directory
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Adjust sys.path to include the root directory (Render uses flat structure)
+ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
